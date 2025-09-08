@@ -1,0 +1,2 @@
+# AuthJS
+Auth.js Template
