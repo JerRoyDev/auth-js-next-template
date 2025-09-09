@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Auth.js Template
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It is a flexible authentication template using Auth.js and Prisma, supporting multiple authentication methods and database providers.
 
 ## Getting Started
 
@@ -20,17 +22,87 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Auth.js & Prisma – Usage & Configuration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### How to use the auth template
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Choose your database:**
 
-## Deploy on Vercel
+   - Go to `prisma/templates/` and select the schema template for your database:
+     - PostgreSQL: `schema-postgres.prisma.template`
+     - MySQL: `schema-mysql.prisma.template`
+     - SQLite: `schema-sqlite.prisma.template`
+     - MongoDB: `schema-mongodb.prisma.template`
+   - Copy the template to `prisma/schema.prisma`:
+     ```bash
+     cp prisma/templates/schema-postgres.prisma.template prisma/schema.prisma
+     ```
+   - Update your `.env` file with the correct `DATABASE_URL` for your database.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Run Prisma migration:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npx prisma migrate dev --name init
+   ```
+
+3. **Configure Auth.js providers:**
+
+   - Edit `src/auth.ts` and add the providers you want to use (Google, GitHub, Credentials, etc).
+
+4. **Environment variables:**
+
+   - Place sensitive keys (OAuth secrets, etc) in `.env.local`.
+
+5. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+### Tips
+
+- You can easily switch database by copying a different schema template to `schema.prisma` and updating `.env`.
+- All schema templates are kept up-to-date with Auth.js requirements.
+- Update this README as you add new features or providers to the template.
+
+---
+
+## Prisma Schema Templates
+
+Detta projekt innehåller färdiga Prisma-scheman för olika databaser (PostgreSQL, MySQL, SQLite, MongoDB) anpassade för Auth.js.
+
+### Så här byter du databas
+
+1. Välj önskad mall från `prisma/templates/`:
+
+   - För PostgreSQL: `schema-postgres.prisma.template`
+   - För MySQL: `schema-mysql.prisma.template`
+   - För SQLite: `schema-sqlite.prisma.template`
+   - För MongoDB: `schema-mongodb.prisma.template`
+
+2. Kopiera mallen till `prisma/schema.prisma`:
+
+   ```bash
+   cp prisma/templates/schema-postgres.prisma.template prisma/schema.prisma
+   ```
+
+3. Kontrollera att din `DATABASE_URL` i `.env` matchar vald databas.
+
+4. Kör migration:
+   ```bash
+   npx prisma migrate dev --name init
+   ```
+
+### Om Auth.js-modeller
+
+Alla mallar innehåller de modeller som krävs för Auth.js och dess Prisma-adapter. Du kan lägga till egna fält eller modeller efter behov.
+
+### Tips
+
+- Uppdatera denna README när du lägger till nya mallar eller funktioner.
+- Lägg till instruktioner för eventuella automatiseringsscript om du skapar sådana.
+
+---
+
+Senast uppdaterad: 2025-09-09
