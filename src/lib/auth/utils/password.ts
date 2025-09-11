@@ -1,13 +1,12 @@
 import bcrypt from "bcryptjs";
 
 // * HASHING PASSWORD * //
-export function saltAndHashPassword(password: string): string {
-  // Salt och hashar ett plaintext-lösenord
-  const salt = bcrypt.genSaltSync(10);
-  return bcrypt.hashSync(password, salt);
-}
+export const saltAndHashPassword = async (password: string): Promise<string> => {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
+};
 
 // * VERIFYING PASSWORD * //
-export function verifyPassword(plain: string, hash: string): boolean {
-  return bcrypt.compareSync(plain, hash);
-}
+export const verifyPassword = async (plain: string, hash: string): Promise<boolean> => {
+  return await bcrypt.compare(plain, hash);
+};

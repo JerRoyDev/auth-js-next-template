@@ -1,7 +1,9 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-// Your own logic for dealing with plaintext password strings; be careful!
-import { saltAndHashPassword } from "@/lib/auth/utils/password"
+import { signInSchema } from "@/lib/auth/validations/auth.validations";
+import { saltAndHashPassword, verifyPassword } from "@/lib/auth/utils/password";
+
+
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -13,12 +15,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        let user = null
+        // Validera credentials med Zod
+        const { email, password } = await signInSchema.parseAsync(credentials);
 
+        // Hämta Prisma-klienten
+        const { prisma } = await import("@/prisma");
+        // Hämta användaren från databasen
+        const user = await prisma.user.findUnique({
+          where: { email },
+        });
+        if (!user || !user.password) return null;
 
+        // Verifiera lösenordet mot hash i databasen
+        const isValid = await verifyPassword(password, user.password);
+        if (!isValid) return null;
 
-        // return user object with their profile data
-        return user
+        // Returnera användarobjekt (utan lösenord)
+        return {
+          id: user.id,
+          email: user.email,
+          // username: user.username, // om du har username
+        };
       },
     }),
   ],
