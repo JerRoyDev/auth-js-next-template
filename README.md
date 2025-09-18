@@ -26,6 +26,47 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Auth.js & Prisma – Usage & Configuration
 
+### Google OAuth (Aktuell standard i denna mall)
+
+Den här mallen är nu konfigurerad för Google OAuth via Auth.js v5 och Prisma-adaptern.
+
+1. Skapa OAuth‑uppgifter i Google Cloud Console:
+   - Gå till: https://console.cloud.google.com/apis/credentials
+   - Skapa OAuth Consent Screen (External) och lägg till din e‑post.
+   - Skapa Credentials → OAuth Client ID → Web Application.
+   - Authorized redirect URI (dev): `http://localhost:3000/api/auth/callback/google`
+2. Kopiera Client ID & Secret till `.env.local`:
+   ```env
+   AUTH_GOOGLE_ID=xxxx.apps.googleusercontent.com
+   AUTH_GOOGLE_SECRET=xxxx
+   AUTH_SECRET= # generera: openssl rand -base64 32
+   DATABASE_URL="file:./dev.db"
+   ```
+3. Starta om dev-servern.
+4. Besök `/signin` och klicka på "Fortsätt med Google".
+
+Credentials (e‑post + lösenord) är avvecklad i denna version. Den tidigare koden är markerad som deprecated och kan tas bort helt om du inte avser återinföra den.
+
+### Lägga till fler OAuth Providers
+
+- Importera t.ex. `import GitHub from "next-auth/providers/github";`
+- Lägg till i `providers` i `auth.config.ts`.
+- Lägg motsvarande `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` i `.env.local`.
+
+### Session Strategy
+
+Vi använder `database` strategy (PrismaAdapter) → sessioner lagras i tabellen `Session` (se `prisma/schema.prisma`). För enklare drift kan du byta till `jwt`, men databas-strategin underlättar spårning av aktiva sessioner och multi-device logout.
+
+### Utökning (förslag)
+
+- Rollfält på `User` (ex: `role String @default("USER")`).
+- Migration: gör `email` obligatorisk (ta bort `?`).
+- Multi-provider linking (kräver att email är verifierad/konsistent).
+- Audit logging av inloggningar.
+- Rate limiting i edge/middleware.
+
+---
+
 ### How to use the auth template
 
 1. **Choose your database:**
@@ -105,4 +146,4 @@ Alla mallar innehåller de modeller som krävs för Auth.js och dess Prisma-adap
 
 ---
 
-Senast uppdaterad: 2025-09-09
+Senast uppdaterad: 2025-09-12

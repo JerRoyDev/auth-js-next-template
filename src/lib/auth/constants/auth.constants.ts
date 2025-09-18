@@ -1,15 +1,26 @@
-export const DEFAULT_LOGIN_REDIRECT = '/overview';
+// ** Authentication Roles ** //
+export const USER_ROLES = {
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+} as const;
 
+// Type for user roles (should maybe be moved to user types later)
+export type UserRole = keyof typeof USER_ROLES;
+
+export const DEFAULT_LOGIN_REDIRECT = '/dashboard';
+
+// ** Authentication Routes ** //
 export const AUTH_ROUTES = {
-  LOGIN: '/auth/login',
-  REGISTER: '/auth/register',
-  FORGOT_PASSWORD: '/auth/forgot-password',
-  RESET_PASSWORD: '/auth/reset-password',
-  VERIFY_EMAIL: '/auth/verify-email',
+  LOGIN: '/signin',
+  REGISTER: '/register',
+  FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password',
+  VERIFY_EMAIL: '/verify-email',
   UNAUTHORIZED: '/unauthorized',
-  AUTH_ERROR: '/auth/error',
+  AUTH_ERROR: '/error',
 };
 
+// ** Authentication Messages ** //
 export const AUTH_MESSAGES = {
   // Error messages
   ERROR_DEFAULT: 'Something went wrong. Please try again.',

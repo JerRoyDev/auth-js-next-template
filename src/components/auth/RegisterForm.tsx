@@ -1,32 +1,31 @@
-import { registerAction } from '@/lib/auth/actions/register.action';
+'use client';
+
+import { OAuthButton } from './OAuthButton';
 
 export const RegisterForm = () => {
   return (
-    <form action={registerAction} className='space-y-4'>
-      <label className='block'>
-        Email
-        <input
-          name='email'
-          type='email'
-          className='mt-1 block w-full border rounded px-2 py-1'
-          required
-        />
-      </label>
-      <label className='block'>
-        Password
-        <input
-          name='password'
-          type='password'
-          className='mt-1 block w-full border rounded px-2 py-1'
-          required
-        />
-      </label>
-      <button
-        type='submit'
-        className='w-full bg-primary text-white py-2 rounded'
-      >
-        Register
-      </button>
-    </form>
+    <div className='space-y-4'>
+      <div className='rounded border p-4 bg-blue-50 text-sm'>
+        <p className='font-medium mb-1'>Skapa konto</p>
+        <p className='text-blue-700'>
+          Välj en tjänst för att skapa ditt konto. Om du redan har ett konto
+          loggas du in automatiskt.
+        </p>
+      </div>
+
+      <div className='space-y-3'>
+        <OAuthButton provider='google' redirectTo='/dashboard' />
+        <OAuthButton provider='github' redirectTo='/dashboard' />
+        <OAuthButton provider='discord' redirectTo='/dashboard' />
+        <OAuthButton provider='facebook' redirectTo='/dashboard' />
+      </div>
+
+      <div className='text-xs text-gray-500 text-center'>
+        Har du redan ett konto?{' '}
+        <a href='/signin' className='text-blue-600 hover:underline'>
+          Logga in här
+        </a>
+      </div>
+    </div>
   );
 };
