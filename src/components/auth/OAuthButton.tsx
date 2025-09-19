@@ -1,16 +1,68 @@
-import { signIn } from 'next-auth/react';
-import { useState } from 'react';
-import { GoogleIcon, GitHubIcon, DiscordIcon, FacebookIcon } from './ProviderIcons';
+'use client';
+
+import { signInWithOAuthAction } from '@/lib/auth/actions/signInWithOAuth.action';
+import { useFormStatus } from 'react-dom';
+import { providerMap } from '@/lib/auth/config/auth.config';
+import {
+  GoogleIcon,
+  GitHubIcon,
+  DiscordIcon,
+  FacebookIcon,
+} from './ProviderIcons';
+
+// Derive provider type from actual config
+type ProviderType = (typeof providerMap)[number]['id'];
 
 interface OAuthButtonProps {
-  provider: 'google' | 'github' | 'discord' | 'facebook';
-  redirectTo?: string;
+  provider: ProviderType;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'outline';
   disabled?: boolean;
 }
 
-const providerConfig = {
+// Letter icon for unknown providers - shows first letter of provider name
+const LetterIcon = ({
+  letter,
+  size = 18,
+}: {
+  letter: string;
+  size?: number;
+}) => (
+  <div
+    className='flex items-center justify-center rounded font-bold text-sm'
+    style={{
+      width: size,
+      height: size,
+      fontSize: size * 0.6,
+      backgroundColor: 'rgba(255,255,255,0.2)',
+    }}
+  >
+    {letter.toUpperCase()}
+  </div>
+);
+
+// Function to create default config for unknown providers
+const createDefaultConfig = (provider: string) => ({
+  name: provider.charAt(0).toUpperCase() + provider.slice(1),
+  icon: ({ size }: { size?: number }) => (
+    <LetterIcon letter={provider.charAt(0)} size={size} />
+  ),
+  bgColor:
+    'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700',
+  textColor: 'text-white',
+});
+
+const providerConfig: Partial<
+  Record<
+    ProviderType,
+    {
+      name: string;
+      icon: React.ComponentType<{ size?: number }>;
+      bgColor: string;
+      textColor: string;
+    }
+  >
+> = {
   google: {
     name: 'Google',
     icon: GoogleIcon,
@@ -35,6 +87,15 @@ const providerConfig = {
     bgColor: 'bg-blue-600 hover:bg-blue-700',
     textColor: 'text-white',
   },
+  // * Add more provider-specific configs as needed
+  // example for Twitter:
+
+  /* twitter: {
+    name: 'Twitter',
+    icon: TwitterIcon,
+    bgColor: 'bg-blue-400 hover:bg-blue-500',
+    textColor: 'text-white',
+  }, */
 } as const;
 
 const sizeClasses = {
@@ -43,27 +104,18 @@ const sizeClasses = {
   lg: 'px-6 py-3 text-lg',
 };
 
-export function OAuthButton({
+function OAuthButtonContent({
   provider,
-  redirectTo = '/dashboard',
   size = 'md',
   variant = 'default',
   disabled = false,
 }: OAuthButtonProps) {
-  const [loading, setLoading] = useState(false);
-  const config = providerConfig[provider];
-  const IconComponent = config.icon;
+  const { pending } = useFormStatus();
 
-  const handleSignIn = async () => {
-    try {
-      setLoading(true);
-      await signIn(provider, { callbackUrl: redirectTo });
-    } catch (error) {
-      console.error(`${config.name} sign-in error:`, error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Use specific config or fallback to default
+  const config = providerConfig[provider] || createDefaultConfig(provider);
+
+  const IconComponent = config.icon;
 
   const baseClasses = `
     flex items-center justify-center gap-2 
@@ -79,13 +131,30 @@ export function OAuthButton({
 
   return (
     <button
-      type='button'
-      onClick={handleSignIn}
-      disabled={disabled || loading}
+      type='submit'
+      disabled={disabled || pending}
       className={`${baseClasses} ${variantClasses} ${sizeClasses[size]}`}
     >
       <IconComponent size={18} />
-      {loading ? 'Ansluter...' : `${config.name}`}
+      {pending ? 'Loading...' : config.name}
     </button>
+  );
+}
+
+export function OAuthButton({
+  provider,
+  size = 'md',
+  variant = 'default',
+  disabled = false,
+}: OAuthButtonProps) {
+  return (
+    <form action={() => signInWithOAuthAction(provider)}>
+      <OAuthButtonContent
+        provider={provider}
+        size={size}
+        variant={variant}
+        disabled={disabled}
+      />
+    </form>
   );
 }
