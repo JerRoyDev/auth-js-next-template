@@ -33,6 +33,17 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# Database files
+prisma/dev.db
+prisma/dev.db-journal
+*.db
+*.db-journal
+
+# Prisma
+/prisma/.env
+/prisma/migrations/**/migration.sql
+# Keep migration folders but ignore SQL content for development
+
 # vercel
 .vercel
 
