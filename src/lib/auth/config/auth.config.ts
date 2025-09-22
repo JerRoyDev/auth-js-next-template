@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
 import Discord from "next-auth/providers/discord";
@@ -53,6 +54,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers,
   pages: {
     error: AUTH_ROUTES.AUTH_ERROR, // Custom error page
+    signIn: AUTH_ROUTES.LOGIN, // Custom sign-in page, include some error handling here ex.(error=OAuthAccountNotLinked)
+    // newUser: AUTH_ROUTES.REGISTER, // New users will be directed here on first sign in (leave the property out if not of interest)
+
+    // signOut: AUTH_ROUTES.LOGOUT, // Custom sign-out page (if needed)
+    // verifyRequest: AUTH_ROUTES.VERIFY_REQUEST, // (if using email sign-in)
+    // resetPassword: AUTH_ROUTES.RESET_PASSWORD, // (if implementing password reset)
+
   },
 
   callbacks: {

@@ -1,102 +1,90 @@
+'use client';
+
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import {
+  parseAuthError,
+  getAuthErrorMessage,
+  shouldDisplayOnErrorPage,
+  getErrorDisplayClasses,
+} from '@/lib/auth/utils/error-handler';
 import { OAuthButton } from '@/components/auth/OAuthButton';
 
-interface AuthErrorPageProps {
-  searchParams: {
-    error?: string;
-    email?: string;
-    provider?: string;
-  };
-}
+export default function AuthErrorPage() {
+  const searchParams = useSearchParams();
 
-export default function AuthErrorPage({ searchParams }: AuthErrorPageProps) {
-  const { error, email, provider } = searchParams;
+  // Hämta error params från URL
+  const errorParam = searchParams.get('error');
+  const provider = searchParams.get('provider');
+  const email = searchParams.get('email');
 
-  if (error === 'OAuthAccountNotLinked') {
+  // Parse error och få error info
+  const errorType = parseAuthError(errorParam);
+  const shouldShow = shouldDisplayOnErrorPage(errorType);
+
+  // Fallback för okänt fel eller fel som inte ska visas här
+  if (!errorParam || !shouldShow) {
     return (
       <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
-        <div className='max-w-md w-full space-y-8'>
-          <div className='text-center'>
-            <h2 className='mt-6 text-3xl font-extrabold text-gray-900'>
-              Account Already Exists
-            </h2>
-            <p className='mt-2 text-sm text-gray-600'>
-              {email
-                ? `The email ${email} is already registered`
-                : 'Your email is already registered'}
-              {provider && ` with ${provider}`}.
-            </p>
-          </div>
-
-          <div className='mt-8 space-y-4'>
-            <div className='rounded-md bg-blue-50 p-4'>
-              <div className='text-sm text-blue-700'>
-                <p className='font-medium mb-2'>Sign in instead:</p>
-                {provider && (
-                  <p>
-                    You previously registered with <strong>{provider}</strong>.
-                    Use the button below:
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Visa rätt provider-knapp */}
-            {provider === 'discord' && (
-              <OAuthButton provider='discord' size='lg' />
-            )}
-            {provider === 'google' && (
-              <OAuthButton provider='google' size='lg' />
-            )}
-            {provider === 'github' && (
-              <OAuthButton provider='github' size='lg' />
-            )}
-            {provider === 'facebook' && (
-              <OAuthButton provider='facebook' size='lg' />
-            )}
-
-            {/* Fallback if we don't know the provider */}
-            {!provider && (
-              <>
-                <p className='text-sm text-gray-600 text-center'>
-                  Try signing in with one of these:
-                </p>
-                <div className='space-y-2'>
-                  <OAuthButton provider='google' size='md' />
-                  <OAuthButton provider='discord' size='md' />
-                  <OAuthButton provider='github' size='md' />
-                  <OAuthButton provider='facebook' size='md' />
-                </div>
-              </>
-            )}
-
-            <div className='text-center mt-6'>
-              <Link
-                href='/signin'
-                className='text-indigo-600 hover:text-indigo-500 text-sm'
-              >
-                ← Back to sign in
-              </Link>
-            </div>
-          </div>
+        <div className='max-w-md w-full space-y-8 text-center'>
+          <h2 className='text-3xl font-extrabold text-gray-900'>
+            Something went wrong
+          </h2>
+          <p className='text-gray-600'>
+            An authentication error occurred. Please try again.
+          </p>
+          <Link
+            href='/signin'
+            className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700'
+          >
+            Back to Sign In
+          </Link>
         </div>
       </div>
     );
   }
 
-  // Fallback for other errors
+  const errorInfo = getAuthErrorMessage({
+    error: errorType,
+    provider: provider || undefined,
+    email: email || undefined,
+  });
+
+  const cssClasses = getErrorDisplayClasses(errorInfo);
+
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-50'>
-      <div className='text-center'>
-        <h2 className='text-2xl font-bold text-gray-900 mb-4'>
-          Something went wrong
-        </h2>
-        <p className='text-gray-600 mb-4'>
-          {error || 'An unknown error occurred'}
-        </p>
-        <Link href='/signin' className='text-indigo-600 hover:text-indigo-500'>
-          Try again
-        </Link>
+    <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='max-w-md w-full space-y-8'>
+        <div className='text-center'>
+          <h2 className='mt-6 text-3xl font-extrabold text-gray-900'>
+            {errorInfo.title}
+          </h2>
+        </div>
+
+        <div className={cssClasses}>
+          <p className='text-sm'>{errorInfo.message}</p>
+        </div>
+
+        {/* Visa provider knapp för vissa fel */}
+        {errorType === 'OAuthAccountNotLinked' && provider && (
+          <div className='space-y-4'>
+            <div className='text-center'>
+              <p className='text-sm text-gray-600'>
+                Try signing in with the correct provider:
+              </p>
+            </div>
+            <OAuthButton provider={provider} size='lg' />
+          </div>
+        )}
+
+        <div className='text-center'>
+          <Link
+            href='/signin'
+            className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700'
+          >
+            Back to Sign In
+          </Link>
+        </div>
       </div>
     </div>
   );

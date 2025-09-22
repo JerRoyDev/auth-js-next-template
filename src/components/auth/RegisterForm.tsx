@@ -1,11 +1,15 @@
 'use client';
 
 import { OAuthButton } from './OAuthButton';
+import { AuthErrorMessage } from './AuthErrorMessage';
 import { providerMap } from '@/lib/auth/config/auth.config';
 
 export const RegisterForm = () => {
   return (
     <div className='space-y-4'>
+      {/* Visa error meddelande om det finns */}
+      <AuthErrorMessage />
+
       <div className='rounded border p-4 bg-blue-50 text-sm'>
         <p className='font-medium mb-1'>Create account</p>
         <p className='text-blue-700'>
