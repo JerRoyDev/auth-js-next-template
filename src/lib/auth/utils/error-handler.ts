@@ -17,6 +17,12 @@ export type AuthErrorType =
   | 'CredentialsSignin'
   | 'AccountNotLinked'
   | 'MissingCSRF'
+  
+  // Registration related errors (custom errors)
+  | 'EmailExists'
+  | 'ValidationError'
+  | 'RegistrationFailed'
+  | 'AccountCreated'
 
   // Configuration/System errors (redirect to error page)
   | 'AccessDenied'
@@ -145,6 +151,47 @@ export function getAuthErrorMessage(context: AuthErrorContext): ErrorDisplayInfo
         type: 'error',
         showOnPage: 'signin',
         severity: 'high'
+      };
+
+    // === REGISTRATION ERRORS (Custom errors) ===
+    case 'EmailExists':
+      return {
+        title: 'Email Already Registered',
+        message: email 
+          ? `The email ${email} is already registered. Please sign in instead.`
+          : AUTH_MESSAGES.ERROR_EMAIL_EXISTS,
+        type: 'warning',
+        showOnPage: 'signin',
+        severity: 'medium'
+      };
+
+    case 'ValidationError':
+      return {
+        title: 'Invalid Input',
+        message: context.message || AUTH_MESSAGES.ERROR_INVALID_INPUT,
+        type: 'error',
+        showOnPage: 'both',
+        severity: 'low'
+      };
+
+    case 'RegistrationFailed':
+      return {
+        title: 'Registration Failed',
+        message: AUTH_MESSAGES.ERROR_REGISTRATION_FAILED,
+        type: 'error',
+        showOnPage: 'both',
+        severity: 'medium'
+      };
+
+    case 'AccountCreated':
+      return {
+        title: 'Account Created Successfully',
+        message: email 
+          ? `Account created for ${email}. Please sign in.`
+          : AUTH_MESSAGES.SUCCESS_REGISTRATION,
+        type: 'info',
+        showOnPage: 'signin',
+        severity: 'low'
       };
 
     // === ERROR PAGE ERRORS (System/Configuration) ===
@@ -445,6 +492,7 @@ export function parseAuthError(errorParam: string | null): AuthErrorType {
 
   // Auth.js error types mapping
   const errorMap: Record<string, AuthErrorType> = {
+    // Auth.js built-in errors
     'OAuthAccountNotLinked': 'OAuthAccountNotLinked',
     'OAuthCallbackError': 'OAuthCallbackError',
     'OAuthSignInError': 'OAuthSignInError',
@@ -452,6 +500,14 @@ export function parseAuthError(errorParam: string | null): AuthErrorType {
     'CredentialsSignin': 'CredentialsSignin',
     'AccountNotLinked': 'AccountNotLinked',
     'MissingCSRF': 'MissingCSRF',
+    
+    // Custom registration errors
+    'EmailExists': 'EmailExists',
+    'ValidationError': 'ValidationError',
+    'RegistrationFailed': 'RegistrationFailed',
+    'AccountCreated': 'AccountCreated',
+    
+    // System/Config errors
     'AccessDenied': 'AccessDenied',
     'Configuration': 'Configuration',
     'CallbackRouteError': 'CallbackRouteError',

@@ -8,12 +8,75 @@ import Twitter from "next-auth/providers/twitter";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import { AUTH_ROUTES } from "../constants/auth.constants";
+import { signInSchema } from "../validations/auth.validations";
+import { verifyPassword } from "../utils/password";
 
 /**
  * Auth.js v5 config: Multi OAuth providers with dynamic rendering.
  */
 
 const providers = [
+  // Credentials Provider - Email/Password authentication
+  Credentials({
+    name: "credentials",
+    credentials: {
+      email: {
+        label: "Email",
+        type: "email",
+        placeholder: "john@example.com"
+      },
+      password: {
+        label: "Password",
+        type: "password",
+        placeholder: "Your password"
+      },
+    },
+    async authorize(credentials) {
+      try {
+        // Validate input using Zod schema
+        const { email, password } = await signInSchema.parseAsync(credentials);
+
+        // Find user in database
+        const user = await prisma.user.findUnique({
+          where: { email },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            password: true,
+            image: true,
+          },
+        });
+
+        // Check if user exists and has a password
+        if (!user || !user.password) {
+          return null;
+        }
+
+        // Verify password
+        const isValidPassword = await verifyPassword(password, user.password);
+        if (!isValidPassword) {
+          return null;
+        }
+
+        // Return user object (without password)
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          image: user.image,
+        };
+      } catch (error) {
+        // Log error for debugging but don't expose details
+        console.error("Credentials authorization error:", error);
+        return null;
+      }
+    },
+  }),
+
+  // OAuth Providers
   Google({
     clientId: process.env.AUTH_GOOGLE_ID!,
     clientSecret: process.env.AUTH_GOOGLE_SECRET!,

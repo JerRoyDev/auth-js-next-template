@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   parseAuthError,
@@ -9,8 +10,9 @@ import {
   getErrorDisplayClasses,
 } from '@/lib/auth/utils/error-handler';
 import { OAuthButton } from '@/components/auth/OAuthButton';
+import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
   const searchParams = useSearchParams();
 
   // Hämta error params från URL
@@ -34,7 +36,7 @@ export default function AuthErrorPage() {
             An authentication error occurred. Please try again.
           </p>
           <Link
-            href='/signin'
+            href={AUTH_ROUTES.LOGIN}
             className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700'
           >
             Back to Sign In
@@ -55,31 +57,22 @@ export default function AuthErrorPage() {
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md w-full space-y-8'>
+        {/* Error Title */}
         <div className='text-center'>
           <h2 className='mt-6 text-3xl font-extrabold text-gray-900'>
             {errorInfo.title}
           </h2>
         </div>
 
+        {/* Error Message */}
         <div className={cssClasses}>
           <p className='text-sm'>{errorInfo.message}</p>
         </div>
 
-        {/* Visa provider knapp för vissa fel */}
-        {errorType === 'OAuthAccountNotLinked' && provider && (
-          <div className='space-y-4'>
-            <div className='text-center'>
-              <p className='text-sm text-gray-600'>
-                Try signing in with the correct provider:
-              </p>
-            </div>
-            <OAuthButton provider={provider} size='lg' />
-          </div>
-        )}
-
+        {/* Back to Sign In */}
         <div className='text-center'>
           <Link
-            href='/signin'
+            href={AUTH_ROUTES.LOGIN}
             className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700'
           >
             Back to Sign In
@@ -87,5 +80,13 @@ export default function AuthErrorPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthErrorPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthErrorContent />
+    </Suspense>
   );
 }
