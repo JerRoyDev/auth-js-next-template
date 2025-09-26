@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { registerFormSchema } from '../validations/auth.validations';
 import { saltAndHashPassword } from '../utils/password';
-import { AUTH_MESSAGES, AUTH_ROUTES, DEFAULT_LOGIN_REDIRECT, USER_ROLES } from '../constants/auth.constants';
+import { AUTH_MESSAGES, AUTH_ROUTES, USER_ROLES } from '../constants/auth.constants';
 
 /**
  * Server action for registering a new user with credentials

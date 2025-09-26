@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { registerCredentials } from '@/lib/auth/actions/registerCredentials.action';
 import { signInCredentials } from '@/lib/auth/actions/signInCredentials.action';
-import { DEFAULT_LOGIN_REDIRECT } from '@/lib/auth/constants/auth.constants';
+import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 
 interface CredentialsFormProps {
   mode: 'signin' | 'register';
@@ -42,7 +42,7 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
         // If sign in was successful, redirect to callbackUrl or default
         if (signInResult.success) {
           router.push(
-            callbackUrl || signInResult.redirectTo || DEFAULT_LOGIN_REDIRECT
+            callbackUrl || signInResult.redirectTo || AUTH_ROUTES.AUTHENTICATED_HOME
           );
         }
 

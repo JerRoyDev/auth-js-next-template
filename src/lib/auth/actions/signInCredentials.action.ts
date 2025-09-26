@@ -1,7 +1,7 @@
 'use server';
 
 import { signIn } from '@/lib/auth/config/auth.config';
-import { DEFAULT_LOGIN_REDIRECT } from '../constants/auth.constants';
+import { AUTH_ROUTES } from '../constants/auth.constants';
 import { AuthError } from 'next-auth';
 
 export async function signInCredentials(email: string, password: string) {
@@ -17,7 +17,7 @@ export async function signInCredentials(email: string, password: string) {
     return {
       success: true,
       message: 'Sign in successful',
-      redirectTo: DEFAULT_LOGIN_REDIRECT
+      redirectTo: AUTH_ROUTES.AUTHENTICATED_HOME
     };
   } catch (error) {
 
