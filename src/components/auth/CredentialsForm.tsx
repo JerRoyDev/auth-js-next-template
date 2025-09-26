@@ -42,7 +42,9 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
         // If sign in was successful, redirect to callbackUrl or default
         if (signInResult.success) {
           router.push(
-            callbackUrl || signInResult.redirectTo || AUTH_ROUTES.AUTHENTICATED_HOME
+            callbackUrl ||
+              signInResult.redirectTo ||
+              AUTH_ROUTES.AUTHENTICATED_HOME
           );
         }
 

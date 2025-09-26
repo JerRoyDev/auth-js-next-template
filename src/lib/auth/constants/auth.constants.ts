@@ -12,7 +12,7 @@ export const SESSION_CONFIG = {
   // Balanced approach - suitable for most web applications
   MAX_AGE: 7 * 24 * 60 * 60, // 7 days in seconds
   UPDATE_AGE: 60 * 60, // 1 hour in seconds
-  
+
   // Alternative configurations (uncomment to use):
   // CONSERVATIVE: { MAX_AGE: 8 * 60 * 60, UPDATE_AGE: 30 * 60 }, // 8 hours, 30 min
   // EXTENDED: { MAX_AGE: 30 * 24 * 60 * 60, UPDATE_AGE: 24 * 60 * 60 }, // 30 days, 24 hours
@@ -28,7 +28,7 @@ export const AUTH_ROUTES = {
   VERIFY_EMAIL: '/verify-email',
   UNAUTHORIZED: '/unauthorized',
   AUTH_ERROR: '/error',
-  
+
   // Post-authentication landing page
   AUTHENTICATED_HOME: '/dashboard',
 } as const;
