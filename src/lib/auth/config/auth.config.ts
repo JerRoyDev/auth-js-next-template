@@ -7,16 +7,21 @@ import Facebook from "next-auth/providers/facebook";
 import Twitter from "next-auth/providers/twitter";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
-import { AUTH_ROUTES } from "../constants/auth.constants";
+import { AUTH_ROUTES, SESSION_CONFIG } from "../constants/auth.constants";
 import { signInSchema } from "../validations/auth.validations";
 import { verifyPassword } from "../utils/password";
+import { encode as defaultEncode } from "next-auth/jwt";
+import { v4 as uuid } from "uuid";
 
 /**
  * Auth.js v5 config: Multi OAuth providers with dynamic rendering.
  */
 
 const providers = [
-  // Credentials Provider - Email/Password authentication
+  // CREDENTIALS PROVIDER - Email/Password authentication
+  // ⚠️  IMPORTANT: If using this provider, consider switching to JWT sessions
+  // ⚠️  Database sessions + Credentials requires custom implementation
+  // 💡 For production: Consider OAuth providers for better security
   Credentials({
     name: "credentials",
     credentials: {
@@ -110,25 +115,90 @@ export const providerMap = providers.map((provider) => ({
   name: provider.name,
 }));
 
+// Create adapter instance to be used in jwt.encode
+const adapter = PrismaAdapter(prisma);
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
-  session: { strategy: "database" },
+  adapter,
+
+  // DATABASE SESSION STRATEGY WITH CREDENTIALS WORKAROUND
+  // This configuration enables database sessions for ALL providers,
+  // including the Credentials provider through a custom JWT encode workaround.
+  session: {
+    strategy: "database",
+    maxAge: SESSION_CONFIG.MAX_AGE,
+    updateAge: SESSION_CONFIG.UPDATE_AGE,
+  },
+
   debug: process.env.NODE_ENV === "development",
   providers,
   pages: {
     error: AUTH_ROUTES.AUTH_ERROR, // Custom error page
-    signIn: AUTH_ROUTES.LOGIN, // Custom sign-in page, include some error handling here ex.(error=OAuthAccountNotLinked)
-    // newUser: AUTH_ROUTES.REGISTER, // New users will be directed here on first sign in (leave the property out if not of interest)
+    signIn: AUTH_ROUTES.LOGIN, // Custom sign-in page
+    // newUser: AUTH_ROUTES.REGISTER, // New users will be directed here on first sign in
+  },
 
-    // signOut: AUTH_ROUTES.LOGOUT, // Custom sign-out page (if needed)
-    // verifyRequest: AUTH_ROUTES.VERIFY_REQUEST, // (if using email sign-in)
-    // resetPassword: AUTH_ROUTES.RESET_PASSWORD, // (if implementing password reset)
+  // * CREDENTIALS WORKAROUND: Custom JWT encode function
+  // This is the key to making Credentials work with database sessions.
+  // When a credentials login occurs, we:
+  // 1. Detect it via the `credentials` flag in the token
+  // 2. Manually create a session in the database using the adapter
+  // 3. Return the sessionToken instead of encoding a JWT
+  jwt: {
+    encode: async function (params) {
+      // Check if this is a credentials login (set in jwt callback)
+      if (params.token?.credentials) {
+        if (!params.token.sub) {
+          throw new Error("No user ID found in token");
+        }
 
+        // Ensure adapter and createSession method exist
+        if (!adapter || !adapter.createSession) {
+          throw new Error("Database adapter not properly configured");
+        }
+
+        const sessionToken = uuid();
+
+        try {
+          // Manually create session in database using adapter
+          const createdSession = await adapter.createSession({
+            sessionToken: sessionToken,
+            userId: params.token.sub,
+            expires: new Date(Date.now() + SESSION_CONFIG.MAX_AGE * 1000),
+          });
+
+          if (!createdSession) {
+            throw new Error("Failed to create session");
+          }
+
+          // Return the session token instead of a JWT
+          return sessionToken;
+        } catch (error) {
+          console.error("Session creation failed:", error);
+          throw new Error("Failed to create database session");
+        }
+      }
+
+      // For all other providers (OAuth), use default JWT encoding
+      return defaultEncode(params);
+    },
   },
 
   callbacks: {
-    session: async ({ session, user }) => {
-      if (session.user) {
+    // JWT CALLBACK: Flag credentials provider
+    // This runs for ALL providers and helps us identify credentials logins
+    async jwt({ token, user, account }) {
+      // Flag credentials provider logins for custom handling in jwt.encode
+      if (account?.provider === "credentials") {
+        token.credentials = true;
+      }
+      return token;
+    },
+
+    // SESSION CALLBACK: Extract user data from database
+    // This runs for database sessions and provides user data to the session
+    async session({ session, user }) {
+      if (session.user && user) {
         session.user.id = user.id;
         session.user.role = user.role;
       }

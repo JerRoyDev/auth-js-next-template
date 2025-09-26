@@ -25,3 +25,10 @@ declare module "next-auth" {
     role: string;
   }
 }
+
+declare module "next-auth/jwt" {
+  /** Extend JWT with credentials flag for workaround */
+  interface JWT {
+    credentials?: boolean;
+  }
+}

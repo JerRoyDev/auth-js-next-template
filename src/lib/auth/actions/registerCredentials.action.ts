@@ -77,6 +77,17 @@ export async function registerCredentials(formData: FormData) {
       },
     });
 
+    // * Create Account record for credentials authentication
+    // This enables account linking and provider tracking
+    await prisma.account.create({
+      data: {
+        userId: newUser.id,
+        type: 'credentials',
+        provider: 'credentials',
+        providerAccountId: newUser.id,
+      },
+    });
+
     // * Delete any existing verification tokens for this email
     await prisma.verificationToken.deleteMany({
       where: { identifier: email },
