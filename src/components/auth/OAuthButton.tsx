@@ -1,6 +1,6 @@
 'use client';
 
-import { signInWithOAuthAction } from '@/lib/auth/actions/signInWithOAuth.action';
+import { signInOAuthAction } from '@/lib/auth/actions/signInOAuth.action';
 import { useFormStatus } from 'react-dom';
 import { providerMap } from '@/lib/auth/config/auth.config';
 import {
@@ -148,7 +148,7 @@ export function OAuthButton({
   disabled = false,
 }: OAuthButtonProps) {
   return (
-    <form action={() => signInWithOAuthAction(provider)}>
+    <form action={() => signInOAuthAction(provider)}>
       <OAuthButtonContent
         provider={provider}
         size={size}

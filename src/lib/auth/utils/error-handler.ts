@@ -17,7 +17,7 @@ export type AuthErrorType =
   | 'CredentialsSignin'
   | 'AccountNotLinked'
   | 'MissingCSRF'
-  
+
   // Registration related errors (custom errors)
   | 'EmailExists'
   | 'ValidationError'
@@ -157,7 +157,7 @@ export function getAuthErrorMessage(context: AuthErrorContext): ErrorDisplayInfo
     case 'EmailExists':
       return {
         title: 'Email Already Registered',
-        message: email 
+        message: email
           ? `The email ${email} is already registered. Please sign in instead.`
           : AUTH_MESSAGES.ERROR_EMAIL_EXISTS,
         type: 'warning',
@@ -186,7 +186,7 @@ export function getAuthErrorMessage(context: AuthErrorContext): ErrorDisplayInfo
     case 'AccountCreated':
       return {
         title: 'Account Created Successfully',
-        message: email 
+        message: email
           ? `Account created for ${email}. Please sign in.`
           : AUTH_MESSAGES.SUCCESS_REGISTRATION,
         type: 'info',
@@ -500,13 +500,13 @@ export function parseAuthError(errorParam: string | null): AuthErrorType {
     'CredentialsSignin': 'CredentialsSignin',
     'AccountNotLinked': 'AccountNotLinked',
     'MissingCSRF': 'MissingCSRF',
-    
+
     // Custom registration errors
     'EmailExists': 'EmailExists',
     'ValidationError': 'ValidationError',
     'RegistrationFailed': 'RegistrationFailed',
     'AccountCreated': 'AccountCreated',
-    
+
     // System/Config errors
     'AccessDenied': 'AccessDenied',
     'Configuration': 'Configuration',

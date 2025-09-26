@@ -45,15 +45,15 @@ export const registerFormSchema = z.object({
   // username: usernameSchema,
   email: emailSchema,
   password: passwordSchema,
-  // confirmPassword: z.string()
+  confirmPassword: z.string()
 })
-// .refine(
-//   (data) => data.password === data.confirmPassword,
-//   {
-//     message: AUTH_MESSAGES.ERROR_PASSWORD_MISMATCH,
-//     path: ['confirmPassword'],
-//   }
-// );
+  .refine(
+    (data) => data.password === data.confirmPassword,
+    {
+      message: AUTH_MESSAGES.ERROR_PASSWORD_MISMATCH,
+      path: ['confirmPassword'],
+    }
+  );
 
 export type RegisterFormData = z.infer<typeof registerFormSchema>;
 
