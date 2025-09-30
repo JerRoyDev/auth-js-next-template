@@ -4,33 +4,33 @@ const DashboardPage = async () => {
 
   if (!session?.user) {
     return (
-      <div className='flex items-center justify-center h-screen'>
-        <span className='text-gray-500 text-lg'>Loading...</span>
+      <div className='flex items-center justify-center h-screen bg-background text-foreground'>
+        <span className='text-muted-foreground text-lg'>Loading...</span>
       </div>
     );
   }
 
   return (
-    <div className='min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
+    <div className='min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-4xl mx-auto'>
-        <div className='bg-white shadow-xl rounded-xl p-8 border border-gray-200'>
+        <div className='bg-card shadow-xl rounded-xl p-8 border border-border'>
           <div className='text-center mb-8'>
-            <h1 className='text-3xl font-bold text-gray-900 mb-2'>
+            <h1 className='text-3xl font-bold text-foreground mb-2'>
               Welcome, {session.user.name || session.user.email}!
             </h1>
-            <p className='text-gray-600'>Email: {session.user.email}</p>
+            <p className='text-muted-foreground'>Email: {session.user.email}</p>
             {session.user.role && (
-              <span className='inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full'>
+              <span className='inline-block mt-2 px-3 py-1 bg-secondary text-secondary-foreground text-sm font-medium rounded-full'>
                 {session.user.role}
               </span>
             )}
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-            <div className='bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors cursor-pointer'>
-              <div className='flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4'>
+            <div className='bg-accent rounded-lg p-6 border border-border hover:bg-muted transition-colors cursor-pointer'>
+              <div className='flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4'>
                 <svg
-                  className='w-6 h-6 text-blue-600'
+                  className='w-6 h-6 text-primary'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -43,18 +43,18 @@ const DashboardPage = async () => {
                   />
                 </svg>
               </div>
-              <h3 className='text-lg font-semibold text-gray-900 mb-2'>
+              <h3 className='text-lg font-semibold text-foreground mb-2'>
                 Profile Settings
               </h3>
-              <p className='text-gray-600 text-sm'>
+              <p className='text-muted-foreground text-sm'>
                 Manage your account and personal details
               </p>
             </div>
 
-            <div className='bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors cursor-pointer'>
-              <div className='flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mb-4'>
+            <div className='bg-accent rounded-lg p-6 border border-border hover:bg-muted transition-colors cursor-pointer'>
+              <div className='flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4'>
                 <svg
-                  className='w-6 h-6 text-green-600'
+                  className='w-6 h-6 text-primary'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -67,18 +67,18 @@ const DashboardPage = async () => {
                   />
                 </svg>
               </div>
-              <h3 className='text-lg font-semibold text-gray-900 mb-2'>
+              <h3 className='text-lg font-semibold text-foreground mb-2'>
                 Recent Activity
               </h3>
-              <p className='text-gray-600 text-sm'>
+              <p className='text-muted-foreground text-sm'>
                 See your latest actions and activities
               </p>
             </div>
 
-            <div className='bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors cursor-pointer'>
-              <div className='flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-lg mb-4'>
+            <div className='bg-accent rounded-lg p-6 border border-border hover:bg-muted transition-colors cursor-pointer'>
+              <div className='flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4'>
                 <svg
-                  className='w-6 h-6 text-yellow-600'
+                  className='w-6 h-6 text-primary'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -91,10 +91,10 @@ const DashboardPage = async () => {
                   />
                 </svg>
               </div>
-              <h3 className='text-lg font-semibold text-gray-900 mb-2'>
+              <h3 className='text-lg font-semibold text-foreground mb-2'>
                 Notifications
               </h3>
-              <p className='text-gray-600 text-sm'>
+              <p className='text-muted-foreground text-sm'>
                 Manage your messages and alerts
               </p>
             </div>
