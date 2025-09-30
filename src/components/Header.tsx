@@ -27,7 +27,16 @@ export default async function Header() {
                 {/* User Info */}
                 <div className='flex items-center space-x-3'>
                   <span className='text-sm text-muted-foreground font-medium'>
-                    Welcome, {session.user?.name || session.user?.email}
+                    {session.user?.name
+                      ? session.user.name
+                          .split(' ')
+                          .map(
+                            (part) =>
+                              part.charAt(0).toUpperCase() +
+                              part.slice(1).toLowerCase()
+                          )
+                          .join(' ')
+                      : session.user?.email}
                   </span>
                   {/* Logout Button */}
                   <SignOutButton />
@@ -40,14 +49,14 @@ export default async function Header() {
                   href={AUTH_ROUTES.LOGIN}
                   className='inline-flex items-center px-4 py-2 border border-border text-sm font-medium rounded-lg text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors shadow-sm'
                 >
-                  Logga in
+                  Sign In
                 </Link>
                 {/* Register Link  */}
                 <Link
                   href={AUTH_ROUTES.REGISTER}
                   className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-primary-foreground bg-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors shadow-sm'
                 >
-                  Registrera
+                  Create Account
                 </Link>
               </div>
             )}

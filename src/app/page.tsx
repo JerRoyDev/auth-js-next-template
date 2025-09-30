@@ -8,8 +8,8 @@ export default function Home() {
               Auth.js Next Template
             </h1>
             <p className='text-xl text-muted-foreground mb-8 max-w-2xl mx-auto'>
-              En komplett autentiseringslösning med Next.js, Auth.js v5, Prisma
-              och stöd för både credentials och OAuth providers.
+              A complete authentication starter with Next.js, Auth.js v5, and
+              Prisma with support for both credentials and OAuth providers.
             </p>
 
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-8'>
@@ -30,10 +30,10 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className='text-lg font-semibold text-foreground mb-2'>
-                  Säker autentisering
+                  Secure authentication
                 </h3>
                 <p className='text-muted-foreground text-sm'>
-                  Byggd med Auth.js v5 och moderna säkerhetsstandarder
+                  Built with Auth.js v5 and modern security best practices
                 </p>
               </div>
 
@@ -54,10 +54,10 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className='text-lg font-semibold text-foreground mb-2'>
-                  Snabb utveckling
+                  Rapid development
                 </h3>
                 <p className='text-muted-foreground text-sm'>
-                  Redo att använda med TypeScript, Tailwind CSS och Prisma
+                  Ready to use with TypeScript, Tailwind CSS, and Prisma
                 </p>
               </div>
 
@@ -78,16 +78,17 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className='text-lg font-semibold text-foreground mb-2'>
-                  Flexibel lösning
+                  Flexible solution
                 </h3>
                 <p className='text-muted-foreground text-sm'>
-                  Stöder både databassessioner och JWT med credentials + OAuth
+                  Supports both database sessions and JWT with credentials +
+                  OAuth
                 </p>
               </div>
             </div>
 
             <div className='text-sm text-muted-foreground'>
-              Utvecklad med ❤️ för moderna webbapplikationer
+              Built with ❤️ for modern web applications
             </div>
           </div>
         </div>

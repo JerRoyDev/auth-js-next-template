@@ -3,7 +3,7 @@
 import { useAuthError } from '@/lib/auth/hooks/useAuthError';
 
 /**
- * Enkel ErrorMessage komponent som automatiskt visar Auth.js fel
+ * Simple ErrorMessage component that automatically shows Auth.js errors
  */
 export function AuthErrorMessage() {
   const error = useAuthError();

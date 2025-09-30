@@ -16,7 +16,7 @@ const DashboardPage = async () => {
         <div className='bg-white shadow-xl rounded-xl p-8 border border-gray-200'>
           <div className='text-center mb-8'>
             <h1 className='text-3xl font-bold text-gray-900 mb-2'>
-              Välkommen, {session.user.name || session.user.email}!
+              Welcome, {session.user.name || session.user.email}!
             </h1>
             <p className='text-gray-600'>Email: {session.user.email}</p>
             {session.user.role && (
@@ -44,10 +44,10 @@ const DashboardPage = async () => {
                 </svg>
               </div>
               <h3 className='text-lg font-semibold text-gray-900 mb-2'>
-                Profilinställningar
+                Profile Settings
               </h3>
               <p className='text-gray-600 text-sm'>
-                Hantera ditt konto och personliga uppgifter
+                Manage your account and personal details
               </p>
             </div>
 
@@ -68,10 +68,10 @@ const DashboardPage = async () => {
                 </svg>
               </div>
               <h3 className='text-lg font-semibold text-gray-900 mb-2'>
-                Senaste aktivitet
+                Recent Activity
               </h3>
               <p className='text-gray-600 text-sm'>
-                Se dina senaste åtgärder och aktiviteter
+                See your latest actions and activities
               </p>
             </div>
 
@@ -92,10 +92,10 @@ const DashboardPage = async () => {
                 </svg>
               </div>
               <h3 className='text-lg font-semibold text-gray-900 mb-2'>
-                Notifikationer
+                Notifications
               </h3>
               <p className='text-gray-600 text-sm'>
-                Hantera dina meddelanden och aviseringar
+                Manage your messages and alerts
               </p>
             </div>
           </div>

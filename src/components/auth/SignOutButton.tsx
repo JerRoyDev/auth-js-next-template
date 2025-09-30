@@ -12,7 +12,7 @@ function SignOutButtonContent() {
       disabled={pending}
       className='flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg shadow-sm bg-card text-sm font-medium text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
     >
-      {pending ? 'Loggar ut...' : 'Logga ut'}
+      {pending ? 'Signing out...' : 'Sign Out'}
     </button>
   );
 }

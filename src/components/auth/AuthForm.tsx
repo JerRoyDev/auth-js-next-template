@@ -60,22 +60,22 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
       <div className='text-sm text-muted-foreground text-center pt-4 border-t border-border'>
         {isSignIn ? (
           <>
-            Har du inget konto?{' '}
+            Don't have an account?{' '}
             <a
               href={AUTH_ROUTES.REGISTER}
               className='text-primary hover:opacity-90 font-medium hover:underline transition-colors'
             >
-              Registrera dig här
+              Create one here
             </a>
           </>
         ) : (
           <>
-            Har du redan ett konto?{' '}
+            Already have an account?{' '}
             <a
               href={AUTH_ROUTES.LOGIN}
               className='text-primary hover:opacity-90 font-medium hover:underline transition-colors'
             >
-              Logga in här
+              Sign in here
             </a>
           </>
         )}

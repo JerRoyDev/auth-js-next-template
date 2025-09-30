@@ -14,16 +14,16 @@ import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 function AuthErrorContent() {
   const searchParams = useSearchParams();
 
-  // Hämta error params från URL
+  // Read error params from URL
   const errorParam = searchParams.get('error');
   const provider = searchParams.get('provider');
   const email = searchParams.get('email');
 
-  // Parse error och få error info
+  // Parse error and get error info
   const errorType = parseAuthError(errorParam);
   const shouldShow = shouldDisplayOnErrorPage(errorType);
 
-  // Fallback för okänt fel eller fel som inte ska visas här
+  // Fallback for unknown error or errors that shouldn't show here
   if (!errorParam || !shouldShow) {
     return (
       <div className='min-h-screen flex items-center justify-center bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8'>
