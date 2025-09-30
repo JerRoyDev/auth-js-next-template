@@ -100,9 +100,9 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
     <div className='space-y-6'>
       {/* Show local error for both signin and register modes */}
       {error && (
-        <div className='p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm flex items-center space-x-2'>
+        <div className='p-4 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center space-x-2'>
           <svg
-            className='w-5 h-5 text-red-500 flex-shrink-0'
+            className='w-5 h-5 text-destructive flex-shrink-0'
             fill='currentColor'
             viewBox='0 0 20 20'
           >
@@ -137,14 +137,14 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
               setFormValues((prev) => ({ ...prev, email: e.target.value }))
             }
             placeholder='john@example.com'
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors ${
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors text-foreground placeholder:text-muted-foreground ${
               fieldErrors.email
-                ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50'
-                : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-white hover:border-gray-400'
+                ? 'border-destructive focus:ring-destructive focus:border-destructive bg-destructive/10'
+                : 'border-border focus:ring-ring focus:border-ring bg-card hover:border-border'
             }`}
           />
           {fieldErrors.email && (
-            <p className='mt-1 text-sm text-red-600'>{fieldErrors.email}</p>
+            <p className='mt-1 text-sm text-destructive'>{fieldErrors.email}</p>
           )}
         </div>
 
@@ -166,14 +166,16 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
               setFormValues((prev) => ({ ...prev, password: e.target.value }))
             }
             placeholder='Your password'
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors ${
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors text-foreground placeholder:text-muted-foreground ${
               fieldErrors.password
-                ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50'
-                : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-white hover:border-gray-400'
+                ? 'border-destructive focus:ring-destructive focus:border-destructive bg-destructive/10'
+                : 'border-border focus:ring-ring focus:border-ring bg-card hover:border-border'
             }`}
           />
           {fieldErrors.password && (
-            <p className='mt-1 text-sm text-red-600'>{fieldErrors.password}</p>
+            <p className='mt-1 text-sm text-destructive'>
+              {fieldErrors.password}
+            </p>
           )}
         </div>
 
@@ -199,14 +201,14 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
                 }))
               }
               placeholder='Confirm your password'
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors ${
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors text-foreground placeholder:text-muted-foreground ${
                 fieldErrors.confirmPassword
-                  ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50'
-                  : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-white hover:border-gray-400'
+                  ? 'border-destructive focus:ring-destructive focus:border-destructive bg-destructive/10'
+                  : 'border-border focus:ring-ring focus:border-ring bg-card hover:border-border'
               }`}
             />
             {fieldErrors.confirmPassword && (
-              <p className='mt-1 text-sm text-red-600'>
+              <p className='mt-1 text-sm text-destructive'>
                 {fieldErrors.confirmPassword}
               </p>
             )}
@@ -216,7 +218,7 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
         <button
           type='submit'
           disabled={isLoading}
-          className='w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-base transition-colors shadow-sm hover:shadow-md'
+          className='w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-base transition-colors shadow-sm hover:shadow-md'
         >
           {isLoading
             ? mode === 'signin'

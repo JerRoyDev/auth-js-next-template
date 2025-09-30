@@ -9,7 +9,6 @@ import {
   shouldDisplayOnErrorPage,
   getErrorDisplayClasses,
 } from '@/lib/auth/utils/error-handler';
-import { OAuthButton } from '@/components/auth/OAuthButton';
 import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 
 function AuthErrorContent() {
@@ -27,17 +26,15 @@ function AuthErrorContent() {
   // Fallback för okänt fel eller fel som inte ska visas här
   if (!errorParam || !shouldShow) {
     return (
-      <div className='min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='min-h-screen flex items-center justify-center bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8'>
         <div className='max-w-md w-full space-y-8 text-center'>
-          <h2 className='text-3xl font-bold text-gray-900 dark:text-white'>
-            Something went wrong
-          </h2>
-          <p className='text-gray-600 dark:text-gray-400 text-base leading-relaxed'>
+          <h2 className='text-3xl font-bold'>Something went wrong</h2>
+          <p className='text-muted-foreground text-base leading-relaxed'>
             An authentication error occurred. Please try again.
           </p>
           <Link
             href={AUTH_ROUTES.LOGIN}
-            className='inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200'
+            className='inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-primary-foreground bg-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors duration-200'
           >
             Back to Sign In
           </Link>
@@ -55,13 +52,11 @@ function AuthErrorContent() {
   const cssClasses = getErrorDisplayClasses(errorInfo);
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8'>
+    <div className='min-h-screen flex items-center justify-center bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md w-full space-y-8'>
         {/* Error Title */}
         <div className='text-center'>
-          <h2 className='text-3xl font-bold text-gray-900 dark:text-white'>
-            {errorInfo.title}
-          </h2>
+          <h2 className='text-3xl font-bold'>{errorInfo.title}</h2>
         </div>
 
         {/* Error Message */}
@@ -73,7 +68,7 @@ function AuthErrorContent() {
         <div className='text-center'>
           <Link
             href={AUTH_ROUTES.LOGIN}
-            className='inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200'
+            className='inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-primary-foreground bg-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors duration-200'
           >
             Back to Sign In
           </Link>
@@ -87,10 +82,10 @@ export default function AuthErrorPage() {
   return (
     <Suspense
       fallback={
-        <div className='min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900'>
+        <div className='min-h-screen flex items-center justify-center bg-background text-foreground'>
           <div className='text-center'>
-            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto'></div>
-            <p className='mt-4 text-gray-600 dark:text-gray-400'>Loading...</p>
+            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto'></div>
+            <p className='mt-4 text-muted-foreground'>Loading...</p>
           </div>
         </div>
       }

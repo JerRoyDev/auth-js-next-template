@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
+import ThemeToggleButton from '@/components/ThemeToggleButton';
 
 export const metadata: Metadata = {
   title: 'Auth.js Next Template',
@@ -17,6 +18,9 @@ export default function RootLayout({
       <body>
         <Header />
         <main>{children}</main>
+        <div className='fixed bottom-4 right-4'>
+          <ThemeToggleButton />
+        </div>
       </body>
     </html>
   );

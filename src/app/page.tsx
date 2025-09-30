@@ -1,22 +1,22 @@
 export default function Home() {
   return (
-    <main className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
+    <main className='min-h-screen bg-background text-foreground'>
       <div className='flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8'>
         <div className='max-w-4xl mx-auto text-center'>
-          <div className='bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-gray-200'>
-            <h1 className='text-4xl md:text-6xl font-bold text-gray-900 mb-6'>
+          <div className='bg-card rounded-2xl shadow-xl p-8 md:p-12 border border-border'>
+            <h1 className='text-4xl md:text-6xl font-bold text-foreground mb-6'>
               Auth.js Next Template
             </h1>
-            <p className='text-xl text-gray-600 mb-8 max-w-2xl mx-auto'>
+            <p className='text-xl text-muted-foreground mb-8 max-w-2xl mx-auto'>
               En komplett autentiseringslösning med Next.js, Auth.js v5, Prisma
               och stöd för både credentials och OAuth providers.
             </p>
 
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-8'>
-              <div className='p-6 bg-blue-50 rounded-lg border border-blue-100'>
-                <div className='w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4'>
+              <div className='p-6 bg-accent rounded-lg border border-border'>
+                <div className='w-12 h-12 bg-secondary rounded-lg flex items-center justify-center mx-auto mb-4'>
                   <svg
-                    className='w-6 h-6 text-blue-600'
+                    className='w-6 h-6 text-primary'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -29,18 +29,18 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className='text-lg font-semibold text-gray-900 mb-2'>
+                <h3 className='text-lg font-semibold text-foreground mb-2'>
                   Säker autentisering
                 </h3>
-                <p className='text-gray-600 text-sm'>
+                <p className='text-muted-foreground text-sm'>
                   Byggd med Auth.js v5 och moderna säkerhetsstandarder
                 </p>
               </div>
 
-              <div className='p-6 bg-green-50 rounded-lg border border-green-100'>
-                <div className='w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4'>
+              <div className='p-6 bg-accent rounded-lg border border-border'>
+                <div className='w-12 h-12 bg-secondary rounded-lg flex items-center justify-center mx-auto mb-4'>
                   <svg
-                    className='w-6 h-6 text-green-600'
+                    className='w-6 h-6 text-primary'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -53,18 +53,18 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className='text-lg font-semibold text-gray-900 mb-2'>
+                <h3 className='text-lg font-semibold text-foreground mb-2'>
                   Snabb utveckling
                 </h3>
-                <p className='text-gray-600 text-sm'>
+                <p className='text-muted-foreground text-sm'>
                   Redo att använda med TypeScript, Tailwind CSS och Prisma
                 </p>
               </div>
 
-              <div className='p-6 bg-purple-50 rounded-lg border border-purple-100'>
-                <div className='w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4'>
+              <div className='p-6 bg-accent rounded-lg border border-border'>
+                <div className='w-12 h-12 bg-secondary rounded-lg flex items-center justify-center mx-auto mb-4'>
                   <svg
-                    className='w-6 h-6 text-purple-600'
+                    className='w-6 h-6 text-primary'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -77,16 +77,16 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className='text-lg font-semibold text-gray-900 mb-2'>
+                <h3 className='text-lg font-semibold text-foreground mb-2'>
                   Flexibel lösning
                 </h3>
-                <p className='text-gray-600 text-sm'>
+                <p className='text-muted-foreground text-sm'>
                   Stöder både databassessioner och JWT med credentials + OAuth
                 </p>
               </div>
             </div>
 
-            <div className='text-sm text-gray-500'>
+            <div className='text-sm text-muted-foreground'>
               Utvecklad med ❤️ för moderna webbapplikationer
             </div>
           </div>

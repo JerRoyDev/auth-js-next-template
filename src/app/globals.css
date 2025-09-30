@@ -1,58 +1,109 @@
-@import "tailwindcss";
+/* * IMPORTS * */
+@import "tailwindcss"
+/* (example to set prefix: @import "tailwindcss" prefix(tw); usage: tw:bg-red-500) */
+/* * PLUGINS * */
+/* @plugin (example: tailwindcss-animate); */
+;
+
+/* https: //tailwindcss.com/docs/theme#default-theme-variable-reference */
+/* Default theme namespace: https: //tailwindcss.com/docs/theme#default-theme-variable-reference:~:text=xl%22)%3B-,Default%20theme%20variable%20reference,%7D,-Dark%20mode */
+@theme {
+  /* Tailwind v4 color tokens mapped to CSS variables.
+     Use utilities like bg-background, text-foreground, border-border, etc. */
+
+  /* SURFACES */
+  --color-background: var(--background);
+  /* Page/background surface (bg-background) */
+  --color-foreground: var(--foreground);
+  /* Default readable text (text-foreground) */
+  --color-card: var(--card);
+  /* Component surfaces e.g. cards/panels (bg-card) */
+  --color-card-foreground: var(--card-foreground);
+  /* Text on card (text-card-foreground) */
+  --color-popover: var(--popover);
+  /* Overlays/menus/modals (bg-popover) */
+  --color-popover-foreground: var(--popover-foreground);
+  /* Text on popover */
+  --color-muted: var(--muted);
+  /* Subtle sections (bg-muted) */
+  --color-muted-foreground: var(--muted-foreground);
+  /* Text on muted */
+  --color-border: var(--border);
+  /* Dividers/outlines (border-border) */
+  --color-input: var(--input);
+  /* Form controls (inputs, selects) */
+
+  /* ACCENTS */
+  --color-primary: var(--primary);
+  /* Primary actions/links (bg-primary) */
+  --color-primary-foreground: var(--primary-foreground);
+  /* Text on primary */
+  --color-secondary: var(--secondary);
+  /* Secondary actions (bg-secondary) */
+  --color-secondary-foreground: var(--secondary-foreground);
+  /* Text on secondary */
+  --color-accent: var(--accent);
+  /* Subtle highlights/tags (bg-accent) */
+  --color-accent-foreground: var(--accent-foreground);
+  /* Text on accent */
+  --color-destructive: var(--destructive);
+  /* Destructive/alert (bg-destructive) */
+  --color-destructive-foreground: var(--destructive-foreground);
+  /* Text on destructive */
+  --color-ring: var(--ring);
+  /* Focus ring (focus:ring-ring) */
+
+}
 
 :root {
-  /* Light theme colors */
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 221.2 83.2% 53.3%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 98%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 84% 4.9%;
-  --destructive: 0 72.2% 50.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 221.2 83.2% 53.3%;
-  --radius: 0.5rem;
+  /* Light theme values */
+  /* SURFACES */
+  --background: #D8C9AE;
+  --foreground: #575757;
+  --card: #EDE3D1;
+  --card-foreground: #575757;
+  --popover: #EDE3D1;
+  --popover-foreground: #575757;
+  --muted: #EAE1D1;
+  --muted-foreground: #6F665B;
+  --border: #C2B59B;
+  --input: #C2B59B;
+
+  /* ACCENTS */
+  --primary: #2D5A6A;
+  --primary-foreground: #F8FAFC;
+  --secondary: #E6DDCC;
+  --secondary-foreground: #575757;
+  --accent: #CBBE9F;
+  --accent-foreground: #2F2F2F;
+  --destructive: #B91C1C;
+  --destructive-foreground: #FDF2F2;
+  --ring: #3F7C8C;
 }
 
+/* https: //tailwindcss.com/docs/dark-mode */
+.dark {
+  /* Dark theme values (applied when <html> has class "dark") */
+  /* SURFACES */
+  --background: #111314;
+  --foreground: #ECE7DF;
+  --card: #171A18;
+  --card-foreground: #ECE7DF;
+  --popover: #171A18;
+  --popover-foreground: #ECE7DF;
+  --muted: #1F2320;
+  --muted-foreground: #A9A79F;
+  --border: #2B302C;
+  --input: #2B302C;
 
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Dark theme colors - proper contrast ratios */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 47.4% 11.2%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 47.4% 11.2%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 72.2% 50.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 217.2 91.2% 59.8%;
-  }
-}
-
-body {
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-family: Arial, Helvetica, sans-serif;
+  /* ACCENTS */
+  --primary: #78A9B5;
+  --primary-foreground: #0B0C0C;
+  --secondary: #1E221F;
+  --secondary-foreground: #E2DDD2;
+  --accent: #222722;
+  --accent-foreground: #EAE6DC;
+  --destructive: #F87171;
+  --destructive-foreground: #0B0C0C;
+  --ring: #78A9B5;
 }

@@ -15,8 +15,6 @@ type ProviderType = (typeof providerMap)[number]['id'];
 
 interface OAuthButtonProps {
   provider: ProviderType;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'outline';
   disabled?: boolean;
 }
 
@@ -58,8 +56,8 @@ const providerConfig: Partial<
     {
       name: string;
       icon: React.ComponentType<{ size?: number }>;
-      bgColor: string;
-      textColor: string;
+      bgColor: string; // unused: uniform styling enforced
+      textColor: string; // unused: uniform styling enforced
     }
   >
 > = {
@@ -98,18 +96,10 @@ const providerConfig: Partial<
   }, */
 } as const;
 
-const sizeClasses = {
-  sm: 'px-3 py-2 text-sm',
-  md: 'px-4 py-3 text-base',
-  lg: 'px-6 py-4 text-lg',
-};
+// Fixed size to enforce uniform square icon buttons
+const ICON_BUTTON_SIZE = 'h-10 w-10';
 
-function OAuthButtonContent({
-  provider,
-  size = 'md',
-  variant = 'default',
-  disabled = false,
-}: OAuthButtonProps) {
+function OAuthButtonContent({ provider, disabled = false }: OAuthButtonProps) {
   const { pending } = useFormStatus();
 
   // Use specific config or fallback to default
@@ -117,45 +107,28 @@ function OAuthButtonContent({
 
   const IconComponent = config.icon;
 
-  const baseClasses = `
-    w-full flex items-center justify-center gap-3 
-    rounded-lg font-semibold transition-all duration-200
-    disabled:opacity-60 disabled:cursor-not-allowed
-    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
-    shadow-sm hover:shadow-md
-  `.trim();
-
-  const variantClasses =
-    variant === 'outline'
-      ? 'border-2 border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-      : config.bgColor + ' ' + config.textColor;
-
   return (
     <button
       type='submit'
       disabled={disabled || pending}
-      className={`${baseClasses} ${variantClasses} ${sizeClasses[size]}`}
+      title={config.name}
+      aria-label={config.name}
+      className={` inline-flex items-center justify-center
+    rounded-md transition-colors duration-200
+    disabled:opacity-60 disabled:cursor-not-allowed
+    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring focus:ring-offset-background
+    shadow-sm border border-border bg-card text-foreground hover:bg-muted ${ICON_BUTTON_SIZE}`}
     >
-      <IconComponent size={20} />
-      {pending ? 'Loading...' : `${config.name}`}
+      <IconComponent size={18} />
+      <span className='sr-only'>{pending ? 'Loading…' : `${config.name}`}</span>
     </button>
   );
 }
 
-export function OAuthButton({
-  provider,
-  size = 'md',
-  variant = 'default',
-  disabled = false,
-}: OAuthButtonProps) {
+export function OAuthButton({ provider, disabled = false }: OAuthButtonProps) {
   return (
     <form action={() => signInOAuthAction(provider)}>
-      <OAuthButtonContent
-        provider={provider}
-        size={size}
-        variant={variant}
-        disabled={disabled}
-      />
+      <OAuthButtonContent provider={provider} disabled={disabled} />
     </form>
   );
 }

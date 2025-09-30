@@ -466,20 +466,20 @@ export function shouldDisplayOnErrorPage(error: AuthErrorType): boolean {
 export function getErrorDisplayClasses(errorInfo: ErrorDisplayInfo): string {
   const baseClasses = 'p-4 rounded-lg border text-center max-w-md mx-auto';
 
-  // Type-based styling
+  // Type-based styling (token-based, adapts to light/dark palettes)
   const typeClasses = {
-    error: 'bg-red-50 border-red-200 text-red-800 dark:bg-red-950 dark:border-red-800 dark:text-red-200',
-    warning: 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950 dark:border-amber-800 dark:text-amber-200',
-    info: 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200'
-  };
+    error: 'bg-destructive/10 border-destructive/30 text-destructive',
+    warning: 'bg-accent/20 border-accent/40 text-accent-foreground',
+    info: 'bg-primary/10 border-primary/30 text-primary'
+  } as const;
 
   // Severity-based additional styling
   const severityClasses = {
     low: '',
     medium: 'border-l-4',
     high: 'border-l-4 shadow-md',
-    critical: 'border-l-4 shadow-lg ring-1 ring-red-200 dark:ring-red-800'
-  };
+    critical: 'border-l-4 shadow-lg ring-1 ring-ring'
+  } as const;
 
   return `${baseClasses} ${typeClasses[errorInfo.type]} ${severityClasses[errorInfo.severity]}`;
 }

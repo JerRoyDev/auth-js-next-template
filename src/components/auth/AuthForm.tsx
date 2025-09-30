@@ -37,10 +37,10 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
       {oauthProviders.length > 0 && (
         <div className='relative my-8'>
           <div className='absolute inset-0 flex items-center'>
-            <div className='w-full border-t border-gray-300' />
+            <div className='w-full border-t border-border' />
           </div>
           <div className='relative flex justify-center text-sm'>
-            <span className='px-4 bg-white text-gray-500 font-medium'>
+            <span className='px-4 bg-card text-muted-foreground font-medium'>
               {isSignIn ? 'Or continue with' : 'Or sign up with'}
             </span>
           </div>
@@ -49,7 +49,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
 
       {/* OAuth Providers */}
       {oauthProviders.length > 0 && (
-        <div className='space-y-3'>
+        <div className='flex flex-wrap justify-center items-center gap-3'>
           {oauthProviders.map((provider) => (
             <OAuthButton key={provider.id} provider={provider.id} />
           ))}
@@ -57,13 +57,13 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
       )}
 
       {/* Footer */}
-      <div className='text-sm text-gray-600 text-center pt-4 border-t border-gray-100'>
+      <div className='text-sm text-muted-foreground text-center pt-4 border-t border-border'>
         {isSignIn ? (
           <>
             Har du inget konto?{' '}
             <a
               href={AUTH_ROUTES.REGISTER}
-              className='text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors'
+              className='text-primary hover:opacity-90 font-medium hover:underline transition-colors'
             >
               Registrera dig här
             </a>
@@ -73,7 +73,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             Har du redan ett konto?{' '}
             <a
               href={AUTH_ROUTES.LOGIN}
-              className='text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors'
+              className='text-primary hover:opacity-90 font-medium hover:underline transition-colors'
             >
               Logga in här
             </a>
