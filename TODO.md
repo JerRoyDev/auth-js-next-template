@@ -1,0 +1,5 @@
+- routes med behörighet.
+- verifering vid registrering med credentials.
+- automatisk inlogg efter lyckad registrering (verifierad credentials signup)
+- Toggle light- darkmode konfiguration. Ska den även gå på systeminställningar?
+-
