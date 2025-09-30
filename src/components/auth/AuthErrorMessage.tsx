@@ -12,8 +12,8 @@ export function AuthErrorMessage() {
 
   return (
     <div className={error.cssClasses}>
-      <p className='font-medium'>{error.title}</p>
-      <p className='text-sm mt-1'>{error.message}</p>
+      <p className='font-semibold text-base'>{error.title}</p>
+      <p className='text-sm mt-2 leading-relaxed'>{error.message}</p>
     </div>
   );
 }

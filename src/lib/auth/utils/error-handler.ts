@@ -464,13 +464,13 @@ export function shouldDisplayOnErrorPage(error: AuthErrorType): boolean {
  * Get CSS classes for error display based on type and severity
  */
 export function getErrorDisplayClasses(errorInfo: ErrorDisplayInfo): string {
-  const baseClasses = 'p-4 rounded-md border';
+  const baseClasses = 'p-4 rounded-lg border text-center max-w-md mx-auto';
 
   // Type-based styling
   const typeClasses = {
-    error: 'bg-red-50 border-red-200 text-red-800',
-    warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-    info: 'bg-blue-50 border-blue-200 text-blue-800'
+    error: 'bg-red-50 border-red-200 text-red-800 dark:bg-red-950 dark:border-red-800 dark:text-red-200',
+    warning: 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950 dark:border-amber-800 dark:text-amber-200',
+    info: 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200'
   };
 
   // Severity-based additional styling
@@ -478,7 +478,7 @@ export function getErrorDisplayClasses(errorInfo: ErrorDisplayInfo): string {
     low: '',
     medium: 'border-l-4',
     high: 'border-l-4 shadow-md',
-    critical: 'border-l-4 shadow-lg'
+    critical: 'border-l-4 shadow-lg ring-1 ring-red-200 dark:ring-red-800'
   };
 
   return `${baseClasses} ${typeClasses[errorInfo.type]} ${severityClasses[errorInfo.severity]}`;

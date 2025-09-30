@@ -97,19 +97,30 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
   };
 
   return (
-    <div className='space-y-4'>
+    <div className='space-y-6'>
       {/* Show local error for both signin and register modes */}
       {error && (
-        <div className='p-3 rounded-md bg-red-50 border border-red-200 text-red-800 text-sm'>
-          {error}
+        <div className='p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm flex items-center space-x-2'>
+          <svg
+            className='w-5 h-5 text-red-500 flex-shrink-0'
+            fill='currentColor'
+            viewBox='0 0 20 20'
+          >
+            <path
+              fillRule='evenodd'
+              d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z'
+              clipRule='evenodd'
+            />
+          </svg>
+          <span>{error}</span>
         </div>
       )}
 
-      <form action={handleSubmit} className='space-y-3'>
+      <form action={handleSubmit} className='space-y-5'>
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-gray-700 mb-1'
+            className='block text-sm font-semibold text-foreground mb-2'
           >
             Email
           </label>
@@ -126,10 +137,10 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
               setFormValues((prev) => ({ ...prev, email: e.target.value }))
             }
             placeholder='john@example.com'
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-offset-2 disabled:opacity-50 ${
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors ${
               fieldErrors.email
                 ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50'
-                : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-white hover:border-gray-400'
             }`}
           />
           {fieldErrors.email && (
@@ -140,7 +151,7 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-gray-700 mb-1'
+            className='block text-sm font-semibold text-foreground mb-2'
           >
             Password
           </label>
@@ -155,10 +166,10 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
               setFormValues((prev) => ({ ...prev, password: e.target.value }))
             }
             placeholder='Your password'
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-offset-2 disabled:opacity-50 ${
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors ${
               fieldErrors.password
                 ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50'
-                : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-white hover:border-gray-400'
             }`}
           />
           {fieldErrors.password && (
@@ -170,7 +181,7 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
           <div>
             <label
               htmlFor='confirmPassword'
-              className='block text-sm font-medium text-gray-700 mb-1'
+              className='block text-sm font-semibold text-foreground mb-2'
             >
               Confirm Password
             </label>
@@ -188,10 +199,10 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
                 }))
               }
               placeholder='Confirm your password'
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-offset-2 disabled:opacity-50 ${
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors ${
                 fieldErrors.confirmPassword
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50'
-                  : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                  : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-white hover:border-gray-400'
               }`}
             />
             {fieldErrors.confirmPassword && (
@@ -205,7 +216,7 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
         <button
           type='submit'
           disabled={isLoading}
-          className='w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium'
+          className='w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-base transition-colors shadow-sm hover:shadow-md'
         >
           {isLoading
             ? mode === 'signin'

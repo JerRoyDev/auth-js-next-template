@@ -27,17 +27,17 @@ function AuthErrorContent() {
   // Fallback för okänt fel eller fel som inte ska visas här
   if (!errorParam || !shouldShow) {
     return (
-      <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8'>
         <div className='max-w-md w-full space-y-8 text-center'>
-          <h2 className='text-3xl font-extrabold text-gray-900'>
+          <h2 className='text-3xl font-bold text-gray-900 dark:text-white'>
             Something went wrong
           </h2>
-          <p className='text-gray-600'>
+          <p className='text-gray-600 dark:text-gray-400 text-base leading-relaxed'>
             An authentication error occurred. Please try again.
           </p>
           <Link
             href={AUTH_ROUTES.LOGIN}
-            className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700'
+            className='inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200'
           >
             Back to Sign In
           </Link>
@@ -55,25 +55,25 @@ function AuthErrorContent() {
   const cssClasses = getErrorDisplayClasses(errorInfo);
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
+    <div className='min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md w-full space-y-8'>
         {/* Error Title */}
         <div className='text-center'>
-          <h2 className='mt-6 text-3xl font-extrabold text-gray-900'>
+          <h2 className='text-3xl font-bold text-gray-900 dark:text-white'>
             {errorInfo.title}
           </h2>
         </div>
 
         {/* Error Message */}
         <div className={cssClasses}>
-          <p className='text-sm'>{errorInfo.message}</p>
+          <p className='text-sm leading-relaxed'>{errorInfo.message}</p>
         </div>
 
         {/* Back to Sign In */}
         <div className='text-center'>
           <Link
             href={AUTH_ROUTES.LOGIN}
-            className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700'
+            className='inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200'
           >
             Back to Sign In
           </Link>
@@ -85,7 +85,16 @@ function AuthErrorContent() {
 
 export default function AuthErrorPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className='min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900'>
+          <div className='text-center'>
+            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto'></div>
+            <p className='mt-4 text-gray-600 dark:text-gray-400'>Loading...</p>
+          </div>
+        </div>
+      }
+    >
       <AuthErrorContent />
     </Suspense>
   );

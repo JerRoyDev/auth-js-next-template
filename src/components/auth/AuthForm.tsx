@@ -35,12 +35,12 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
 
       {/* Divider */}
       {oauthProviders.length > 0 && (
-        <div className='relative'>
+        <div className='relative my-8'>
           <div className='absolute inset-0 flex items-center'>
             <div className='w-full border-t border-gray-300' />
           </div>
           <div className='relative flex justify-center text-sm'>
-            <span className='px-2 bg-white text-gray-500'>
+            <span className='px-4 bg-white text-gray-500 font-medium'>
               {isSignIn ? 'Or continue with' : 'Or sign up with'}
             </span>
           </div>
@@ -57,17 +57,25 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
       )}
 
       {/* Footer */}
-      <div className='text-xs text-gray-500 text-center'>
+      <div className='text-sm text-gray-600 text-center pt-4 border-t border-gray-100'>
         {isSignIn ? (
-          <>By signing in you agree to our terms of service.</>
+          <>
+            Har du inget konto?{' '}
+            <a
+              href={AUTH_ROUTES.REGISTER}
+              className='text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors'
+            >
+              Registrera dig här
+            </a>
+          </>
         ) : (
           <>
-            Already have an account?{' '}
+            Har du redan ett konto?{' '}
             <a
               href={AUTH_ROUTES.LOGIN}
-              className='text-blue-600 hover:underline'
+              className='text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors'
             >
-              Sign in here
+              Logga in här
             </a>
           </>
         )}
