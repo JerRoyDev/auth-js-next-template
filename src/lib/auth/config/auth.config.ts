@@ -17,7 +17,7 @@ import { sessionConfig } from "./session.config";
 // Re-export provider map for backward compatibility
 export { providerMap } from "../providers/provider-map";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+const authConfig = {
   adapter,
   session: sessionConfig,
   debug: process.env.NODE_ENV === "development",
@@ -25,10 +25,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     error: AUTH_ROUTES.AUTH_ERROR, // Custom error page
     signIn: PUBLIC_ROUTES.LOGIN, // Custom sign-in page
-    // newUser: AUTH_ROUTES.REGISTER, // New users will be directed here on first sign in
+    // newUser: PUBLIC_ROUTES.REGISTER, // New users will be directed here on first sign in
   },
   jwt: {
     encode: customJwtEncode,
   },
   callbacks: authCallbacks,
-});
+};
+
+export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
