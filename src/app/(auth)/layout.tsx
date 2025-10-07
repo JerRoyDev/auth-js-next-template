@@ -1,34 +1,23 @@
-'use client';
+import { auth } from '@/lib/auth/config/auth.config';
+import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
+import { redirect } from 'next/navigation';
+import AuthClientLayout from './AuthClientLayout'; // Import the new client component
 
-import React from 'react';
-import { useSelectedLayoutSegment } from 'next/navigation';
-
-// Base styling
-const base =
-  'min-h-screen flex items-center justify-center transition-colors duration-300';
-
-// Gradient styles per auth page segment
-const gradients: Record<string, string> = {
-  signin: 'bg-gradient-to-l from-background to-muted-foreground',
-  register: 'bg-gradient-to-r from-background to-muted-foreground',
-  error: 'bg-gradient-to-br from-background to-muted-foreground',
-};
-
-export default function AuthLayout({
+/**
+ * Server component layout for authentication pages.
+ * It checks for an active session and redirects if the user is already logged in.
+ * It then wraps the page content with the client-side layout for styling.
+ */
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const segment = useSelectedLayoutSegment();
-  const gradient = (segment && gradients[segment]) || gradients.signin;
+  const session = await auth();
 
-  return (
-    <div className={`${base} ${gradient} py-12 px-4 sm:px-6 lg:px-8`}>
-      <div className='max-w-md w-full space-y-8'>
-        <div className='bg-card rounded-xl shadow-lg p-8 border border-border'>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
+  if (session?.user) {
+    redirect(AUTH_ROUTES.DEFAULT_AUTHENTICATED_ROUTE);
+  }
+
+  return <AuthClientLayout>{children}</AuthClientLayout>;
 }
