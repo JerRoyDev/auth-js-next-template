@@ -44,7 +44,7 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
           router.push(
             callbackUrl ||
               signInResult.redirectTo ||
-              AUTH_ROUTES.AUTHENTICATED_HOME
+              AUTH_ROUTES.DEFAULT_AUTHENTICATED_ROUTE
           );
         }
 

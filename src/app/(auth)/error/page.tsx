@@ -9,7 +9,7 @@ import {
   shouldDisplayOnErrorPage,
   getErrorDisplayClasses,
 } from '@/lib/auth/utils/error-handler';
-import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
+import { PUBLIC_ROUTES } from '@/lib/auth/constants/auth.constants';
 
 function AuthErrorContent() {
   const searchParams = useSearchParams();
@@ -33,7 +33,7 @@ function AuthErrorContent() {
             An authentication error occurred. Please try again.
           </p>
           <Link
-            href={AUTH_ROUTES.LOGIN}
+            href={PUBLIC_ROUTES.LOGIN}
             className='inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-primary-foreground bg-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors duration-200'
           >
             Back to Sign In
@@ -67,7 +67,7 @@ function AuthErrorContent() {
         {/* Back to Sign In */}
         <div className='text-center'>
           <Link
-            href={AUTH_ROUTES.LOGIN}
+            href={PUBLIC_ROUTES.LOGIN}
             className='inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-primary-foreground bg-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors duration-200'
           >
             Back to Sign In

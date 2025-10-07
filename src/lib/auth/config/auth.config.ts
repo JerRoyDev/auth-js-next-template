@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { AUTH_ROUTES } from "../constants/auth.constants";
+import { AUTH_ROUTES, PUBLIC_ROUTES } from "../constants/auth.constants";
 import { providers } from "../providers/provider-map";
 import { adapter, customJwtEncode } from "./jwt-encoder";
 import { authCallbacks } from "./callbacks";
@@ -24,7 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers,
   pages: {
     error: AUTH_ROUTES.AUTH_ERROR, // Custom error page
-    signIn: AUTH_ROUTES.LOGIN, // Custom sign-in page
+    signIn: PUBLIC_ROUTES.LOGIN, // Custom sign-in page
     // newUser: AUTH_ROUTES.REGISTER, // New users will be directed here on first sign in
   },
   jwt: {

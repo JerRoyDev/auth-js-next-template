@@ -19,19 +19,22 @@ export const SESSION_CONFIG = {
 } as const;
 
 // ** Authentication Routes ** //
+// Routes for internal logic, redirection, and error handling
 export const AUTH_ROUTES = {
-  // Authentication pages
-  LOGIN: '/signin',
-  REGISTER: '/register',
-  FORGOT_PASSWORD: '/forgot-password',
-  RESET_PASSWORD: '/reset-password',
-  VERIFY_EMAIL: '/verify-email',
-  UNAUTHORIZED: '/unauthorized',
-  AUTH_ERROR: '/error',
+  DEFAULT_AUTHENTICATED_ROUTE: "/dashboard",
+  AUTH_ERROR: "/error", /* maybe this should be a public route? general error page */
+  UNAUTHORIZED: "/unauthorized",
+};
 
-  // Post-authentication landing page
-  AUTHENTICATED_HOME: '/dashboard',
-} as const;
+// Publicly accessible routes that do not require authentication
+export const PUBLIC_ROUTES = {
+  HOME: "/",
+  LOGIN: "/signin",
+  REGISTER: "/register",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+  VERIFY_EMAIL: "/verify-email",
+};
 
 // ** Authentication Messages ** //
 export const AUTH_MESSAGES = {

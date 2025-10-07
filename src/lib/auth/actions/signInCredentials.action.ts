@@ -17,7 +17,7 @@ export async function signInCredentials(email: string, password: string) {
     return {
       success: true,
       message: 'Sign in successful',
-      redirectTo: AUTH_ROUTES.AUTHENTICATED_HOME
+      redirectTo: AUTH_ROUTES.DEFAULT_AUTHENTICATED_ROUTE
     };
   } catch (error) {
 
