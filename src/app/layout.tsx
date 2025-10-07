@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
 import ThemeToggleButton from '@/components/ThemeToggleButton';
+import AuthProvider from '@/lib/auth/components/AuthProvider';
 
 export const metadata: Metadata = {
   title: 'Auth.js Next Template',
@@ -16,11 +17,13 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <Header />
-        <main>{children}</main>
-        <div className='fixed bottom-4 right-4'>
-          <ThemeToggleButton />
-        </div>
+        <AuthProvider>
+          <Header />
+          <main>{children}</main>
+          <div className='fixed bottom-4 right-4'>
+            <ThemeToggleButton />
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );
