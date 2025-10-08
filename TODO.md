@@ -4,10 +4,15 @@
   - Vad visas när jag försöker navigera till admin eller likande och inte har behörighet? (/unautorized)?
 
 - [x] Når inte /signin eller /register när man är inloggad
-- [ ] Kontrollera att sessions faktiskt försvinner efter expireDate på Både oAutb och Credentials.
+- [x] Kontrollera att sessions faktiskt försvinner efter expireDate på Både oAutb och Credentials.
+
+  - Cookie försvinner efter expireDate.
+  - Rester av sessions i databasen kan ibland ligga kvar - Detta resnsas med github workflow.
+
+- [ ] Unchecked runtime.lastError: The message port closed before a response was received. Varför får jag detta i konsolen?
 - [ ] verifering vid registrering med credentials.
 - [ ] automatisk inlogg efter lyckad registrering (verifierad credentials signup)
-- [ ] Toggle light- darkmode konfiguration. Ska den även gå på systeminställningar?
+- [ ] Toggle light- darkmode konfiguration. Ska den även gå på systeminställningar? det tar ett tag innan darkmode slås på när sidan uppdateras.
 
   Funderingar:
 
