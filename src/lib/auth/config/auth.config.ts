@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { AUTH_ROUTES, PUBLIC_ROUTES } from "../constants/auth.constants";
+import { AUTH_ROUTES, DEFAULT_AUTHENTICATED_ROUTE, PUBLIC_ROUTES } from "../constants/auth.constants";
 import { providers } from "../providers/provider-map";
 import { adapter, customJwtEncode } from "./jwt-encoder";
 import { authCallbacks } from "./callbacks";
@@ -17,15 +17,15 @@ import { sessionConfig } from "./session.config";
 // Re-export provider map for backward compatibility
 export { providerMap } from "../providers/provider-map";
 
-const authConfig = {
+export const authConfig = {
   adapter,
   session: sessionConfig,
   debug: process.env.NODE_ENV === "development",
   providers,
   pages: {
-    error: AUTH_ROUTES.AUTH_ERROR, // Custom error page
-    signIn: PUBLIC_ROUTES.LOGIN, // Custom sign-in page
-    // newUser: PUBLIC_ROUTES.REGISTER, // New users will be directed here on first sign in
+    error: PUBLIC_ROUTES.ERROR, // Custom error page
+    signIn: AUTH_ROUTES.LOGIN, // Custom sign-in page
+    // newUser: AUTH_ROUTES.NEW_USER // New users will be directed here on first sign in
   },
   jwt: {
     encode: customJwtEncode,

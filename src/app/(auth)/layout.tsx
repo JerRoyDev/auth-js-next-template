@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth/config/auth.config';
-import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/lib/auth/constants/auth.constants';
 import { redirect } from 'next/navigation';
 import AuthClientLayout from './AuthClientLayout'; // Import the new client component
 
@@ -16,7 +16,7 @@ export default async function AuthLayout({
   const session = await auth();
 
   if (session?.user) {
-    redirect(AUTH_ROUTES.DEFAULT_AUTHENTICATED_ROUTE);
+    redirect(DEFAULT_AUTHENTICATED_ROUTE);
   }
 
   return <AuthClientLayout>{children}</AuthClientLayout>;

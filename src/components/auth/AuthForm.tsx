@@ -5,7 +5,7 @@ import { AuthErrorMessage } from './AuthErrorMessage';
 import { CredentialsForm } from './CredentialsForm';
 import { providerMap } from '@/lib/auth/config/auth.config';
 import { useSearchParams } from 'next/navigation';
-import { PUBLIC_ROUTES } from '@/lib/auth/constants/auth.constants';
+import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 
 interface AuthFormProps {
   mode: 'signin' | 'register';
@@ -62,7 +62,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
           <>
             Don't have an account?{' '}
             <a
-              href={PUBLIC_ROUTES.REGISTER}
+              href={AUTH_ROUTES.REGISTER}
               className='text-primary hover:opacity-90 font-medium hover:underline transition-colors'
             >
               Create one here
@@ -72,7 +72,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
           <>
             Already have an account?{' '}
             <a
-              href={PUBLIC_ROUTES.LOGIN}
+              href={AUTH_ROUTES.LOGIN}
               className='text-primary hover:opacity-90 font-medium hover:underline transition-colors'
             >
               Sign in here

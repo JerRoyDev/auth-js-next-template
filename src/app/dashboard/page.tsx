@@ -1,14 +1,14 @@
 import { auth } from '@/lib/auth/config/auth.config';
+import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
+import { redirect } from 'next/navigation';
+
 const DashboardPage = async () => {
   const session = await auth();
 
-  if (!session?.user) {
-    return (
-      <div className='flex items-center justify-center h-screen bg-background text-foreground'>
-        <span className='text-muted-foreground text-lg'>Loading...</span>
-      </div>
-    );
-  }
+  // This check provides a fallback layer of security.
+  // While middleware is the primary guard, this ensures the page remains
+  // protected even if the middleware is disabled or removed in the future.
+  if (!session?.user) redirect(AUTH_ROUTES.LOGIN);
 
   return (
     <div className='min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8'>

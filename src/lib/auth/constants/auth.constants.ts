@@ -18,23 +18,32 @@ export const SESSION_CONFIG = {
   // EXTENDED: { MAX_AGE: 30 * 24 * 60 * 60, UPDATE_AGE: 24 * 60 * 60 }, // 30 days, 24 hours
 } as const;
 
-// ** Authentication Routes ** //
-// Routes for internal logic, redirection, and error handling
+// ** Route Definitions ** //
+
+// The default redirect path after a user logs in.
+export const DEFAULT_AUTHENTICATED_ROUTE = '/dashboard';
+
+// These routes do not require authentication and will not trigger redirects.
+export const PUBLIC_ROUTES = {
+  HOME: '/',
+  UNAUTHORIZED: '/unauthorized',
+  ERROR: '/error',
+} as const;
+
+// Logged-in users will be redirected to the DEFAULT_AUTHENTICATED_ROUTE.
 export const AUTH_ROUTES = {
-  DEFAULT_AUTHENTICATED_ROUTE: "/dashboard",
-  AUTH_ERROR: "/error", /* maybe this should be a public route? general error page */
-  UNAUTHORIZED: "/unauthorized",
+  LOGIN: '/signin',
+  REGISTER: '/register',
+  FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password',
+  VERIFY_EMAIL: '/verify-email',
 };
 
-// Publicly accessible routes that do not require authentication
-export const PUBLIC_ROUTES = {
-  HOME: "/",
-  LOGIN: "/signin",
-  REGISTER: "/register",
-  FORGOT_PASSWORD: "/forgot-password",
-  RESET_PASSWORD: "/reset-password",
-  VERIFY_EMAIL: "/verify-email",
-};
+// Routes that require authentication.
+export const PROTECTED_ROUTES = [
+  DEFAULT_AUTHENTICATED_ROUTE,
+  // "/settings",
+];
 
 // ** Authentication Messages ** //
 export const AUTH_MESSAGES = {

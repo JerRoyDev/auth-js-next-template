@@ -1,6 +1,6 @@
 import { auth } from '@/lib/auth/config/auth.config';
 import SignOutButton from '@/components/auth/SignOutButton';
-import { PUBLIC_ROUTES } from '@/lib/auth/constants/auth.constants';
+import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 import Link from 'next/link';
 
 export default async function Header() {
@@ -46,14 +46,14 @@ export default async function Header() {
               <div className='flex items-center space-x-3'>
                 {/* Login Link */}
                 <Link
-                  href={PUBLIC_ROUTES.LOGIN}
+                  href={AUTH_ROUTES.LOGIN}
                   className='inline-flex items-center px-4 py-2 border border-border text-sm font-medium rounded-lg text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors shadow-sm'
                 >
                   Sign In
                 </Link>
                 {/* Register Link  */}
                 <Link
-                  href={PUBLIC_ROUTES.REGISTER}
+                  href={AUTH_ROUTES.REGISTER}
                   className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-primary-foreground bg-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors shadow-sm'
                 >
                   Create Account
