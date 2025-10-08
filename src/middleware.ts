@@ -1,10 +1,8 @@
 // filepath: src/middleware.ts
-import NextAuth from 'next-auth';
 import { auth } from '@/auth';
 import {
   AUTH_ROUTES,
   PROTECTED_ROUTES,
-  DEFAULT_AUTHENTICATED_ROUTE,
 } from '@/lib/auth/constants/auth.constants';
 
 // const { auth } = NextAuth(authConfig);
@@ -21,12 +19,17 @@ export default auth((req) => {
   // even if this middleware is disabled or misconfigured in a project
   // that uses this template.
 
+  // Routes organized by access level:
+  // (public) - Accessible to everyone
+  // (auth) - Login/register pages (redirected if already logged in)
+  // (protected) - Requires authentication
+
   const isAuthRoute = Object.values(AUTH_ROUTES).includes(nextUrl.pathname);
   const isProtectedRoute = Object.values(PROTECTED_ROUTES).includes(nextUrl.pathname);
 
   // 1. Redirect authenticated users from auth pages (e.g., /signin)
   if (isAuthRoute && isAuthenticated) {
-    return Response.redirect(new URL(DEFAULT_AUTHENTICATED_ROUTE, nextUrl));
+    return Response.redirect(new URL(PROTECTED_ROUTES.USER_LANDING, nextUrl));
   }
 
   // 2. Redirect unauthenticated users from protected pages

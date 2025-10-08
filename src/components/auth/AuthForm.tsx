@@ -13,7 +13,8 @@ interface AuthFormProps {
 
 export const AuthForm = ({ mode }: AuthFormProps) => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const callbackUrl =
+    searchParams.get('callbackUrl') || 'PROTECTED_ROUTES.USER_LANDING';
 
   // Filter out credentials from OAuth providers
   const oauthProviders = providerMap.filter(
@@ -51,7 +52,11 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
       {oauthProviders.length > 0 && (
         <div className='flex flex-wrap justify-center items-center gap-3'>
           {oauthProviders.map((provider) => (
-            <OAuthButton key={provider.id} provider={provider.id} />
+            <OAuthButton
+              key={provider.id}
+              provider={provider.id}
+              callbackUrl={callbackUrl}
+            />
           ))}
         </div>
       )}
@@ -60,7 +65,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
       <div className='text-sm text-muted-foreground text-center pt-4 border-t border-border'>
         {isSignIn ? (
           <>
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <a
               href={AUTH_ROUTES.REGISTER}
               className='text-primary hover:opacity-90 font-medium hover:underline transition-colors'

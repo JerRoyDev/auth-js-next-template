@@ -6,10 +6,12 @@
  * and to save the session or user data.
  */
 
-export const authCallbacks = {
+import type { NextAuthConfig } from 'next-auth';
+
+export const authCallbacks: NextAuthConfig['callbacks'] = {
   // JWT CALLBACK: Flag credentials provider
   // This runs for ALL providers and helps us identify credentials logins
-  async jwt({ token, account }: any) {
+  async jwt({ token, account }) {
     // Flag credentials provider logins for custom handling in jwt.encode
     if (account?.provider === "credentials") {
       token.credentials = true;
@@ -19,7 +21,7 @@ export const authCallbacks = {
 
   // SESSION CALLBACK: Extract user data from database
   // This runs for database sessions and provides user data to the session
-  async session({ session, user }: any) {
+  async session({ session, user }) {
     if (session.user && user) {
       session.user.id = user.id;
       session.user.role = user.role;

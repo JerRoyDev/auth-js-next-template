@@ -1,10 +1,10 @@
 'use server';
 
 import { signIn } from '@/auth';
-import { DEFAULT_AUTHENTICATED_ROUTE } from '../constants/auth.constants';
+import { PROTECTED_ROUTES } from '../constants/auth.constants';
 
-export async function signInOAuthAction(provider: string) {
+export async function signInOAuthAction(provider: string, callbackUrl?: string) {
   await signIn(provider, {
-    redirectTo: DEFAULT_AUTHENTICATED_ROUTE
+    redirectTo: callbackUrl || PROTECTED_ROUTES.USER_LANDING
   });
 }

@@ -1,5 +1,4 @@
-import NextAuth from "next-auth";
-import { AUTH_ROUTES, DEFAULT_AUTHENTICATED_ROUTE, PUBLIC_ROUTES } from "../constants/auth.constants";
+import { AUTH_ROUTES, PUBLIC_ROUTES } from "../constants/auth.constants";
 import { providers } from "../providers/provider-map";
 import { adapter, customJwtEncode } from "./jwt-encoder";
 import { authCallbacks } from "./callbacks";

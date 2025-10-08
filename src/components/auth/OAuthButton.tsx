@@ -2,7 +2,7 @@
 
 import { signInOAuthAction } from '@/lib/auth/actions/signInOAuth.action';
 import { useFormStatus } from 'react-dom';
-import { providerMap } from '@/auth';
+import { providerMap } from '@/lib/auth/config/auth.config';
 import {
   GoogleIcon,
   GitHubIcon,
@@ -16,6 +16,7 @@ type ProviderType = (typeof providerMap)[number]['id'];
 interface OAuthButtonProps {
   provider: ProviderType;
   disabled?: boolean;
+  callbackUrl?: string;
 }
 
 // Letter icon for unknown providers - shows first letter of provider name
@@ -125,9 +126,13 @@ function OAuthButtonContent({ provider, disabled = false }: OAuthButtonProps) {
   );
 }
 
-export function OAuthButton({ provider, disabled = false }: OAuthButtonProps) {
+export function OAuthButton({
+  provider,
+  disabled = false,
+  callbackUrl,
+}: OAuthButtonProps) {
   return (
-    <form action={() => signInOAuthAction(provider)}>
+    <form action={() => signInOAuthAction(provider, callbackUrl)}>
       <OAuthButtonContent provider={provider} disabled={disabled} />
     </form>
   );

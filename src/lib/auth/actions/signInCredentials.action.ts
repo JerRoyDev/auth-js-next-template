@@ -1,10 +1,10 @@
 'use server';
 
 import { signIn } from '@/auth';
-import { DEFAULT_AUTHENTICATED_ROUTE } from '../constants/auth.constants';
 import { AuthError } from 'next-auth';
+import { PROTECTED_ROUTES } from '../constants/auth.constants';
 
-export async function signInCredentials(email: string, password: string) {
+export async function signInCredentials(email: string, password: string, callbackUrl?: string) {
   try {
     // * Use NextAuth's signIn function with 'credentials' provider
     await signIn('credentials', {
@@ -13,11 +13,11 @@ export async function signInCredentials(email: string, password: string) {
       redirect: false // Ingen automatisk omdirigering
     });
 
-    // If sign in was successful, return success response
+    // If sign in was successful, return success response with callback URL support
     return {
       success: true,
       message: 'Sign in successful',
-      redirectTo: DEFAULT_AUTHENTICATED_ROUTE
+      redirectTo: callbackUrl || PROTECTED_ROUTES.USER_LANDING
     };
   } catch (error) {
 

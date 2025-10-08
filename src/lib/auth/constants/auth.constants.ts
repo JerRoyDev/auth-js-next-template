@@ -30,7 +30,7 @@ export const PUBLIC_ROUTES = {
   ERROR: '/error',
 } as const;
 
-// Logged-in users will be redirected to the DEFAULT_AUTHENTICATED_ROUTE.
+// Logged-in users will be redirected to the PROTECTED_ROUTES.USER_LANDING.
 export const AUTH_ROUTES = {
   LOGIN: '/signin',
   REGISTER: '/register',
@@ -43,6 +43,7 @@ export const AUTH_ROUTES = {
 export const PROTECTED_ROUTES = {
   USER_LANDING: DEFAULT_AUTHENTICATED_ROUTE, /* could be dashboard, Overview etc. */
   ADMIN_DASHBOARD: '/admin',
+  ADMIN_USERS: '/admin/users',
   USER_SETTINGS: '/settings',
   USER_PROFILE: '/profile',
 }

@@ -96,7 +96,7 @@ export async function registerCredentials(formData: FormData) {
     // TODO: // * Generate verification token and send email
 
     // * Prepare user object without password for return
-    const { password: _, ...userWithoutPassword } = newUser;
+    const { password: _password, ...userWithoutPassword } = newUser;
 
     // * Return success response
     return {
