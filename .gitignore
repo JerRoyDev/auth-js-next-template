@@ -51,7 +51,7 @@ prisma/dev.db-journal
 *.tsbuildinfo
 next-env.d.ts
 
-# Github
+# Github Copilot instructions
 .github/copilot-instructions.md
 
 /src/generated/prisma
