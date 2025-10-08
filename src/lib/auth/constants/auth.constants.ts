@@ -40,10 +40,13 @@ export const AUTH_ROUTES = {
 };
 
 // Routes that require authentication.
-export const PROTECTED_ROUTES = [
-  DEFAULT_AUTHENTICATED_ROUTE,
-  // "/settings",
-];
+export const PROTECTED_ROUTES = {
+  USER_LANDING: DEFAULT_AUTHENTICATED_ROUTE, /* could be dashboard, Overview etc. */
+  ADMIN_DASHBOARD: '/admin',
+  USER_SETTINGS: '/settings',
+  USER_PROFILE: '/profile',
+}
+
 
 // ** Authentication Messages ** //
 export const AUTH_MESSAGES = {

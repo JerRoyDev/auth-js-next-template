@@ -22,7 +22,7 @@ export default auth((req) => {
   // that uses this template.
 
   const isAuthRoute = Object.values(AUTH_ROUTES).includes(nextUrl.pathname);
-  const isProtectedRoute = PROTECTED_ROUTES.includes(nextUrl.pathname);
+  const isProtectedRoute = Object.values(PROTECTED_ROUTES).includes(nextUrl.pathname);
 
   // 1. Redirect authenticated users from auth pages (e.g., /signin)
   if (isAuthRoute && isAuthenticated) {
@@ -31,8 +31,12 @@ export default auth((req) => {
 
   // 2. Redirect unauthenticated users from protected pages
   if (isProtectedRoute && !isAuthenticated) {
-    // Redirect to the primary sign-in page
-    return Response.redirect(new URL(AUTH_ROUTES.LOGIN, nextUrl));
+
+    // Redirect to login with a callback URL so user returns after sign-in
+    const callbackUrl = encodeURIComponent(nextUrl.pathname + nextUrl.search);
+    return Response.redirect(
+      new URL(`${AUTH_ROUTES.LOGIN}?callbackUrl=${callbackUrl}`, nextUrl)
+    );
   }
 
   return; // Allow the request to proceed
