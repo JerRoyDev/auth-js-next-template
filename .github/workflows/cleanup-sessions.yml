@@ -1,0 +1,18 @@
+name: Cleanup Expired Sessions
+
+on:
+  schedule:
+    # Runs at 5:00 AM UTC every day
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+    # Allows running this workflow manually from the Actions tab
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call cleanup endpoint
+        run: |
+          curl --request GET \
+          --url '${{ secrets.DEPLOYMENT_URL }}/api/cron/cleanup-sessions' \
+          --header 'Authorization: Bearer ${{ secrets.CRON_SECRET }}'
