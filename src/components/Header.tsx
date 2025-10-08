@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth/config/auth.config';
+import { auth } from '@/auth';
 import SignOutButton from '@/components/auth/SignOutButton';
 import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 import Link from 'next/link';

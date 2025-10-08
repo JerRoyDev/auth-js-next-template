@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn } from '@/lib/auth/config/auth.config';
+import { signIn } from '@/auth';
 import { DEFAULT_AUTHENTICATED_ROUTE } from '../constants/auth.constants';
 import { AuthError } from 'next-auth';
 

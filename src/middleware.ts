@@ -1,13 +1,13 @@
 // filepath: src/middleware.ts
 import NextAuth from 'next-auth';
-import { authConfig } from '@/lib/auth/config/auth.config';
+import { auth } from '@/auth';
 import {
   AUTH_ROUTES,
   PROTECTED_ROUTES,
   DEFAULT_AUTHENTICATED_ROUTE,
 } from '@/lib/auth/constants/auth.constants';
 
-const { auth } = NextAuth(authConfig);
+// const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
   const { nextUrl } = req;

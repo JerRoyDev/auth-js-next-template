@@ -2,7 +2,7 @@
 
 import { signInOAuthAction } from '@/lib/auth/actions/signInOAuth.action';
 import { useFormStatus } from 'react-dom';
-import { providerMap } from '@/lib/auth/config/auth.config';
+import { providerMap } from '@/auth';
 import {
   GoogleIcon,
   GitHubIcon,

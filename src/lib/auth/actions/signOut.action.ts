@@ -1,6 +1,6 @@
 'use server';
 
-import { signOut } from '@/lib/auth/config/auth.config';
+import { signOut } from '@/auth';
 import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 
 export async function signOutAction() {

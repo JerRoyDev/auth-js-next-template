@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth/config/auth.config';
+import { auth } from '@/auth';
 import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 import { redirect } from 'next/navigation';
 

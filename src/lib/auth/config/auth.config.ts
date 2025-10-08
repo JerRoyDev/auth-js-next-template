@@ -33,4 +33,3 @@ export const authConfig = {
   callbacks: authCallbacks,
 };
 
-export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);

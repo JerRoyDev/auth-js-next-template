@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn } from '@/lib/auth/config/auth.config';
+import { signIn } from '@/auth';
 import { DEFAULT_AUTHENTICATED_ROUTE } from '../constants/auth.constants';
 
 export async function signInOAuthAction(provider: string) {

@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth/config/auth.config';
+import { auth } from '@/auth';
 import { DEFAULT_AUTHENTICATED_ROUTE } from '@/lib/auth/constants/auth.constants';
 import { redirect } from 'next/navigation';
 import AuthClientLayout from './AuthClientLayout'; // Import the new client component
