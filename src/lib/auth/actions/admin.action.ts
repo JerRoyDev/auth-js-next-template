@@ -2,7 +2,8 @@
 
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import { PROTECTED_ROUTES, USER_ROLES } from '@/lib/auth/constants/auth.constants';
+import { PROTECTED_ROUTES } from '@/lib/auth/constants/auth.constants';
+import { Role } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 export async function updateUserRole(userId: string, newRole: string) {
@@ -10,7 +11,7 @@ export async function updateUserRole(userId: string, newRole: string) {
     const session = await auth();
 
     // Only allow ADMIN users to update roles
-    if (session?.user?.role !== USER_ROLES.ADMIN) {
+    if (session?.user?.role !== Role.ADMIN) {
       return {
         success: false,
         error: 'Unauthorized: Only administrators can update user roles',
@@ -26,7 +27,7 @@ export async function updateUserRole(userId: string, newRole: string) {
     }
 
     // Validate the new role
-    if (!Object.values(USER_ROLES).includes(newRole as keyof typeof USER_ROLES)) {
+    if (!Object.values(Role).includes(newRole as Role)) {
       return {
         success: false,
         error: 'Invalid role specified',
@@ -36,7 +37,7 @@ export async function updateUserRole(userId: string, newRole: string) {
     // Update the user's role
     const updatedUser = await prisma.user.update({
       where: { id: userId },
-      data: { role: newRole },
+      data: { role: newRole as Role },
       select: {
         id: true,
         name: true,
@@ -69,7 +70,7 @@ export async function deleteUser(userId: string) {
     const session = await auth();
 
     // Only allow ADMIN users to delete users
-    if (session?.user?.role !== USER_ROLES.ADMIN) {
+    if (session?.user?.role !== Role.ADMIN) {
       return {
         success: false,
         error: 'Unauthorized: Only administrators can delete users',

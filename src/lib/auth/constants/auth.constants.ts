@@ -1,11 +1,13 @@
-// ** Authentication Roles ** //
-export const USER_ROLES = {
-  USER: 'USER',
-  ADMIN: 'ADMIN',
-} as const;
+import { Role } from "@prisma/client";
 
-// Type for user roles (should maybe be moved to user types later)
-export type UserRole = keyof typeof USER_ROLES;
+// ** Authentication Roles ** //
+
+// Labels for roles (for display purposes) (should match the Role enum in Prisma schema)
+export const ROLE_LABELS: Record<Role, string> = {
+  USER: 'Användare',
+  ADMIN: 'Administratör',
+  // Add more roles here as needed
+};
 
 // ** Session Configuration ** //
 export const SESSION_CONFIG = {

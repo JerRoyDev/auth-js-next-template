@@ -72,7 +72,7 @@ export async function registerCredentials(formData: FormData) {
         /* name, */
         email,
         password: hashedPassword,
-        /* role: USER_ROLES.USER, */ // Default role is USER, so this line is optional
+  /* role: Role.USER, */ // Default role is USER, so this line is optional
         /* emailVerified: null, */ // Email verification can be handled later
       },
     });

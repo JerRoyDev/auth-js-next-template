@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 import { updateUserRole, deleteUser } from '@/lib/auth/actions/admin.action';
-import { USER_ROLES } from '@/lib/auth/constants/auth.constants';
-
+import { Role } from '@prisma/client';
 interface UserActionsProps {
   userId: string;
-  currentRole: string;
+  currentRole: Role;
   userEmail: string;
   isCurrentUser: boolean;
 }
@@ -66,7 +65,7 @@ export function UserActions({
         disabled={isUpdating}
         className='text-xs bg-background border border-border rounded px-2 py-1 text-foreground disabled:opacity-50'
       >
-        {Object.values(USER_ROLES).map((role) => (
+        {Object.values(Role).map((role) => (
           <option key={role} value={role}>
             {role}
           </option>

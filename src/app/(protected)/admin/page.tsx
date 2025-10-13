@@ -2,8 +2,8 @@ import { auth } from '@/auth';
 import {
   PROTECTED_ROUTES,
   PUBLIC_ROUTES,
-  USER_ROLES,
 } from '@/lib/auth/constants/auth.constants';
+import { Role } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
@@ -12,14 +12,14 @@ const AdminPage = async () => {
   const session = await auth();
 
   // Only allow users with ADMIN role
-  if (session?.user?.role !== USER_ROLES.ADMIN) {
+  if (session?.user?.role !== Role.ADMIN) {
     redirect(PUBLIC_ROUTES.UNAUTHORIZED);
   }
 
   // Get basic statistics for the dashboard
   const [userCount, adminCount, totalSessions] = await Promise.all([
     prisma.user.count(),
-    prisma.user.count({ where: { role: USER_ROLES.ADMIN } }),
+  prisma.user.count({ where: { role: Role.ADMIN } }),
     prisma.session.count(),
   ]);
 

@@ -2,8 +2,8 @@ import { auth } from '@/auth';
 import {
   PROTECTED_ROUTES,
   PUBLIC_ROUTES,
-  USER_ROLES,
 } from '@/lib/auth/constants/auth.constants';
+import { Role } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { AdminCard } from '@/components/admin/AdminCard';
@@ -25,7 +25,7 @@ const AdminUsersPage = async () => {
   const session = await auth();
 
   // Only allow users with ADMIN role
-  if (session?.user?.role !== USER_ROLES.ADMIN) {
+  if (session?.user?.role !== Role.ADMIN) {
     redirect(PUBLIC_ROUTES.UNAUTHORIZED);
   }
 
@@ -49,9 +49,8 @@ const AdminUsersPage = async () => {
   });
 
   const userCount = users.length;
-  const adminCount = users.filter(
-    (user) => user.role === USER_ROLES.ADMIN
-  ).length;
+  const adminCount = users.filter((user) => user.role === Role.ADMIN).length;
+  // Count recently created users (within the last 7 days)
   const recentUsers = users.filter((user) => {
     const daysSinceCreated = Math.floor(
       (Date.now() - new Date(user.createdAt).getTime()) / (1000 * 60 * 60 * 24)
@@ -273,7 +272,7 @@ function UserRow({
       <td className='py-4 px-4'>
         <span
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-            user.role === USER_ROLES.ADMIN
+            user.role === Role.ADMIN
               ? 'bg-destructive/10 text-destructive'
               : 'bg-secondary/10 text-secondary-foreground'
           }`}
@@ -293,7 +292,7 @@ function UserRow({
       <td className='py-4 px-4'>
         <UserActions
           userId={user.id}
-          currentRole={user.role}
+          currentRole={user.role as Role}
           userEmail={user.email}
           isCurrentUser={isCurrentUser}
         />
