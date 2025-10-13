@@ -13,9 +13,14 @@ export const SESSION_CONFIG = {
   MAX_AGE: 7 * 24 * 60 * 60, // 7 days in seconds
   UPDATE_AGE: 60 * 60, // 1 hour in seconds
 
-  // Alternative configurations (uncomment to use):
-  // CONSERVATIVE: { MAX_AGE: 8 * 60 * 60, UPDATE_AGE: 30 * 60 }, // 8 hours, 30 min
-  // EXTENDED: { MAX_AGE: 30 * 24 * 60 * 60, UPDATE_AGE: 24 * 60 * 60 }, // 30 days, 24 hours
+  // More secure - suitable for highly sensitive applications
+  // MAX_AGE: 24 * 60 * 60, // 1 day in seconds
+  // UPDATE_AGE: 15 * 60, // 15 minutes in seconds
+
+  // More convenient - suitable for low-risk applications
+  // MAX_AGE: 30 * 24 * 60 * 60, // 30 days in seconds
+  // UPDATE_AGE: 24 * 60 * 60, // 24 hours in seconds
+
 } as const;
 
 // ** Route Definitions ** //
