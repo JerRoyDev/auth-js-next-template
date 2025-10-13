@@ -5,7 +5,10 @@ import { AuthErrorMessage } from './AuthErrorMessage';
 import { CredentialsForm } from './CredentialsForm';
 import { providerMap } from '@/lib/auth/config/auth.config';
 import { useSearchParams } from 'next/navigation';
-import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
+import {
+  AUTH_ROUTES,
+  PROTECTED_ROUTES,
+} from '@/lib/auth/constants/auth.constants';
 
 interface AuthFormProps {
   mode: 'signin' | 'register';
@@ -14,7 +17,7 @@ interface AuthFormProps {
 export const AuthForm = ({ mode }: AuthFormProps) => {
   const searchParams = useSearchParams();
   const callbackUrl =
-    searchParams.get('callbackUrl') || 'PROTECTED_ROUTES.USER_LANDING';
+    searchParams.get('callbackUrl') || PROTECTED_ROUTES.USER_LANDING;
 
   // Filter out credentials from OAuth providers
   const oauthProviders = providerMap.filter(
