@@ -1,14 +1,17 @@
 import { auth } from '@/auth';
 import SignOutButton from '@/components/auth/SignOutButton';
+import { useSession } from '@/lib/auth/config/auth-client';
 import {
   AUTH_ROUTES,
   PROTECTED_ROUTES,
   PUBLIC_ROUTES,
 } from '@/lib/auth/constants/auth.constants';
 import Link from 'next/link';
+import { da } from 'zod/locales';
 
 export default async function Header() {
-  const session = await auth();
+  // const session = await auth();
+  const { data } = useSession();
 
   return (
     <header className='bg-card text-foreground shadow-sm border-b border-border'>
@@ -26,7 +29,7 @@ export default async function Header() {
 
           {/* Navigation */}
           <div className='flex items-center space-x-4'>
-            {session ? (
+            {data ? (
               <>
                 {/* Dashboard Link - Show for all authenticated users */}
                 <Link
@@ -37,7 +40,7 @@ export default async function Header() {
                 </Link>
 
                 {/* Admin Link - Only show for ADMIN users */}
-                {session.user?.role === 'ADMIN' && (
+                {data.user?.role === 'ADMIN' && (
                   <Link
                     href={PROTECTED_ROUTES.ADMIN_DASHBOARD}
                     className='inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors'
@@ -68,8 +71,8 @@ export default async function Header() {
                 {/* User Info */}
                 <div className='flex items-center space-x-3'>
                   <span className='text-sm text-muted-foreground font-medium'>
-                    {session.user?.name
-                      ? session.user.name
+                    {data.user?.name
+                      ? data.user.name
                           .split(' ')
                           .map(
                             (part) =>
@@ -77,7 +80,7 @@ export default async function Header() {
                               part.slice(1).toLowerCase()
                           )
                           .join(' ')
-                      : session.user?.email}
+                      : data.user?.email}
                   </span>
                   {/* Logout Button */}
                   <SignOutButton />

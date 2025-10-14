@@ -1,32 +1,32 @@
 'use server';
 
+import { requireAdmin } from '@/lib/auth/utils/require-auth';
 import { auth } from '@/auth';
-import { prisma } from '@/lib/prisma';
 import { PROTECTED_ROUTES } from '@/lib/auth/constants/auth.constants';
 import { Role } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 
+/**
+ * Update a user's role using Better Auth Admin Plugin API
+ * 
+ * @see https://better-auth.com/docs/plugins/admin.mdx - setRole API
+ * Date: October 14, 2025
+ */
 export async function updateUserRole(userId: string, newRole: string) {
   try {
-    const session = await auth();
-
-    // Only allow ADMIN users to update roles
-    if (session?.user?.role !== Role.ADMIN) {
-      return {
-        success: false,
-        error: 'Unauthorized: Only administrators can update user roles',
-      };
-    }
+    // Better Auth: Use requireAdmin() helper - automatically checks and redirects if not admin
+    const session = await requireAdmin();
 
     // Prevent admins from changing their own role
-    if (session.user.id === userId) {
+    if (session?.user?.id === userId) {
       return {
         success: false,
         error: 'You cannot change your own role',
       };
     }
 
-    // Validate the new role
+    // Validate the new role against Prisma Role enum
     if (!Object.values(Role).includes(newRole as Role)) {
       return {
         success: false,
@@ -34,26 +34,21 @@ export async function updateUserRole(userId: string, newRole: string) {
       };
     }
 
-    // Update the user's role
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: { role: newRole as Role },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
+    // Use Better Auth Admin Plugin API to set user role
+    await auth.api.setRole({
+      body: {
+        userId,
+        role: newRole as Role,
       },
+      headers: await headers(),
     });
 
     // Revalidate the admin pages to show updated data
-
     revalidatePath(PROTECTED_ROUTES.ADMIN_DASHBOARD);
     revalidatePath(PROTECTED_ROUTES.ADMIN_USERS);
 
     return {
       success: true,
-      user: updatedUser,
       message: `User role updated to ${newRole}`,
     };
   } catch (error) {
@@ -65,42 +60,31 @@ export async function updateUserRole(userId: string, newRole: string) {
   }
 }
 
+/**
+ * Delete a user using Better Auth Admin Plugin API
+ * 
+ * @see https://better-auth.com/docs/plugins/admin.mdx - removeUser API
+ * Date: October 14, 2025
+ */
 export async function deleteUser(userId: string) {
   try {
-    const session = await auth();
-
-    // Only allow ADMIN users to delete users
-    if (session?.user?.role !== Role.ADMIN) {
-      return {
-        success: false,
-        error: 'Unauthorized: Only administrators can delete users',
-      };
-    }
+    // Better Auth: Use requireAdmin() helper
+    const session = await requireAdmin();
 
     // Prevent admins from deleting themselves
-    if (session.user.id === userId) {
+    if (session?.user?.id === userId) {
       return {
         success: false,
         error: 'You cannot delete your own account',
       };
     }
 
-    // Get user info before deletion for the response
-    const userToDelete = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { email: true, name: true },
-    });
-
-    if (!userToDelete) {
-      return {
-        success: false,
-        error: 'User not found',
-      };
-    }
-
-    // Delete the user (this will cascade delete related records)
-    await prisma.user.delete({
-      where: { id: userId },
+    // Use Better Auth Admin Plugin API to remove user
+    await auth.api.removeUser({
+      body: {
+        userId,
+      },
+      headers: await headers(),
     });
 
     // Revalidate the admin pages to show updated data
@@ -109,7 +93,7 @@ export async function deleteUser(userId: string) {
 
     return {
       success: true,
-      message: `User ${userToDelete.email} has been deleted`,
+      message: `User has been deleted successfully`,
     };
   } catch (error) {
     console.error('Error deleting user:', error);

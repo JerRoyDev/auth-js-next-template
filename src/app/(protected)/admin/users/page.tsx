@@ -1,10 +1,6 @@
-import { auth } from '@/auth';
-import {
-  PROTECTED_ROUTES,
-  PUBLIC_ROUTES,
-} from '@/lib/auth/constants/auth.constants';
+import { requireAdmin } from '@/lib/auth/utils/require-auth';
+import { PROTECTED_ROUTES } from '@/lib/auth/constants/auth.constants';
 import { Role } from '@prisma/client';
-import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { AdminCard } from '@/components/admin/AdminCard';
 import { UserActions } from '@/components/admin/UserActions';
@@ -22,12 +18,8 @@ interface User {
 }
 
 const AdminUsersPage = async () => {
-  const session = await auth();
-
-  // Only allow users with ADMIN role
-  if (session?.user?.role !== Role.ADMIN) {
-    redirect(PUBLIC_ROUTES.UNAUTHORIZED);
-  }
+  // Better Auth: requireAdmin() automatically checks role and redirects if not admin
+  const session = await requireAdmin();
 
   // Get all users with their accounts for provider info
   const users = await prisma.user.findMany({
@@ -49,7 +41,7 @@ const AdminUsersPage = async () => {
   });
 
   const userCount = users.length;
-  const adminCount = users.filter((user) => user.role === Role.ADMIN).length;
+  const adminCount = users.filter((user) => user.role === Role.admin).length;
   // Count recently created users (within the last 7 days)
   const recentUsers = users.filter((user) => {
     const daysSinceCreated = Math.floor(
@@ -272,7 +264,7 @@ function UserRow({
       <td className='py-4 px-4'>
         <span
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-            user.role === Role.ADMIN
+            user.role === Role.admin
               ? 'bg-destructive/10 text-destructive'
               : 'bg-secondary/10 text-secondary-foreground'
           }`}

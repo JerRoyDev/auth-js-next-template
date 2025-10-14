@@ -11,38 +11,40 @@ model User {
   id            String          @id @default(cuid())
   name          String?
   username      String?
-  email         String         @unique
-  role          Role           @default(USER)
-  emailVerified DateTime?
+  email         String          @unique
+  role          Role            @default(user)
+  emailVerified Boolean         @default(false)
   password      String?
   image         String?
   accounts      Account[]
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
+  
+  // Better Auth Admin Plugin fields
+  banned        Boolean         @default(false)
+  banReason     String?
+  banExpires    DateTime?
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 enum Role {
-  USER
-  ADMIN
+  user
+  admin
 }
  
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
+  id                   String   @id @default(cuid())
+  userId               String
+  provider             String
+  providerAccountId    String
+  refreshToken         String?
+  accessToken          String?
+  accessTokenExpiresAt Int?
+  scope                String?
+  idToken              String?
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -53,11 +55,14 @@ model Account {
 }
  
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String   @id @default(cuid())
+  expiresAt      DateTime
+  token          String   @unique
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Better Auth Admin Plugin field (for user impersonation)
+  impersonatedBy String?
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

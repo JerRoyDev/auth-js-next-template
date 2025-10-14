@@ -1,4 +1,6 @@
-import NextAuth from "next-auth";
+// src/auth.ts
+
+import { betterAuth } from 'better-auth';
 import { authConfig } from "@/lib/auth/config/auth.config";
 
-export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
+export const auth = betterAuth(authConfig);

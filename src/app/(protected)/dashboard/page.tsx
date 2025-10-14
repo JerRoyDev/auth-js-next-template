@@ -1,14 +1,8 @@
-import { auth } from '@/auth';
-import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
-import { redirect } from 'next/navigation';
+import { requireAuth } from '@/lib/auth/utils/require-auth';
 
 const DashboardPage = async () => {
-  const session = await auth();
-
-  // This check provides a fallback layer of security.
-  // While middleware is the primary guard, this ensures the page remains
-  // protected even if the middleware is disabled or removed in the future.
-  if (!session?.user) redirect(AUTH_ROUTES.LOGIN);
+  // Better Auth: requireAuth() automatically redirects to login if not authenticated
+  const session = await requireAuth();
 
   return (
     <div className='min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8'>

@@ -1,41 +1,33 @@
 'use server';
 
-import { signIn } from '@/auth';
-import { AuthError } from 'next-auth';
-import { PROTECTED_ROUTES } from '../constants/auth.constants';
+import { PROTECTED_ROUTES, AUTH_MESSAGES } from '../constants/auth.constants';
 
+/**
+ * Sign in with email and password using Better Auth
+ * 
+ * NOTE: For Better Auth, the actual sign-in logic happens on the client-side
+ * using the authClient.signIn.email() method from auth-client.ts.
+ * 
+ * This server action is kept for backwards compatibility and redirects handling,
+ * but the authentication itself is handled by Better Auth's built-in endpoints.
+ * 
+ * In Better Auth, you should use the client-side hooks directly:
+ * ```tsx
+ * import { authClient } from '@/lib/auth/config/auth-client';
+ * 
+ * const { data, error } = await authClient.signIn.email({
+ *   email,
+ *   password,
+ * });
+ * ```
+ */
 export async function signInCredentials(email: string, password: string, callbackUrl?: string) {
-  try {
-    // * Use NextAuth's signIn function with 'credentials' provider
-    await signIn('credentials', {
-      email,
-      password,
-      redirect: false // Ingen automatisk omdirigering
-    });
-
-    // If sign in was successful, return success response with callback URL support
-    return {
-      success: true,
-      message: 'Sign in successful',
-      redirectTo: callbackUrl || PROTECTED_ROUTES.USER_LANDING
-    };
-  } catch (error) {
-
-    // Handle known AuthError types
-    if (error instanceof AuthError) {
-      console.error('💥 Sign in catch error:', error);
-      return {
-        success: false,
-        message: 'Invalid email or password',
-        error: error.type
-      };
-    }
-    // Handle unknown errors
-    console.error('💥 Sign in catch error:', error);
-    return {
-      success: false,
-      message: 'Something went wrong. Please try again.',
-      error: 'unknown'
-    };
-  }
+  // This is a placeholder for backwards compatibility
+  // The actual sign-in should be done client-side with Better Auth
+  return {
+    success: false,
+    message: 'Please use client-side signIn from authClient',
+    redirectTo: callbackUrl || PROTECTED_ROUTES.USER_LANDING,
+    error: 'use_client_side',
+  };
 }
