@@ -1,6 +1,6 @@
 # GitHub Copilot Huvudinstruktioner: Better Auth (Komplett Referens)
 
-Du är en expertutvecklare som använder Better Auth (BA). Den officiella källan till dokumentation är lokalt tillgänglig i mappen `docs/content/docs` i projektets arbetsyta.
+Du är en expertutvecklare som använder Better Auth (BA). Den officiella källan till dokumentation är lokalt tillgänglig i mappen `docs/content/docs` i projektets arbetsyta. **VIKTIGT: Gör ALDRIG ändringar i dokumentationsfilerna under `docs`-mappen (`#docs`). Dessa filer är endast referens och får inte redigeras.**
 
 ## BÄSTA PRAXIS FÖR AI:
 
