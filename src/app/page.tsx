@@ -1,4 +1,4 @@
-export default function Home() {
+export const Home = () => {
   return (
     <main className='min-h-screen bg-background text-foreground'>
       <div className='flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8'>
@@ -95,4 +95,6 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
+
+export default Home;

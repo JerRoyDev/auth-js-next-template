@@ -1,3 +1,5 @@
+// src/lib/auth/config/auth-client.ts
+
 /**
  * Better Auth Client Configuration
  * 
@@ -17,7 +19,9 @@ export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   plugins: [
     adminClient(),
+
   ],
+
 });
 
 // Export commonly used hooks and methods
@@ -27,3 +31,4 @@ export const {
   signOut,
   signUp,
 } = authClient;
+

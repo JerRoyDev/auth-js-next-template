@@ -45,3 +45,4 @@
 - [ ] Credential "account" får ingen av: "refresh_token, access_token, expires_at, token_type, scope, id_token, session_state"
 - [ ] Google "account" får ingen av: "refresh_token, session_state"
 - [ ] Discord "account" får ingen av: "id_token, session_state"
+- [ ] Kolla på ErrorBoundary för bättre felhantering i layouts/sidor

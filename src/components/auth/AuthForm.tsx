@@ -1,68 +1,61 @@
 'use client';
 
 import { OAuthButton } from './OAuthButton';
-import { AuthErrorMessage } from './AuthErrorMessage';
+// import { AuthErrorMessage } from './AuthErrorMessage';
 import { CredentialsForm } from './CredentialsForm';
-import { providerMap } from '@/lib/auth/config/auth.config';
 import { useSearchParams } from 'next/navigation';
 import {
   AUTH_ROUTES,
   PROTECTED_ROUTES,
 } from '@/lib/auth/constants/auth.constants';
-
-interface AuthFormProps {
-  mode: 'signin' | 'register';
-}
+import { useState } from 'react';
+import { AuthFormProps, BetterAuthError } from '@/lib/auth/types';
+import { AuthErrorMessage } from './AuthErrorMessage';
 
 export const AuthForm = ({ mode }: AuthFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [authErrorObj, setAuthErrorObj] = useState<BetterAuthError | null>(
+    null
+  );
   const searchParams = useSearchParams();
   const callbackUrl =
     searchParams.get('callbackUrl') || PROTECTED_ROUTES.USER_LANDING;
-
-  // Filter out credentials from OAuth providers
-  const oauthProviders = providerMap.filter(
-    (provider) => provider.id !== 'credentials'
-  );
 
   const isSignIn = mode === 'signin';
 
   return (
     <div className='space-y-6'>
       {/* Visa error meddelande om det finns */}
-      <AuthErrorMessage />
+      <AuthErrorMessage error={authErrorObj} />
 
       {/* Credentials Form (Sign In / Register) */}
       <CredentialsForm
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+        setAuthErrorObj={setAuthErrorObj}
         mode={mode}
         callbackUrl={isSignIn ? callbackUrl : undefined}
       />
 
       {/* Divider */}
-      {oauthProviders.length > 0 && (
-        <div className='relative my-8'>
-          <div className='absolute inset-0 flex items-center'>
-            <div className='w-full border-t border-border' />
-          </div>
-          <div className='relative flex justify-center text-sm'>
-            <span className='px-4 bg-card text-muted-foreground font-medium'>
-              {isSignIn ? 'Or continue with' : 'Or sign up with'}
-            </span>
-          </div>
+      <div className='relative my-8'>
+        <div className='absolute inset-0 flex items-center'>
+          <div className='w-full border-t border-border' />
         </div>
-      )}
+        <div className='relative flex justify-center text-sm'>
+          <span className='px-4 bg-card text-muted-foreground font-medium'>
+            {isSignIn ? 'Or continue with' : 'Or sign up with'}
+          </span>
+        </div>
+      </div>
 
-      {/* OAuth Providers */}
-      {oauthProviders.length > 0 && (
-        <div className='flex flex-wrap justify-center items-center gap-3'>
-          {oauthProviders.map((provider) => (
-            <OAuthButton
-              key={provider.id}
-              provider={provider.id}
-              callbackUrl={callbackUrl}
-            />
-          ))}
-        </div>
-      )}
+      {/* OAuth Providers: Manually added to prevent hydration errors */}
+      <div className='flex flex-wrap justify-center items-center gap-3'>
+        <OAuthButton provider='google' callbackUrl={callbackUrl} />
+        <OAuthButton provider='github' callbackUrl={callbackUrl} />
+        <OAuthButton provider='discord' callbackUrl={callbackUrl} />
+        <OAuthButton provider='facebook' callbackUrl={callbackUrl} />
+      </div>
 
       {/* Footer */}
       <div className='text-sm text-muted-foreground text-center pt-4 border-t border-border'>

@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
 import { AuthForm } from '@/components/auth/AuthForm';
 
-function RegisterContent() {
+const RegisterContent = () => {
   return <AuthForm mode='register' />;
-}
+};
 
-export default function RegisterPage() {
+const RegisterPage = () => {
   return (
     <>
       <div className='text-center mb-8'>
@@ -26,4 +26,6 @@ export default function RegisterPage() {
       </Suspense>
     </>
   );
-}
+};
+
+export default RegisterPage;

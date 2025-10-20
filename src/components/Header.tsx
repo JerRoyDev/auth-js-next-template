@@ -1,4 +1,6 @@
-import { auth } from '@/auth';
+// Header.tsx
+'use client';
+
 import SignOutButton from '@/components/auth/SignOutButton';
 import { useSession } from '@/lib/auth/config/auth-client';
 import {
@@ -7,9 +9,14 @@ import {
   PUBLIC_ROUTES,
 } from '@/lib/auth/constants/auth.constants';
 import Link from 'next/link';
-import { da } from 'zod/locales';
+import { usePathname } from 'next/navigation';
 
-export default async function Header() {
+const Header = () => {
+  // Exclude header on auth pages
+  const excludedPaths = [AUTH_ROUTES.LOGIN, AUTH_ROUTES.REGISTER];
+  const pathname = usePathname();
+  if (excludedPaths.includes(pathname)) return null;
+
   // const session = await auth();
   const { data } = useSession();
 
@@ -109,4 +116,6 @@ export default async function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;

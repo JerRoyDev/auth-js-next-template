@@ -1,7 +1,7 @@
 import { requireAuth } from '@/lib/auth/utils/require-auth';
 
 const DashboardPage = async () => {
-  // Better Auth: requireAuth() automatically redirects to login if not authenticated
+  // Get the authenticated user's session or redirect if not authenticated
   const session = await requireAuth();
 
   return (
@@ -10,12 +10,14 @@ const DashboardPage = async () => {
         <div className='bg-card shadow-xl rounded-xl p-8 border border-border'>
           <div className='text-center mb-8'>
             <h1 className='text-3xl font-bold text-foreground mb-2'>
-              Welcome, {session.user.name || session.user.email}!
+              Welcome, {session?.user.name || session?.user.email}!
             </h1>
-            <p className='text-muted-foreground'>Email: {session.user.email}</p>
-            {session.user.role && (
+            <p className='text-muted-foreground'>
+              Email: {session?.user.email}
+            </p>
+            {session?.user.role && (
               <span className='inline-block mt-2 px-3 py-1 bg-secondary text-secondary-foreground text-sm font-medium rounded-full'>
-                {session.user.role}
+                {session?.user.role}
               </span>
             )}
           </div>

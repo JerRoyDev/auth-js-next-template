@@ -10,7 +10,7 @@ import { headers } from 'next/headers';
 /**
  * Update a user's role using Better Auth Admin Plugin API
  * 
- * @see https://better-auth.com/docs/plugins/admin.mdx - setRole API
+ * @see https://better-auth.com/docs/plugins/admin - setRole API
  * Date: October 14, 2025
  */
 export async function updateUserRole(userId: string, newRole: string) {

@@ -1,5 +1,5 @@
 {
-  "name": "auth-js-next-template",
+  "name": "better-auth-nextjs-template",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,13 +11,10 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
     "@prisma/client": "^6.17.1",
-    "bcryptjs": "^3.0.2",
     "better-auth": "^1.3.27",
     "next": "15.5.2",
-    "next-auth": "^5.0.0-beta.29",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "uuid": "^13.0.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {

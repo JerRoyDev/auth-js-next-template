@@ -1,4 +1,4 @@
-export default function UnauthorizedPage() {
+const UnauthorizedPage = () => {
   return (
     <div className='min-h-screen flex items-center justify-center'>
       <div className='bg-card p-8 rounded-xl shadow-xl border'>
@@ -11,4 +11,6 @@ export default function UnauthorizedPage() {
       </div>
     </div>
   );
-}
+};
+
+export default UnauthorizedPage;

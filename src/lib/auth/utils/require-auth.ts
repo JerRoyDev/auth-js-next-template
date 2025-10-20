@@ -32,7 +32,7 @@ import { Role, type AuthSession } from '../types';
  * @param callbackUrl - Optional URL to redirect back to after login
  * @returns The authenticated session
  */
-export async function requireAuth(callbackUrl?: string): Promise<AuthSession> {
+export const requireAuth = async (callbackUrl?: string): Promise<AuthSession> => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -65,7 +65,7 @@ export async function requireAuth(callbackUrl?: string): Promise<AuthSession> {
 export async function requireAdmin(): Promise<AuthSession> {
   const session = await requireAuth();
 
-  if (!session?.user || (session.user as any).role !== Role.admin) {
+  if (!session?.user || (session.user as any).role !== Role.ADMIN) {
     redirect(PUBLIC_ROUTES.UNAUTHORIZED);
   }
 
@@ -106,8 +106,13 @@ export async function getSession(): Promise<AuthSession | null> {
  * const isAuthenticated = await isAuth();
  * ```
  */
-export async function isAuth(): Promise<boolean> {
+export async function isAuth(redirectUrl?: string): Promise<boolean> {
   const session = await getSession();
+
+  if (session?.user && redirectUrl) {
+    redirect(redirectUrl);
+  }
+
   return !!session?.user;
 }
 
@@ -116,7 +121,7 @@ export async function isAuth(): Promise<boolean> {
  */
 export async function isAdmin(): Promise<boolean> {
   const session = await getSession();
-  return (session?.user as any)?.role === Role.admin;
+  return (session?.user as any)?.role === Role.ADMIN;
 }
 
 /**

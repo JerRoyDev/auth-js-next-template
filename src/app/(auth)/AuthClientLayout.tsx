@@ -14,11 +14,8 @@ const gradients: Record<string, string> = {
   error: 'bg-gradient-to-br from-background to-muted-foreground',
 };
 
-export default function AuthClientLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+// Client-side layout component for auth pages
+const AuthClientLayout = ({ children }: { children: React.ReactNode }) => {
   const segment = useSelectedLayoutSegment();
   const gradient = (segment && gradients[segment]) || gradients.signin;
 
@@ -31,4 +28,6 @@ export default function AuthClientLayout({
       </div>
     </div>
   );
-}
+};
+
+export default AuthClientLayout;

@@ -1,8 +1,6 @@
 'use client';
 
-import { signInOAuthAction } from '@/lib/auth/actions/signInOAuth.action';
-import { useFormStatus } from 'react-dom';
-import { providerMap } from '@/lib/auth/config/auth.config';
+import { signIn } from '@/lib/auth/config/auth-client';
 import {
   GoogleIcon,
   GitHubIcon,
@@ -10,130 +8,37 @@ import {
   FacebookIcon,
 } from './ProviderIcons';
 
-// Derive provider type from actual config
-type ProviderType = (typeof providerMap)[number]['id'];
-
 interface OAuthButtonProps {
-  provider: ProviderType;
-  disabled?: boolean;
+  provider: string;
   callbackUrl?: string;
 }
 
-// Letter icon for unknown providers - shows first letter of provider name
-const LetterIcon = ({
-  letter,
-  size = 18,
-}: {
-  letter: string;
-  size?: number;
-}) => (
-  <div
-    className='flex items-center justify-center rounded font-bold text-sm'
-    style={{
-      width: size,
-      height: size,
-      fontSize: size * 0.6,
-      backgroundColor: 'rgba(255,255,255,0.2)',
-    }}
-  >
-    {letter.toUpperCase()}
-  </div>
-);
+const providerIcons: Record<string, React.JSX.Element> = {
+  google: <GoogleIcon size={20} />,
+  github: <GitHubIcon size={20} />,
+  discord: <DiscordIcon size={20} />,
+  facebook: <FacebookIcon size={20} />,
+};
 
-// Function to create default config for unknown providers
-const createDefaultConfig = (provider: string) => ({
-  name: provider.charAt(0).toUpperCase() + provider.slice(1),
-  icon: ({ size }: { size?: number }) => (
-    <LetterIcon letter={provider.charAt(0)} size={size} />
-  ),
-  bgColor:
-    'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700',
-  textColor: 'text-white',
-});
+export const OAuthButton = ({ provider, callbackUrl }: OAuthButtonProps) => {
+  const handleClick = async () => {
+    await signIn.social({
+      provider,
+      callbackURL: callbackUrl,
+    });
+  };
 
-const providerConfig: Partial<
-  Record<
-    ProviderType,
-    {
-      name: string;
-      icon: React.ComponentType<{ size?: number }>;
-      bgColor: string; // unused: uniform styling enforced
-      textColor: string; // unused: uniform styling enforced
-    }
-  >
-> = {
-  google: {
-    name: 'Google',
-    icon: GoogleIcon,
-    bgColor: 'bg-white hover:bg-gray-50 border border-gray-300',
-    textColor: 'text-gray-700',
-  },
-  github: {
-    name: 'GitHub',
-    icon: GitHubIcon,
-    bgColor: 'bg-gray-900 hover:bg-gray-800',
-    textColor: 'text-white',
-  },
-  discord: {
-    name: 'Discord',
-    icon: DiscordIcon,
-    bgColor: 'bg-indigo-600 hover:bg-indigo-700',
-    textColor: 'text-white',
-  },
-  facebook: {
-    name: 'Facebook',
-    icon: FacebookIcon,
-    bgColor: 'bg-blue-600 hover:bg-blue-700',
-    textColor: 'text-white',
-  },
-  // * Add more provider-specific configs as needed
-  // example for Twitter:
-
-  /* twitter: {
-    name: 'Twitter',
-    icon: TwitterIcon,
-    bgColor: 'bg-blue-400 hover:bg-blue-500',
-    textColor: 'text-white',
-  }, */
-} as const;
-
-// Fixed size to enforce uniform square icon buttons
-const ICON_BUTTON_SIZE = 'h-10 w-10';
-
-function OAuthButtonContent({ provider, disabled = false }: OAuthButtonProps) {
-  const { pending } = useFormStatus();
-
-  // Use specific config or fallback to default
-  const config = providerConfig[provider] || createDefaultConfig(provider);
-
-  const IconComponent = config.icon;
+  const icon = providerIcons[provider] || null;
 
   return (
-    <button
-      type='submit'
-      disabled={disabled || pending}
-      title={config.name}
-      aria-label={config.name}
-      className={` inline-flex items-center justify-center
-    rounded-md transition-colors duration-200
-    disabled:opacity-60 disabled:cursor-not-allowed
-    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring focus:ring-offset-background
-    shadow-sm border border-border bg-card text-foreground hover:bg-muted ${ICON_BUTTON_SIZE}`}
-    >
-      <IconComponent size={18} />
-      <span className='sr-only'>{pending ? 'Loading…' : `${config.name}`}</span>
-    </button>
+    <div>
+      <button
+        onClick={handleClick}
+        className={`flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg shadow-sm bg-card text-foreground text-sm font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors`}
+      >
+        {icon}
+        {provider.charAt(0).toUpperCase() + provider.slice(1)}
+      </button>
+    </div>
   );
-}
-
-export function OAuthButton({
-  provider,
-  disabled = false,
-  callbackUrl,
-}: OAuthButtonProps) {
-  return (
-    <form action={() => signInOAuthAction(provider, callbackUrl)}>
-      <OAuthButtonContent provider={provider} disabled={disabled} />
-    </form>
-  );
-}
+};

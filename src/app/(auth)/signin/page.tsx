@@ -5,7 +5,7 @@ function SignInContent() {
   return <AuthForm mode='signin' />;
 }
 
-export default function SignInPage() {
+const SignInPage = () => {
   return (
     <>
       <div className='text-center mb-8'>
@@ -26,4 +26,6 @@ export default function SignInPage() {
       </Suspense>
     </>
   );
-}
+};
+
+export default SignInPage;

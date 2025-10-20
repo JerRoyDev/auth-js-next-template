@@ -1,19 +1,24 @@
+// src/components/auth/CredentialsForm.tsx
+
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { registerCredentials } from '@/lib/auth/actions/registerCredentials.action';
-import { signInCredentials } from '@/lib/auth/actions/signInCredentials.action';
 import { PROTECTED_ROUTES } from '@/lib/auth/constants/auth.constants';
+import { signIn, signUp } from '@/lib/auth/config/auth-client';
+import {
+  signInSchema,
+  registerFormSchema,
+} from '@/lib/auth/validations/auth.validations';
+import { CredentialsFormProps } from '@/lib/auth/types';
 
-interface CredentialsFormProps {
-  mode: 'signin' | 'register';
-  callbackUrl?: string;
-}
-
-export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export const CredentialsForm = ({
+  mode,
+  callbackUrl,
+  isLoading,
+  setIsLoading,
+  setAuthErrorObj,
+}: CredentialsFormProps) => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState({
     email: '',
@@ -25,71 +30,119 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
   const router = useRouter();
 
   // * Handle form submission
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setIsLoading(true);
-    setError(null);
     setFieldErrors({});
 
     // *  Handle sign in logic
     if (mode === 'signin') {
+      // Validate with Zod before sending to Better Auth
+      const validation = signInSchema.safeParse({
+        email: formValues.email,
+        password: formValues.password,
+      });
+
+      if (!validation.success) {
+        // Extract field errors from Zod
+        const fieldErrors = validation.error.flatten().fieldErrors;
+        setFieldErrors(
+          Object.fromEntries(
+            Object.entries(fieldErrors).map(([key, value]) => [
+              key,
+              value?.[0] || '',
+            ])
+          )
+        );
+        setIsLoading(false);
+        return;
+      }
       try {
-        // Sign in with credentials using server action
-        const signInResult = await signInCredentials(
-          formValues.email,
-          formValues.password,
-          callbackUrl
-        );
+        const { data, error } = await signIn.email({
+          email: formValues.email,
+          password: formValues.password,
+          // rememberMe: true,  //If false, the user will be signed out when the browser is closed. (optional) (default: true)
+          callbackURL: callbackUrl || PROTECTED_ROUTES.USER_LANDING,
+          fetchOptions: {
+            onRequest: () => {
+              console.log('logging in...');
+              setIsLoading(true);
+            },
+            onResponse: () => {
+              console.log('Login response received.');
+            },
+            onError: (ctx) => {
+              console.error('Login error:', ctx.error);
+              setAuthErrorObj(ctx.error);
+            },
+            onSuccess: () => {
+              router.push(PROTECTED_ROUTES.USER_LANDING);
+            },
+          },
+        });
 
-        // If sign in was successful, redirect to callbackUrl or default
-        router.push(
-          callbackUrl ||
-            signInResult.redirectTo ||
-            PROTECTED_ROUTES.USER_LANDING
-        );
-
-        // If sign in failed, show error message
-        if (!signInResult.success) {
-          setError(signInResult.message || 'Invalid email or password');
-        }
-      } catch {
-        setError('Something went wrong. Please try again.');
+        console.log('Login successful:', data);
+      } catch (err) {
+        console.error('Login error:', err);
       } finally {
+        console.log('Login process finished.');
         setIsLoading(false);
       }
     }
 
     // *  Handle registration logic
     if (mode === 'register') {
+      // Validate with Zod before sending to Better Auth
+      const validation = registerFormSchema.safeParse({
+        email: formValues.email,
+        password: formValues.password,
+        confirmPassword: formValues.confirmPassword,
+      });
+
+      if (!validation.success) {
+        // Extract field errors from Zod
+        const fieldErrors = validation.error.flatten().fieldErrors;
+        setFieldErrors(
+          Object.fromEntries(
+            Object.entries(fieldErrors).map(([key, value]) => [
+              key,
+              value?.[0] || '',
+            ])
+          )
+        );
+        setIsLoading(false);
+        return;
+      }
       try {
-        // Register new user using server action
-        const registerResult = await registerCredentials(formData);
+        const { data, error } = await signUp.email({
+          email: formValues.email,
+          password: formValues.password,
+          name: formValues.email, // or a real name if you have it
+          image: undefined, // optional
+          callbackURL: PROTECTED_ROUTES.USER_LANDING,
+          fetchOptions: {
+            onRequest: () => {
+              console.log('Registering...');
+              setIsLoading(true);
+            },
+            onResponse: () => {
+              console.log('Registration response received.');
+            },
+            onError: (ctx) => {
+              console.error('Register error:', ctx.error);
+              setAuthErrorObj(ctx.error);
+            },
+            onSuccess: () => {
+              router.push(PROTECTED_ROUTES.USER_LANDING);
+            },
+          },
+        });
 
-        // If registration was successful
-        if (registerResult.success) {
-          const email = formData.get('email') as string;
-          const password = formData.get('password') as string;
-
-          console.log('🚀 Registration successful');
-
-          // TODO: Verify email ?
-        }
-
-        // If registration failed
-        if (!registerResult.success) {
-          console.log('❌ Registration failed:', registerResult);
-          setError(registerResult.message || 'Registration failed');
-          setFieldErrors(
-            Object.fromEntries(
-              Object.entries(registerResult.errors || {}).map(
-                ([key, value]) => [key, value?.[0] || '']
-              )
-            )
-          );
-        }
-      } catch (error) {
-        console.error('💥 Registration catch error:', error);
-        setError('Something went wrong. Please try again.');
+        console.log('Registration successful:', data);
+      } catch (err) {
+        console.error('Registration error:', err);
       } finally {
+        console.log('Registration process finished.');
         setIsLoading(false);
       }
     }
@@ -97,25 +150,7 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
 
   return (
     <div className='space-y-6'>
-      {/* Show local error for both signin and register modes */}
-      {error && (
-        <div className='p-4 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center space-x-2'>
-          <svg
-            className='w-5 h-5 text-destructive flex-shrink-0'
-            fill='currentColor'
-            viewBox='0 0 20 20'
-          >
-            <path
-              fillRule='evenodd'
-              d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z'
-              clipRule='evenodd'
-            />
-          </svg>
-          <span>{error}</span>
-        </div>
-      )}
-
-      <form action={handleSubmit} className='space-y-5'>
+      <form onSubmit={handleSubmit} className='space-y-5'>
         <div>
           <label
             htmlFor='email'
@@ -160,7 +195,7 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
             type='password'
             required
             disabled={isLoading}
-            value={formValues.password}
+            value={formValues.password /* 'Hejhej123!' */}
             onChange={(e) =>
               setFormValues((prev) => ({ ...prev, password: e.target.value }))
             }
@@ -192,7 +227,7 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
               type='password'
               required
               disabled={isLoading}
-              value={formValues.confirmPassword}
+              value={formValues.confirmPassword /* 'Hejhej123!' */}
               onChange={(e) =>
                 setFormValues((prev) => ({
                   ...prev,
@@ -230,4 +265,4 @@ export function CredentialsForm({ mode, callbackUrl }: CredentialsFormProps) {
       </form>
     </div>
   );
-}
+};

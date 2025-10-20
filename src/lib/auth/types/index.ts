@@ -15,3 +15,8 @@ export type AuthSession = Awaited<ReturnType<typeof auth.api.getSession>>;
 
 // Helper type for user with session context
 export type SessionUser = NonNullable<AuthSession>['user'];
+
+// Auth-related types
+export type { BetterAuthError } from '@/lib/auth/types/auth.types';
+export type { AuthFormProps } from '@/lib/auth/types/auth.types';
+export type { CredentialsFormProps } from '@/lib/auth/types/auth.types';

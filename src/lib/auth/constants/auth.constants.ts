@@ -56,6 +56,28 @@ export const PROTECTED_ROUTES = {
 }
 
 
+// ** Better Auth Error Messages (Swedish) ** //
+// Maps stable `better-auth` error codes to user-friendly messages.
+export const BETTER_AUTH_ERROR_MESSAGES: Record<string, string> = {
+  // Credentials
+  'invalid-credentials': 'Felaktig e-postadress eller lösenord.',
+  'user-not-found': 'Användaren kunde inte hittas.',
+  'user-already-exists': 'En användare med denna e-postadress finns redan.',
+  'USER_ALREADY_EXISTS': 'En användare med denna e-postadress finns redan.',
+
+  // OAuth
+  'oauth-error': 'Inloggningen med den valda tjänsten misslyckades. Försök igen.',
+  'oauth_error': 'Inloggningen med den valda tjänsten misslyckades. Försök igen.',
+  'oauth-account-not-linked': 'Denna e-post är redan kopplad till en annan inloggningsmetod.',
+  'access-denied': 'Åtkomst nekades. Du måste ge tillstånd för att logga in.',
+  'callback-error': 'Ett fel uppstod under inloggningen. Försök igen.',
+
+  // General
+  'invalid-input': 'Ogiltig indata. Vänligen kontrollera dina uppgifter.',
+  'unknown-error': 'Ett okänt fel inträffade. Försök igen senare.',
+};
+
+
 // ** Authentication Messages ** //
 export const AUTH_MESSAGES = {
   // Error messages
@@ -85,45 +107,6 @@ export const AUTH_MESSAGES = {
   ERROR_INVALID_TOKEN: 'Invalid or expired verification link.',
   ERROR_ALREADY_VERIFIED: 'Your email is already verified.',
   ERROR_EMAIL_NOT_VERIFIED: 'Your email has not been verified. Please check your email for a verification link or request a new one.',
-
-  // ** Auth.js Error Messages ** //
-  // Sign-in related errors (shown on sign-in page)
-  ERROR_OAUTH_ACCOUNT_NOT_LINKED: 'This email is already registered with another sign-in method. Please use the correct provider below.',
-  ERROR_OAUTH_CALLBACK: 'There was a problem with the sign-in process. Please try again.',
-  ERROR_OAUTH_SIGNIN: 'Could not sign in with this provider. Please try again.',
-  ERROR_EMAIL_SIGNIN: 'Could not send sign-in email. Please check your email address.',
-  ERROR_CREDENTIALS_SIGNIN: 'Invalid credentials. Please check your email and password.',
-  ERROR_ACCOUNT_NOT_LINKED: 'Your account is not linked to this sign-in method.',
-  ERROR_MISSING_CSRF: 'Security error. Please refresh the page and try again.',
-
-  // Configuration/System errors (shown on error page)
-  ERROR_ACCESS_DENIED: 'Access denied. You do not have permission to sign in.',
-  ERROR_CONFIGURATION: 'Authentication service is misconfigured. Please contact support.',
-  ERROR_CALLBACK_ROUTE: 'Authentication callback failed. Please try again.',
-  ERROR_ADAPTER: 'Database error occurred. Please try again later.',
-  ERROR_JWT_SESSION: 'Session error occurred. Please sign in again.',
-  ERROR_SESSION_TOKEN: 'Session expired. Please sign in again.',
-  ERROR_INVALID_CALLBACK_URL: 'Invalid redirect URL. Possible security issue detected.',
-  ERROR_INVALID_CHECK: 'Security check failed. Please try again.',
-  ERROR_INVALID_ENDPOINTS: 'Authentication provider is misconfigured.',
-  ERROR_INVALID_PROVIDER: 'Unknown or unsupported authentication provider.',
-  ERROR_MISSING_ADAPTER: 'Database adapter is not configured.',
-  ERROR_MISSING_ADAPTER_METHODS: 'Database adapter is incomplete.',
-  ERROR_MISSING_AUTHORIZE: 'Credentials provider is misconfigured.',
-  ERROR_MISSING_SECRET: 'Authentication secret is not configured.',
-  ERROR_OAUTH_PROFILE_PARSE: 'Could not parse profile information from provider.',
-  ERROR_VERIFICATION: 'Email verification failed. Please try again.',
-  ERROR_SIGNIN_GENERIC: 'Sign-in failed. Please try again.',
-  ERROR_SIGNOUT: 'Sign-out failed. Please try again.',
-  ERROR_UNKNOWN_ACTION: 'Unknown authentication action requested.',
-  ERROR_UNSUPPORTED_STRATEGY: 'Authentication strategy is not supported.',
-  ERROR_UNTRUSTED_HOST: 'Untrusted host detected. Please contact support.',
-  ERROR_ERROR_PAGE_LOOP: 'Error page loop detected. Please contact support.',
-  ERROR_EVENT: 'Authentication event processing failed.',
-  ERROR_EXPERIMENTAL_FEATURE: 'Experimental feature is not enabled.',
-  ERROR_DUPLICATE_CONDITIONAL_UI: 'Multiple conditional UI providers detected.',
-  ERROR_MISSING_WEBAUTHN_AUTOCOMPLETE: 'WebAuthn autocomplete is not configured.',
-  ERROR_WEBAUTHN_VERIFICATION: 'WebAuthn verification failed.',
 
   // Success messages
   SUCCESS_REGISTRATION: 'Registration successful!',
