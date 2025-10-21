@@ -133,7 +133,9 @@ export const CredentialsForm = ({
               setAuthErrorObj(ctx.error);
             },
             onSuccess: () => {
-              router.push(PROTECTED_ROUTES.USER_LANDING);
+              router.push(
+                `${PROTECTED_ROUTES.USER_LANDING}?accountCreated=true`
+              );
             },
           },
         });
