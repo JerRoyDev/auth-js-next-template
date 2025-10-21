@@ -18,7 +18,7 @@ const Header = () => {
   if (excludedPaths.includes(pathname)) return null;
 
   // const session = await auth();
-  const { data } = useSession();
+  const { data, error, isPending } = useSession();
 
   return (
     <header className='bg-card text-foreground shadow-sm border-b border-border'>
