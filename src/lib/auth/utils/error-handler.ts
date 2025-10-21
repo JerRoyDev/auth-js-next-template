@@ -2,7 +2,7 @@
  * Better Auth Error Handler
  * 
  * Handles Better Auth error objects and provides appropriate user messages.
- * See: https://www.better-auth.com/docs/error-handling (2025-10-20)
+ * See: 
  */
 
 import { BetterAuthError } from "../types";
@@ -21,6 +21,12 @@ export interface ErrorDisplayInfo {
  * Maps Better Auth error codes to user-friendly messages and categories.
  */
 const BETTER_AUTH_ERROR_MAP: Record<string, Omit<ErrorDisplayInfo, 'code'>> = {
+  INVALID_EMAIL_OR_PASSWORD: {
+    title: 'Invalid Credentials',
+    message: 'Invalid email or password.',
+    type: 'error',
+    severity: 'medium',
+  },
   USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: {
     title: 'Email Already Registered',
     message: 'An account with this email already exists. Please use another email.',
