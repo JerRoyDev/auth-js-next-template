@@ -35,7 +35,7 @@ export const auth = betterAuth({
         to: user.email,
         subject: "Verify your email",
         react: VerifyEmail({
-          username: /* user.username || */ user.email,
+          username: /* user.username || */ user.email.split('@')[0],
           verifyUrl: url,
         }),
 
