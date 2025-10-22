@@ -1,7 +1,6 @@
 'use client';
 
 import { OAuthButton } from './OAuthButton';
-// import { AuthStatusMessage } from './AuthStatusMessage';
 import { CredentialsForm } from './CredentialsForm';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -11,12 +10,15 @@ import {
 import { useState } from 'react';
 import { AuthFormProps, BetterAuthError } from '@/lib/auth/types';
 import { AuthStatusMessage } from './AuthStatusMessage';
+import { authClient } from '@/lib/auth/config/auth-client';
 
 export const AuthForm = ({ mode }: AuthFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [authStatusObj, setAuthStatusObj] = useState<BetterAuthError | null>(
     null
   );
+
+  // Get callback URL from search params or use default
   const searchParams = useSearchParams();
   const callbackUrl =
     searchParams.get('callbackUrl') || PROTECTED_ROUTES.USER_LANDING;
@@ -26,7 +28,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
   return (
     <div className='space-y-6'>
       {/* Visa error meddelande om det finns */}
-      <AuthStatusMessage error={authStatusObj} />
+      <AuthStatusMessage authStatus={authStatusObj} />
 
       {/* Credentials Form (Sign In / Register) */}
       <CredentialsForm

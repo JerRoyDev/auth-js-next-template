@@ -28,8 +28,9 @@ export const auth = betterAuth({
 
   // Email verification configuration
   emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }, request) => {
 
-    sendVerificationEmail: async ({ user, url }) => {
+
       await sendEmail({
         from: `${process.env.EMAIL_SENDER_NAME} <${process.env.EMAIL_SENDER_ADDRESS}>` || 'Acme <onboarding@resend.dev>',
         to: user.email,
@@ -41,8 +42,9 @@ export const auth = betterAuth({
 
       });
     },
+
     sendOnSignUp: true,
-    autoSignInAfterVerification: true
+    // autoSignInAfterVerification: true,
   },
 
   // Oauth providers

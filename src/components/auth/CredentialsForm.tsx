@@ -76,7 +76,12 @@ export const CredentialsForm = ({
             },
             onError: (ctx) => {
               console.error('Login error:', ctx.error);
-              setAuthStatusObj(ctx.error);
+              // setAuthStatusObj(ctx.error);
+              router.push(
+                `${AUTH_ROUTES.LOGIN}?error=${encodeURIComponent(
+                  ctx.error?.code || 'login_error'
+                )}`
+              );
             },
             onSuccess: () => {
               router.push(PROTECTED_ROUTES.USER_LANDING);
@@ -133,14 +138,20 @@ export const CredentialsForm = ({
             },
             onError: (ctx) => {
               console.error('Register error:', ctx.error);
-              setAuthStatusObj(ctx.error);
-            },
-            onSuccess: () => {
-              router.push(`${AUTH_ROUTES.LOGIN}?verificationEmailSent=true`);
+              // setAuthStatusObj(ctx.error);
+              router.push(
+                `${AUTH_ROUTES.REGISTER}?error=${encodeURIComponent(
+                  ctx.error?.code || 'registration_error'
+                )}`
+              );
             },
           },
         });
-
+        console.log('Registration data:', data);
+        // After successful registration, redirect to login with verification notice
+        router.push(
+          `${AUTH_ROUTES.VERIFY_EMAIL}?verification_sent=true&email=${encodeURIComponent(data?.user.email as string)}&token=${encodeURIComponent(data?.token as string)}`
+        );
         console.log('Registration successful:', data);
       } catch (err) {
         console.error('Registration error:', err);
@@ -198,7 +209,7 @@ export const CredentialsForm = ({
             type='password'
             required
             disabled={isLoading}
-            value={formValues.password /* 'Hejhej123!' */}
+            value={/* formValues.password */ 'Hejhej123!'}
             onChange={(e) =>
               setFormValues((prev) => ({ ...prev, password: e.target.value }))
             }
@@ -230,7 +241,7 @@ export const CredentialsForm = ({
               type='password'
               required
               disabled={isLoading}
-              value={formValues.confirmPassword /* 'Hejhej123!' */}
+              value={/* formValues.confirmPassword */ 'Hejhej123!'}
               onChange={(e) =>
                 setFormValues((prev) => ({
                   ...prev,

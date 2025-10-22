@@ -8,20 +8,24 @@ import {
 import { useSearchParams } from 'next/navigation';
 
 interface AuthStatusMessageProps {
-  error: BetterAuthError | null;
+  authStatus: BetterAuthError | null;
 }
 
-export function AuthStatusMessage({ error }: AuthStatusMessageProps) {
-  const hasVerificationEmailSent = useSearchParams().get(
-    'verificationEmailSent'
-  );
+export function AuthStatusMessage({ authStatus }: AuthStatusMessageProps) {
+  const searchParams = useSearchParams();
+  const errorCode = searchParams.get('error');
 
-  if (!error || !hasVerificationEmailSent) return null;
+  // Välj: prop först, annars searchParam
+  const errorObj = authStatus
+    ? getBetterAuthStatusMessage(authStatus)
+    : errorCode
+      ? getBetterAuthStatusMessage({ code: errorCode })
+      : null;
 
-  // Map error to user-friendly info (title, message, type, severity)
-  const errorInfo = getBetterAuthStatusMessage(error);
-  const cssClasses = getErrorDisplayClasses(errorInfo);
-  const icon = getErrorIcon(errorInfo.type);
+  if (!errorObj) return null;
+
+  const cssClasses = getErrorDisplayClasses(errorObj);
+  const icon = getErrorIcon(errorObj.type);
 
   // Icon based on error type
   function getErrorIcon(type: 'error' | 'info' | 'warning') {
@@ -80,8 +84,8 @@ export function AuthStatusMessage({ error }: AuthStatusMessageProps) {
     <div className={cssClasses} role='alert'>
       {icon}
       <div>
-        <span className='font-semibold'>{errorInfo.title}:</span>
-        <span className='ml-1'>{errorInfo.message}</span>
+        <span className='font-semibold'>{errorObj.title}:</span>
+        <span className='ml-1'>{errorObj.message}</span>
       </div>
     </div>
   );

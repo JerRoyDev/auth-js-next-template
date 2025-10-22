@@ -21,23 +21,89 @@ export interface ErrorDisplayInfo {
  * Maps Better Auth error codes to user-friendly messages and categories.
  */
 const BETTER_AUTH_ERROR_MAP: Record<string, Omit<ErrorDisplayInfo, 'code'>> = {
+  USER_NOT_FOUND: {
+    title: 'User Not Found',
+    message: 'No user was found with the provided credentials.',
+    type: 'error',
+    severity: 'medium',
+  },
+  FAILED_TO_CREATE_USER: {
+    title: 'User Creation Failed',
+    message: 'Could not create user. Please try again.',
+    type: 'error',
+    severity: 'high',
+  },
+  FAILED_TO_CREATE_SESSION: {
+    title: 'Session Creation Failed',
+    message: 'Could not create session. Please try again.',
+    type: 'error',
+    severity: 'high',
+  },
+  FAILED_TO_UPDATE_USER: {
+    title: 'User Update Failed',
+    message: 'Could not update user information.',
+    type: 'error',
+    severity: 'medium',
+  },
+  FAILED_TO_GET_SESSION: {
+    title: 'Session Retrieval Failed',
+    message: 'Could not retrieve session. Please log in again.',
+    type: 'error',
+    severity: 'medium',
+  },
+  INVALID_PASSWORD: {
+    title: 'Invalid Password',
+    message: 'The password you entered is incorrect.',
+    type: 'error',
+    severity: 'medium',
+  },
+  INVALID_EMAIL: {
+    title: 'Invalid Email',
+    message: 'The email address is not valid.',
+    type: 'error',
+    severity: 'low',
+  },
   INVALID_EMAIL_OR_PASSWORD: {
     title: 'Invalid Credentials',
     message: 'Invalid email or password.',
     type: 'error',
     severity: 'medium',
   },
-  USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: {
-    title: 'Email Already Registered',
-    message: 'An account with this email already exists. Please use another email.',
+  SOCIAL_ACCOUNT_ALREADY_LINKED: {
+    title: 'Account Already Linked',
+    message: 'This social account is already linked to another user.',
     type: 'info',
     severity: 'low',
   },
-  INVALID_CREDENTIALS: {
-    title: 'Invalid Credentials',
-    message: 'Incorrect email or password.',
+  PROVIDER_NOT_FOUND: {
+    title: 'Provider Not Found',
+    message: 'The specified provider could not be found.',
     type: 'error',
     severity: 'medium',
+  },
+  INVALID_TOKEN: {
+    title: 'Invalid Token',
+    message: 'The token provided is invalid or expired.',
+    type: 'error',
+    severity: 'medium',
+  },
+  ID_TOKEN_NOT_SUPPORTED: {
+    title: 'ID Token Not Supported',
+    message: 'The id_token is not supported by this provider.',
+    type: 'error',
+    severity: 'low',
+  },
+  FAILED_TO_GET_USER_INFO: {
+    title: 'User Info Retrieval Failed',
+    message: 'Could not retrieve user information.',
+    type: 'error',
+    severity: 'medium',
+  },
+  USER_EMAIL_NOT_FOUND: {
+    title: 'User Email Not Found',
+    message: 'No email address found for this user.',
+    type: 'error',
+    severity: 'low',
   },
   EMAIL_NOT_VERIFIED: {
     title: 'Email Not Verified',
@@ -45,17 +111,65 @@ const BETTER_AUTH_ERROR_MAP: Record<string, Omit<ErrorDisplayInfo, 'code'>> = {
     type: 'warning',
     severity: 'low',
   },
-  ACCOUNT_CREATED: {
-    title: 'Account Created',
-    message: 'Your account has been created. Please sign in.',
+  PASSWORD_TOO_SHORT: {
+    title: 'Password Too Short',
+    message: 'Your password is too short.',
+    type: 'error',
+    severity: 'low',
+  },
+  PASSWORD_TOO_LONG: {
+    title: 'Password Too Long',
+    message: 'Your password is too long.',
+    type: 'error',
+    severity: 'low',
+  },
+  USER_ALREADY_EXISTS: {
+    title: 'User Already Exists',
+    message: 'A user with this email already exists.',
     type: 'info',
     severity: 'low',
   },
-  ACCESS_DENIED: {
-    title: 'Access Denied',
-    message: 'You do not have permission to access this resource.',
+  USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: {
+    title: 'Email Already Registered',
+    message: 'User already exists. Use another email.',
+    type: 'info',
+    severity: 'low',
+  },
+  EMAIL_CAN_NOT_BE_UPDATED: {
+    title: 'Email Update Failed',
+    message: 'Email address cannot be updated.',
     type: 'error',
-    severity: 'high',
+    severity: 'low',
+  },
+  CREDENTIAL_ACCOUNT_NOT_FOUND: {
+    title: 'Credential Account Not Found',
+    message: 'No credential account found for this user.',
+    type: 'error',
+    severity: 'low',
+  },
+  SESSION_EXPIRED: {
+    title: 'Session Expired',
+    message: 'Session expired. Re-authenticate to perform this action.',
+    type: 'warning',
+    severity: 'medium',
+  },
+  FAILED_TO_UNLINK_LAST_ACCOUNT: {
+    title: 'Unlink Failed',
+    message: 'You can\'t unlink your last account.',
+    type: 'error',
+    severity: 'low',
+  },
+  ACCOUNT_NOT_FOUND: {
+    title: 'Account Not Found',
+    message: 'No account found with the provided information.',
+    type: 'error',
+    severity: 'low',
+  },
+  USER_ALREADY_HAS_PASSWORD: {
+    title: 'User Already Has Password',
+    message: 'User already has a password. Provide that to delete the account.',
+    type: 'info',
+    severity: 'low',
   },
   DEFAULT: {
     title: 'Authentication Error',
