@@ -106,10 +106,12 @@ export async function getSession(): Promise<AuthSession | null> {
  * const isAuthenticated = await isAuth();
  * ```
  */
-export async function isAuth(redirectUrl?: string): Promise<boolean> {
+export const isAuth = async (redirectUrl?: string): Promise<boolean> => {
+
   const session = await getSession();
 
   if (session?.user && redirectUrl) {
+    console.log('isAuth(): Session found, redirecting to:', redirectUrl);
     redirect(redirectUrl);
   }
 
