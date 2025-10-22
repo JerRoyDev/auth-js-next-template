@@ -12,13 +12,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const Header = () => {
+  // Get session data
+  const { data, error, isPending } = useSession();
+
   // Exclude header on auth pages
   const excludedPaths = [AUTH_ROUTES.LOGIN, AUTH_ROUTES.REGISTER];
   const pathname = usePathname();
   if (excludedPaths.includes(pathname)) return null;
-
-  // const session = await auth();
-  const { data, error, isPending } = useSession();
 
   return (
     <header className='bg-card text-foreground shadow-sm border-b border-border'>
