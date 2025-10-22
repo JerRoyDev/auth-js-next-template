@@ -6,6 +6,8 @@ import { prisma } from './lib/prisma';
 import { SESSION_CONFIG } from './lib/auth/constants/auth.constants';
 import { admin } from 'better-auth/plugins';
 import { nextCookies } from 'better-auth/next-js';
+import sendEmail from './lib/email/resend-provider';
+import VerifyEmail from './components/auth/email/verify-email';
 
 export const auth = betterAuth({
 
@@ -19,14 +21,28 @@ export const auth = betterAuth({
   // Email & Password authentication (replaces credentials provider)
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // Set to true if you want email verification
+    requireEmailVerification: true,
     minPasswordLength: 8, // Match Zod validation
     maxPasswordLength: 100, // Match Zod validation
-
   },
 
+  // Email verification configuration
   emailVerification: {
-    // Configuration for email verification emails
+
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendEmail({
+        from: `${process.env.EMAIL_SENDER_NAME} <${process.env.EMAIL_SENDER_ADDRESS}>` || 'Acme <onboarding@resend.dev>',
+        to: user.email,
+        subject: "Verify your email",
+        react: VerifyEmail({
+          username: /* user.username || */ user.email,
+          verifyUrl: url,
+        }),
+
+      });
+    },
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true
   },
 
   // Oauth providers

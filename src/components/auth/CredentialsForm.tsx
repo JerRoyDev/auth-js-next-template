@@ -4,7 +4,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PROTECTED_ROUTES } from '@/lib/auth/constants/auth.constants';
+import {
+  AUTH_ROUTES,
+  PROTECTED_ROUTES,
+} from '@/lib/auth/constants/auth.constants';
 import { signIn, signUp } from '@/lib/auth/config/auth-client';
 import {
   signInSchema,
@@ -133,9 +136,7 @@ export const CredentialsForm = ({
               setAuthErrorObj(ctx.error);
             },
             onSuccess: () => {
-              router.push(
-                `${PROTECTED_ROUTES.USER_LANDING}?accountCreated=true`
-              );
+              router.push(`${AUTH_ROUTES.LOGIN}?verificationEmailSent=true`);
             },
           },
         });
@@ -261,8 +262,8 @@ export const CredentialsForm = ({
               ? 'Signing in...'
               : 'Creating account...'
             : mode === 'signin'
-            ? 'Sign In'
-            : 'Create Account'}
+              ? 'Sign In'
+              : 'Create Account'}
         </button>
       </form>
     </div>

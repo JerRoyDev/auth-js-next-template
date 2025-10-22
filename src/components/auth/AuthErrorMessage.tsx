@@ -5,13 +5,18 @@ import {
   getBetterAuthErrorMessage,
   getErrorDisplayClasses,
 } from '@/lib/auth/utils/error-handler';
+import { useSearchParams } from 'next/navigation';
 
 interface AuthErrorMessageProps {
   error: BetterAuthError | null;
 }
 
 export function AuthErrorMessage({ error }: AuthErrorMessageProps) {
-  if (!error) return null;
+  const hasVerificationEmailSent = useSearchParams().get(
+    'verificationEmailSent'
+  );
+
+  if (!error || !hasVerificationEmailSent) return null;
 
   // Map error to user-friendly info (title, message, type, severity)
   const errorInfo = getBetterAuthErrorMessage(error);

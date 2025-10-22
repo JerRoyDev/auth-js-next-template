@@ -26,9 +26,10 @@ export const authClient = createAuthClient({
 
 // Export commonly used hooks and methods
 export const {
-  useSession,
+  useSession, // data: {user, session} , error, isPending, refetch
   signIn,
   signOut,
   signUp,
+  sendVerificationEmail // manual trigger for sending email verification
 } = authClient;
 
