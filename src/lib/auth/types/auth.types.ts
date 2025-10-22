@@ -24,5 +24,5 @@ export interface CredentialsFormProps {
   callbackUrl?: string;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
-  setAuthErrorObj: (errorObj: BetterAuthError | null) => void;
+  setAuthStatusObj: (errorObj: BetterAuthError | null) => void;
 }

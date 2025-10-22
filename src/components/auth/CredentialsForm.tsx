@@ -20,7 +20,7 @@ export const CredentialsForm = ({
   callbackUrl,
   isLoading,
   setIsLoading,
-  setAuthErrorObj,
+  setAuthStatusObj,
 }: CredentialsFormProps) => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState({
@@ -76,7 +76,7 @@ export const CredentialsForm = ({
             },
             onError: (ctx) => {
               console.error('Login error:', ctx.error);
-              setAuthErrorObj(ctx.error);
+              setAuthStatusObj(ctx.error);
             },
             onSuccess: () => {
               router.push(PROTECTED_ROUTES.USER_LANDING);
@@ -133,7 +133,7 @@ export const CredentialsForm = ({
             },
             onError: (ctx) => {
               console.error('Register error:', ctx.error);
-              setAuthErrorObj(ctx.error);
+              setAuthStatusObj(ctx.error);
             },
             onSuccess: () => {
               router.push(`${AUTH_ROUTES.LOGIN}?verificationEmailSent=true`);

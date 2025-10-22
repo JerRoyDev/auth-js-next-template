@@ -68,7 +68,7 @@ const BETTER_AUTH_ERROR_MAP: Record<string, Omit<ErrorDisplayInfo, 'code'>> = {
 /**
  * Get user-friendly error message from Better Auth error object.
  */
-export function getBetterAuthErrorMessage(error: BetterAuthError): ErrorDisplayInfo {
+export function getBetterAuthStatusMessage(error: BetterAuthError): ErrorDisplayInfo {
   const { code, message, status, statusText, type } = error;
 
   // Map known error code

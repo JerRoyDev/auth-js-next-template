@@ -1,7 +1,7 @@
 'use client';
 
 import { OAuthButton } from './OAuthButton';
-// import { AuthErrorMessage } from './AuthErrorMessage';
+// import { AuthStatusMessage } from './AuthStatusMessage';
 import { CredentialsForm } from './CredentialsForm';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -10,11 +10,11 @@ import {
 } from '@/lib/auth/constants/auth.constants';
 import { useState } from 'react';
 import { AuthFormProps, BetterAuthError } from '@/lib/auth/types';
-import { AuthErrorMessage } from './AuthErrorMessage';
+import { AuthStatusMessage } from './AuthStatusMessage';
 
 export const AuthForm = ({ mode }: AuthFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [authErrorObj, setAuthErrorObj] = useState<BetterAuthError | null>(
+  const [authStatusObj, setAuthStatusObj] = useState<BetterAuthError | null>(
     null
   );
   const searchParams = useSearchParams();
@@ -26,13 +26,13 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
   return (
     <div className='space-y-6'>
       {/* Visa error meddelande om det finns */}
-      <AuthErrorMessage error={authErrorObj} />
+      <AuthStatusMessage error={authStatusObj} />
 
       {/* Credentials Form (Sign In / Register) */}
       <CredentialsForm
         isLoading={isLoading}
         setIsLoading={setIsLoading}
-        setAuthErrorObj={setAuthErrorObj}
+        setAuthStatusObj={setAuthStatusObj}
         mode={mode}
         callbackUrl={isSignIn ? callbackUrl : undefined}
       />
