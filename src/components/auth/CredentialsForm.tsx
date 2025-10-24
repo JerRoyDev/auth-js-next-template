@@ -3,7 +3,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   AUTH_ROUTES,
   PROTECTED_ROUTES,
@@ -14,13 +14,13 @@ import {
   registerFormSchema,
 } from '@/lib/auth/validations/auth.validations';
 import { CredentialsFormProps } from '@/lib/auth/types';
+import { set } from 'zod';
 
 export const CredentialsForm = ({
   mode,
   callbackUrl,
   isLoading,
   setIsLoading,
-  setAuthStatusObj,
 }: CredentialsFormProps) => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState({
@@ -28,6 +28,12 @@ export const CredentialsForm = ({
     password: '',
     confirmPassword: '',
   });
+
+  // Pre-fill email from query parameter
+  const emailParam = useSearchParams().get('email');
+  if (emailParam && !formValues.email) {
+    setFormValues((prev) => ({ ...prev, email: emailParam }));
+  }
 
   // * Router for navigation
   const router = useRouter();
@@ -38,7 +44,7 @@ export const CredentialsForm = ({
     setIsLoading(true);
     setFieldErrors({});
 
-    // *  Handle sign in logic
+    // * SIGN IN (email/password)
     if (mode === 'signin') {
       // Validate with Zod before sending to Better Auth
       const validation = signInSchema.safeParse({
@@ -60,45 +66,51 @@ export const CredentialsForm = ({
         setIsLoading(false);
         return;
       }
-      try {
-        const { data, error } = await signIn.email({
-          email: formValues.email,
-          password: formValues.password,
-          // rememberMe: true,  //If false, the user will be signed out when the browser is closed. (optional) (default: true)
-          callbackURL: callbackUrl || PROTECTED_ROUTES.USER_LANDING,
-          fetchOptions: {
-            onRequest: () => {
-              console.log('logging in...');
-              setIsLoading(true);
-            },
-            onResponse: () => {
-              console.log('Login response received.');
-            },
-            onError: (ctx) => {
-              console.error('Login error:', ctx.error);
-              // setAuthStatusObj(ctx.error);
+
+      // Call Better Auth signIn method
+      const { data, error } = await signIn.email({
+        email: formValues.email,
+        password: formValues.password,
+        // rememberMe: true,  //If false, the user will be signed out when the browser is closed. (optional) (default: true)
+        callbackURL: callbackUrl || PROTECTED_ROUTES.USER_LANDING,
+        fetchOptions: {
+          onRequest: () => {
+            console.log('logging in...');
+            setIsLoading(true);
+          },
+          onResponse: () => {
+            console.log('Login response received.');
+            setIsLoading(false);
+          },
+          onError: (ctx) => {
+            console.error('Login error:', ctx.error);
+
+            if (ctx.error?.code === 'EMAIL_NOT_VERIFIED') {
+              // Redirect to verify-email page
               router.push(
-                `${AUTH_ROUTES.LOGIN}?error=${encodeURIComponent(
-                  ctx.error?.code || 'login_error'
+                `${AUTH_ROUTES.VERIFY_EMAIL}?email=${encodeURIComponent(
+                  formValues.email
                 )}`
               );
-            },
-            onSuccess: () => {
-              router.push(PROTECTED_ROUTES.USER_LANDING);
-            },
+              return;
+            }
+            // Redirect to login with error code
+            router.push(
+              `${AUTH_ROUTES.LOGIN}?error=${encodeURIComponent(
+                ctx.error?.code || 'login_error'
+              )}`
+            );
+            return;
           },
-        });
-
-        console.log('Login successful:', data);
-      } catch (err) {
-        console.error('Login error:', err);
-      } finally {
-        console.log('Login process finished.');
-        setIsLoading(false);
-      }
+          onSuccess: () => {
+            console.log('Login successful');
+            router.push(PROTECTED_ROUTES.USER_LANDING);
+          },
+        },
+      });
     }
 
-    // *  Handle registration logic
+    // *  REGISTER (email/password)
     if (mode === 'register') {
       // Validate with Zod before sending to Better Auth
       const validation = registerFormSchema.safeParse({
@@ -121,44 +133,39 @@ export const CredentialsForm = ({
         setIsLoading(false);
         return;
       }
-      try {
-        const { data, error } = await signUp.email({
-          email: formValues.email,
-          password: formValues.password,
-          name: formValues.email, // or a real name if you have it
-          image: undefined, // optional
-          callbackURL: PROTECTED_ROUTES.USER_LANDING,
-          fetchOptions: {
-            onRequest: () => {
-              console.log('Registering...');
-              setIsLoading(true);
-            },
-            onResponse: () => {
-              console.log('Registration response received.');
-            },
-            onError: (ctx) => {
-              console.error('Register error:', ctx.error);
-              // setAuthStatusObj(ctx.error);
-              router.push(
-                `${AUTH_ROUTES.REGISTER}?error=${encodeURIComponent(
-                  ctx.error?.code || 'registration_error'
-                )}`
-              );
-            },
+
+      // Call Better Auth signUp method
+      const { data, error } = await signUp.email({
+        email: formValues.email,
+        password: formValues.password,
+        name: formValues.email.split('@')[0], // or a real name if you have it
+
+        fetchOptions: {
+          onRequest: () => {
+            console.log('Registering...');
+            setIsLoading(true);
           },
-        });
-        console.log('Registration data:', data);
-        // After successful registration, redirect to login with verification notice
-        router.push(
-          `${AUTH_ROUTES.VERIFY_EMAIL}?verification_sent=true&email=${encodeURIComponent(data?.user.email as string)}&token=${encodeURIComponent(data?.token as string)}`
-        );
-        console.log('Registration successful:', data);
-      } catch (err) {
-        console.error('Registration error:', err);
-      } finally {
-        console.log('Registration process finished.');
-        setIsLoading(false);
-      }
+          onResponse: () => {
+            console.log('Registration response received.');
+            setIsLoading(false);
+          },
+          onError: (ctx) => {
+            console.error('Register error:', ctx.error);
+            router.push(
+              `${AUTH_ROUTES.REGISTER}?error=${encodeURIComponent(
+                ctx.error?.code || 'registration_error'
+              )}`
+            );
+          },
+          onSuccess: (ctx) => {
+            // OTP skickas automatiskt om sendVerificationOnSignUp: true
+            // Redirect directly to verify-email page
+            router.push(
+              `${AUTH_ROUTES.VERIFY_EMAIL}?email=${encodeURIComponent(ctx.data?.user.email as string)}`
+            );
+          },
+        },
+      });
     }
   };
 

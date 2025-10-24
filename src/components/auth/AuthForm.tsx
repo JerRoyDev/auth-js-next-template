@@ -10,13 +10,9 @@ import {
 import { useState } from 'react';
 import { AuthFormProps, BetterAuthError } from '@/lib/auth/types';
 import { AuthStatusMessage } from './AuthStatusMessage';
-import { authClient } from '@/lib/auth/config/auth-client';
 
 export const AuthForm = ({ mode }: AuthFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [authStatusObj, setAuthStatusObj] = useState<BetterAuthError | null>(
-    null
-  );
 
   // Get callback URL from search params or use default
   const searchParams = useSearchParams();
@@ -28,13 +24,12 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
   return (
     <div className='space-y-6'>
       {/* Visa error meddelande om det finns */}
-      <AuthStatusMessage authStatus={authStatusObj} />
+      <AuthStatusMessage />
 
       {/* Credentials Form (Sign In / Register) */}
       <CredentialsForm
         isLoading={isLoading}
         setIsLoading={setIsLoading}
-        setAuthStatusObj={setAuthStatusObj}
         mode={mode}
         callbackUrl={isSignIn ? callbackUrl : undefined}
       />

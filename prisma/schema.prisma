@@ -87,6 +87,7 @@ model Verification {
 
   @@unique([identifier, value])
   @@map("verification")
+  @@index([identifier, value])
 }
 
 // Optional for WebAuthn support

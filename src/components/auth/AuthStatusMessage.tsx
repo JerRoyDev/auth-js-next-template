@@ -1,34 +1,35 @@
 'use client';
 
-import { BetterAuthError } from '@/lib/auth/types';
 import {
-  getBetterAuthStatusMessage,
-  getErrorDisplayClasses,
-} from '@/lib/auth/utils/error-handler';
+  getAuthStatusMessage,
+  getStatusDisplayClasses,
+} from '@/lib/auth/utils/status-handler';
 import { useSearchParams } from 'next/navigation';
 
-interface AuthStatusMessageProps {
-  authStatus: BetterAuthError | null;
-}
-
-export function AuthStatusMessage({ authStatus }: AuthStatusMessageProps) {
+export function AuthStatusMessage() {
   const searchParams = useSearchParams();
-  const errorCode = searchParams.get('error');
+  const errorParam = searchParams.get('error');
+  const successParam = searchParams.get('success');
+  const verifiedParam = searchParams.get('verified');
 
-  // Välj: prop först, annars searchParam
-  const errorObj = authStatus
-    ? getBetterAuthStatusMessage(authStatus)
-    : errorCode
-      ? getBetterAuthStatusMessage({ code: errorCode })
-      : null;
+  let statusObj: any = null;
+  if (errorParam) {
+    statusObj = getAuthStatusMessage({ code: errorParam });
+  }
+  if (successParam) {
+    statusObj = getAuthStatusMessage({ code: successParam });
+  }
+  if (verifiedParam === 'true') {
+    statusObj = getAuthStatusMessage({ code: 'VERIFIED' });
+  }
 
-  if (!errorObj) return null;
+  if (!statusObj) return null;
 
-  const cssClasses = getErrorDisplayClasses(errorObj);
-  const icon = getErrorIcon(errorObj.type);
+  const cssClasses = getStatusDisplayClasses(statusObj);
+  const icon = getErrorIcon(statusObj.type);
 
   // Icon based on error type
-  function getErrorIcon(type: 'error' | 'info' | 'warning') {
+  function getErrorIcon(type: 'error' | 'info' | 'warning' | 'success') {
     switch (type) {
       case 'error':
         return (
@@ -75,6 +76,21 @@ export function AuthStatusMessage({ authStatus }: AuthStatusMessageProps) {
             />
           </svg>
         );
+      case 'success':
+        return (
+          // Success icon (green check)
+          <svg
+            className='w-5 h-5 flex-shrink-0 text-green-600'
+            fill='currentColor'
+            viewBox='0 0 20 20'
+          >
+            <path
+              fillRule='evenodd'
+              d='M10 18a8 8 0 100-16 8 8 0 000 16zm-1-11a1 1 0 112 0v4a1 1 0 01-2 0V7zm0 6a1 1 0 100 2 1 1 0 000-2z'
+              clipRule='evenodd'
+            />
+          </svg>
+        );
       default:
         return null;
     }
@@ -84,8 +100,8 @@ export function AuthStatusMessage({ authStatus }: AuthStatusMessageProps) {
     <div className={cssClasses} role='alert'>
       {icon}
       <div>
-        <span className='font-semibold'>{errorObj.title}:</span>
-        <span className='ml-1'>{errorObj.message}</span>
+        <span className='font-semibold'>{statusObj.title}:</span>
+        <span className='ml-1'>{statusObj.message}</span>
       </div>
     </div>
   );

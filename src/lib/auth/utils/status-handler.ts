@@ -1,7 +1,7 @@
 /**
- * Better Auth Error Handler
+ * Better Auth Status Handler
  * 
- * Handles Better Auth error objects and provides appropriate user messages.
+ * Handles Better Auth status objects and provides appropriate user messages.
  * See: 
  */
 
@@ -9,18 +9,30 @@ import { BetterAuthError } from "../types";
 
 
 
-export interface ErrorDisplayInfo {
+export interface AuthStatusInfo {
   code?: string;
   title: string;
   message: string;
-  type: 'error' | 'info' | 'warning';
+  type: 'error' | 'info' | 'warning' | 'success';
   severity: 'low' | 'medium' | 'high';
 }
 
 /**
  * Maps Better Auth error codes to user-friendly messages and categories.
  */
-const BETTER_AUTH_ERROR_MAP: Record<string, Omit<ErrorDisplayInfo, 'code'>> = {
+const AUTH_STATUS_MAP: Record<string, Omit<AuthStatusInfo, 'code'>> = {
+  VERIFIED: {
+    title: 'Email Verified',
+    message: 'Your email has been successfully verified and you can now sign in.',
+    type: 'success',
+    severity: 'low',
+  },
+  SUCCESS: {
+    title: 'Success',
+    message: 'Operation completed successfully.',
+    type: 'success',
+    severity: 'low',
+  },
   USER_NOT_FOUND: {
     title: 'User Not Found',
     message: 'No user was found with the provided credentials.',
@@ -180,16 +192,16 @@ const BETTER_AUTH_ERROR_MAP: Record<string, Omit<ErrorDisplayInfo, 'code'>> = {
 };
 
 /**
- * Get user-friendly error message from Better Auth error object.
+ * Get user-friendly status message from Better Auth status object.
  */
-export function getBetterAuthStatusMessage(error: BetterAuthError): ErrorDisplayInfo {
-  const { code, message, status, statusText, type } = error;
+export function getAuthStatusMessage(statusObj: BetterAuthError): AuthStatusInfo {
+  const { code, message, status, statusText, type } = statusObj;
 
-  // Map known error code
-  if (code && BETTER_AUTH_ERROR_MAP[code]) {
+  // Map known status code
+  if (code && AUTH_STATUS_MAP[code]) {
     return {
       code,
-      ...BETTER_AUTH_ERROR_MAP[code],
+      ...AUTH_STATUS_MAP[code],
     };
   }
 
@@ -220,16 +232,18 @@ export function getBetterAuthStatusMessage(error: BetterAuthError): ErrorDisplay
 }
 
 /**
- * Get CSS classes for error display based on type and severity
+ * Get CSS classes for status display based on type and severity
  */
-export function getErrorDisplayClasses(errorInfo: ErrorDisplayInfo): string {
-  switch (errorInfo.type) {
+export function getStatusDisplayClasses(statusInfo: AuthStatusInfo): string {
+  switch (statusInfo.type) {
     case 'error':
       return 'p-4 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm flex items-center space-x-2';
     case 'info':
       return 'p-4 rounded-lg bg-primary/10 border border-primary/30 text-primary text-sm flex items-center space-x-2';
     case 'warning':
       return 'p-4 rounded-lg bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm flex items-center space-x-2';
+    case 'success':
+      return 'p-4 rounded-lg bg-green-50 border border-green-300 text-green-800 text-sm flex items-center space-x-2';
     default:
       return 'p-4 rounded-lg bg-card border border-border text-foreground text-sm flex items-center space-x-2';
   }
