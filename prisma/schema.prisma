@@ -13,7 +13,7 @@ model User {
   name          String?
   username      String?
   email         String          @unique
-  role          Role            @default(USER)
+  role          Role            @default(user)
   emailVerified Boolean         @default(false)
   password      String?
   image         String?
@@ -32,8 +32,8 @@ model User {
 }
 
 enum Role {
-  USER
-  ADMIN
+  user
+  admin
 }
 
 model Account {

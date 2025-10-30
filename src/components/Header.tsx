@@ -46,8 +46,8 @@ const Header = () => {
                   Dashboard
                 </Link>
 
-                {/* Admin Link - Only show for ADMIN users */}
-                {data.user?.role === 'ADMIN' && (
+                {/* Admin Link - Only show for admin users */}
+                {data.user?.role === 'admin' && (
                   <Link
                     href={PROTECTED_ROUTES.ADMIN_DASHBOARD}
                     className='inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors'

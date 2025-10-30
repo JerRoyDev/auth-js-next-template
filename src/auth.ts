@@ -66,9 +66,8 @@ export const auth = betterAuth({
   plugins: [
     //* Admin plugin for role management
     admin({
-      defaultRole: "USER",
-      adminRoles: ["ADMIN"],
-
+      defaultRole: "user",
+      adminRoles: ["admin"],
     }),
     //* Email OTP plugin for sending verification and password reset emails
     emailOTP({
