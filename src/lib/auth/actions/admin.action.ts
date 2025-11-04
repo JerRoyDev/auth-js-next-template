@@ -1,3 +1,5 @@
+// src/lib/auth/actions/admin.action.ts
+
 'use server';
 
 import { requireAdmin } from '@/lib/auth/utils/require-auth';
@@ -8,12 +10,12 @@ import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 
 /**
- * Update a user's role using Better Auth Admin Plugin API
+ * * Update a user's role using Better Auth Admin Plugin API
  * 
- * @see https://better-auth.com/docs/plugins/admin - setRole API
+ * @see https://www.better-auth.com/docs/plugins/admin#set-user-role - setRole API
  * Date: October 14, 2025
  */
-export async function updateUserRole(userId: string, newRole: string) {
+const updateUserRole = async (userId: string, newRole: string) => {
   try {
     // Better Auth: Use requireAdmin() helper - automatically checks and redirects if not admin
     const session = await requireAdmin();
@@ -61,12 +63,12 @@ export async function updateUserRole(userId: string, newRole: string) {
 }
 
 /**
- * Delete a user using Better Auth Admin Plugin API
+ * * Delete a user using Better Auth Admin Plugin API
  * 
- * @see https://better-auth.com/docs/plugins/admin.mdx - removeUser API
+ * @see https://www.better-auth.com/docs/plugins/admin#remove-user - removeUser API
  * Date: October 14, 2025
  */
-export async function deleteUser(userId: string) {
+const deleteUser = async (userId: string) => {
   try {
     // Better Auth: Use requireAdmin() helper
     const session = await requireAdmin();
@@ -103,3 +105,71 @@ export async function deleteUser(userId: string) {
     };
   }
 }
+
+
+/**
+ * List users using Better Auth Admin Plugin API
+ * Supports query filtering and pagination
+ * @see https://www.better-auth.com/docs/plugins/admin#list-users
+ * @see https://www.better-auth.com/docs/plugins/admin#query-filtering
+ * @see https://www.better-auth.com/docs/plugins/admin#pagination
+ */
+export type ListUsersParams = {
+  limit?: number;
+  offset?: number;
+  searchValue?: string;
+  searchField?: 'email' | 'name';
+  searchOperator?: 'contains' | 'starts_with' | 'ends_with';
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
+  filterField?: string;
+  filterValue?: string | number | boolean;
+  filterOperator?: 'eq' | 'ne' | 'lt' | 'lte' | 'gt' | 'gte';
+};
+
+const listUsers = async (params: ListUsersParams = {}) => {
+  try {
+    await requireAdmin();
+    const result = await auth.api.listUsers({
+      query: {
+        limit: params.limit ?? 20,
+        offset: params.offset ?? 0,
+        searchValue: params.searchValue,
+        searchField: params.searchField,
+        searchOperator: params.searchOperator,
+        sortBy: params.sortBy,
+        sortDirection: params.sortDirection,
+        filterField: params.filterField,
+        filterValue: params.filterValue,
+        filterOperator: params.filterOperator,
+      },
+      headers: await headers(),
+    });
+    if (!result || !('users' in result)) {
+      return {
+        success: false,
+        error: 'Failed to fetch users. Please try again.',
+      };
+    }
+    return {
+      success: true,
+      users: result.users,
+      total: result.total ?? 0,
+      limit: 'limit' in result ? result.limit : params.limit ?? 20,
+      offset: 'offset' in result ? result.offset : params.offset ?? 0,
+    };
+  } catch (error) {
+    console.error('Error listing users:', error);
+    return {
+      success: false,
+      error: 'Failed to list users. Please try again.',
+    };
+  }
+};
+
+
+export {
+  updateUserRole,
+  deleteUser,
+  listUsers,
+};
