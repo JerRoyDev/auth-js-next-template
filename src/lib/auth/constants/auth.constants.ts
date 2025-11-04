@@ -9,21 +9,7 @@ export const ROLE_LABELS: Record<Role, string> = {
   // Add more roles here as needed
 };
 
-// ** Session Configuration ** //
-export const SESSION_CONFIG = {
-  // Balanced approach - suitable for most web applications
-  MAX_AGE: 7 * 24 * 60 * 60, // 7 days in seconds
-  UPDATE_AGE: 60 * 60, // 1 hour in seconds
 
-  // More secure - suitable for highly sensitive applications
-  // MAX_AGE: 24 * 60 * 60, // 1 day in seconds
-  // UPDATE_AGE: 15 * 60, // 15 minutes in seconds
-
-  // More convenient - suitable for low-risk applications
-  // MAX_AGE: 30 * 24 * 60 * 60, // 30 days in seconds
-  // UPDATE_AGE: 24 * 60 * 60, // 24 hours in seconds
-
-} as const;
 
 // ** Route Definitions ** //
 
