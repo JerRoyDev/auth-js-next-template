@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation';
 
 const Header = () => {
   // Get session data
-  const { data, error, isPending, refetch } = useSession();
+  const { data, error, isPending } = useSession();
 
   // Exclude header on auth pages
   const excludedPaths = [AUTH_ROUTES.LOGIN, AUTH_ROUTES.REGISTER];
@@ -22,12 +22,8 @@ const Header = () => {
 
   if (isPending) {
     return (
-      <header className='bg-card text-foreground shadow-sm border-b border-border'>
-        <div className='flex items-center space-x-4'>
-          <span className='text-sm text-muted-foreground font-medium'>
-            Loading...
-          </span>
-        </div>
+      <header className='bg-card text-foreground shadow-sm border-b border-border transition-all duration-500 max-h-0 overflow-hidden'>
+        <div className='flex items-center space-x-4'></div>
       </header>
     );
   }
@@ -45,7 +41,7 @@ const Header = () => {
   }
 
   return (
-    <header className='bg-card text-foreground shadow-sm border-b border-border'>
+    <header className='bg-card text-foreground shadow-sm border-b border-border transition-all duration-500 max-h-24 overflow-hidden'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
           {/* Logo/App Name */}
