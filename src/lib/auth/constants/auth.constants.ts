@@ -4,8 +4,8 @@ import { Role } from "@prisma/client";
 
 // Labels for roles (for display purposes) (should match the Role enum in Prisma schema)
 export const ROLE_LABELS: Record<Role, string> = {
-  USER: 'Användare',
-  ADMIN: 'Administratör',
+  user: 'User',
+  admin: 'Administrator',
   // Add more roles here as needed
 };
 
@@ -49,7 +49,7 @@ export const AUTH_ROUTES = {
 // Routes that require authentication.
 export const PROTECTED_ROUTES = {
   USER_LANDING: DEFAULT_AUTHENTICATED_ROUTE, /* could be dashboard, Overview etc. */
-  ADMIN_DASHBOARD: '/admin',
+  ADMIN_LANDING: '/admin',
   ADMIN_USERS: '/admin/users',
   USER_SETTINGS: '/settings',
   USER_PROFILE: '/profile',
