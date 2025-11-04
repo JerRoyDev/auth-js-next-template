@@ -43,6 +43,8 @@ export const requireAuth = async (callbackUrl?: string): Promise<AuthSession> =>
       ? `${AUTH_ROUTES.LOGIN}?callbackUrl=${encodeURIComponent(callbackUrl)}`
       : AUTH_ROUTES.LOGIN;
 
+
+    console.log('requireAuth(): No session found, redirecting to:', redirectUrl);
     redirect(redirectUrl);
   }
 
@@ -65,7 +67,9 @@ export const requireAuth = async (callbackUrl?: string): Promise<AuthSession> =>
 export async function requireAdmin(): Promise<AuthSession> {
   const session = await requireAuth();
 
-  if (!session?.user || (session.user as any).role !== Role.ADMIN) {
+  if (!session?.user || (session.user as any).role !== Role.admin) {
+
+    console.log('requireAdmin(): User is not admin, redirecting to:', PUBLIC_ROUTES.UNAUTHORIZED);
     redirect(PUBLIC_ROUTES.UNAUTHORIZED);
   }
 
@@ -92,6 +96,8 @@ export async function getSession(): Promise<AuthSession | null> {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
+
+    console.log('getSession(): Current session:', session);
     return session;
   } catch {
     return null;
@@ -111,6 +117,7 @@ export const isAuth = async (redirectUrl?: string): Promise<boolean> => {
   const session = await getSession();
 
   if (session?.user && redirectUrl) {
+
     console.log('isAuth(): Session found, redirecting to:', redirectUrl);
     redirect(redirectUrl);
   }
@@ -123,7 +130,9 @@ export const isAuth = async (redirectUrl?: string): Promise<boolean> => {
  */
 export async function isAdmin(): Promise<boolean> {
   const session = await getSession();
-  return (session?.user as any)?.role === Role.ADMIN;
+
+  console.log('isAdmin(): Session user role:', (session?.user as any)?.role);
+  return (session?.user as any)?.role === Role.admin;
 }
 
 /**
@@ -136,6 +145,8 @@ export async function isAdmin(): Promise<boolean> {
  */
 export async function hasRole(role: Role): Promise<boolean> {
   const session = await getSession();
+
+  console.log('hasRole(): Session user role:', (session?.user as any)?.role);
   return (session?.user as any)?.role === role;
 }
 
@@ -154,6 +165,8 @@ export async function requireRole(role: Role): Promise<AuthSession> {
   const session = await requireAuth();
 
   if ((session?.user as any)?.role !== role) {
+
+    console.log('requireRole(): User does not have required role, redirecting to:', PUBLIC_ROUTES.UNAUTHORIZED);
     redirect(PUBLIC_ROUTES.UNAUTHORIZED);
   }
 
