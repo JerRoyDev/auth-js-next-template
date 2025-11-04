@@ -50,7 +50,7 @@ export const auth = betterAuth({
   rateLimit: {
     enabled: true,
     window: 60, // Time window in seconds (1 minute)
-    max: 3, // Max requests per window
+    max: 10, // Max requests per window
     // Storage will use memory by default (or database if you configure it)
   },
 
