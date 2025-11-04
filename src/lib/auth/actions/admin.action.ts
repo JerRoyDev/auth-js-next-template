@@ -44,7 +44,7 @@ export async function updateUserRole(userId: string, newRole: string) {
     });
 
     // Revalidate the admin pages to show updated data
-    revalidatePath(PROTECTED_ROUTES.ADMIN_DASHBOARD);
+    revalidatePath(PROTECTED_ROUTES.ADMIN_LANDING);
     revalidatePath(PROTECTED_ROUTES.ADMIN_USERS);
 
     return {
@@ -88,7 +88,7 @@ export async function deleteUser(userId: string) {
     });
 
     // Revalidate the admin pages to show updated data
-    revalidatePath(PROTECTED_ROUTES.ADMIN_DASHBOARD);
+    revalidatePath(PROTECTED_ROUTES.ADMIN_LANDING);
     revalidatePath(PROTECTED_ROUTES.ADMIN_USERS);
 
     return {
