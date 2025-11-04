@@ -13,12 +13,36 @@ import { usePathname } from 'next/navigation';
 
 const Header = () => {
   // Get session data
-  const { data, error, isPending } = useSession();
+  const { data, error, isPending, refetch } = useSession();
 
   // Exclude header on auth pages
   const excludedPaths = [AUTH_ROUTES.LOGIN, AUTH_ROUTES.REGISTER];
   const pathname = usePathname();
   if (excludedPaths.includes(pathname)) return null;
+
+  if (isPending) {
+    return (
+      <header className='bg-card text-foreground shadow-sm border-b border-border'>
+        <div className='flex items-center space-x-4'>
+          <span className='text-sm text-muted-foreground font-medium'>
+            Loading...
+          </span>
+        </div>
+      </header>
+    );
+  }
+
+  if (error) {
+    return (
+      <header className='bg-card text-foreground shadow-sm border-b border-border'>
+        <div className='flex items-center space-x-4'>
+          <span className='text-sm text-muted-foreground font-medium'>
+            `Error: {error.message}
+          </span>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className='bg-card text-foreground shadow-sm border-b border-border'>
@@ -49,7 +73,7 @@ const Header = () => {
                 {/* Admin Link - Only show for admin users */}
                 {data.user?.role === 'admin' && (
                   <Link
-                    href={PROTECTED_ROUTES.ADMIN_DASHBOARD}
+                    href={PROTECTED_ROUTES.ADMIN_LANDING}
                     className='inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors'
                   >
                     <svg
