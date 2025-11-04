@@ -18,8 +18,39 @@ import { headers } from 'next/headers';
 import { AUTH_ROUTES, PUBLIC_ROUTES } from '../constants/auth.constants';
 import { Role, type AuthSession } from '../types';
 
+
 /**
- * Require authentication for a page/route
+ * * Get the current session (optional authentication)
+ * 
+ * Use this for pages that work both authenticated and unauthenticated.
+ * 
+ * Usage:
+ * ```tsx
+ * export default async function HomePage() {
+ *   const session = await getSession();
+ *   return <div>{session ? `Hello ${session.user.name}` : 'Welcome Guest'}</div>;
+ * }
+ * ```
+ * 
+ * @returns The session if authenticated, null otherwise
+ */
+export const getSession = async (): Promise<AuthSession | null> => {
+  try {
+    console.log('getSession(): Fetching current session...');
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    return session;
+  } catch {
+    console.error('getSession(): Error fetching session');
+    return null;
+  }
+}
+
+
+/**
+ * * Require authentication for a page/route
  * 
  * Usage in Server Components:
  * ```tsx
@@ -33,9 +64,9 @@ import { Role, type AuthSession } from '../types';
  * @returns The authenticated session
  */
 export const requireAuth = async (callbackUrl?: string): Promise<AuthSession> => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  console.log('requireAuth(): Checking for authenticated session...');
+  const session = await getSession();
+  console.log('requireAuth(): Current session:', session);
 
   if (!session?.user) {
     // Build redirect URL with callback
@@ -52,7 +83,7 @@ export const requireAuth = async (callbackUrl?: string): Promise<AuthSession> =>
 }
 
 /**
- * Require admin role for a page/route
+ * * Require admin role for a page/route
  * 
  * Usage in Server Components:
  * ```tsx
@@ -64,8 +95,10 @@ export const requireAuth = async (callbackUrl?: string): Promise<AuthSession> =>
  * 
  * @returns The authenticated admin session
  */
-export async function requireAdmin(): Promise<AuthSession> {
+export const requireAdmin = async (): Promise<AuthSession> => {
+  console.log('requireAdmin(): Checking for admin session...');
   const session = await requireAuth();
+  console.log('requireAdmin(): Current session user role:', (session?.user as any)?.role);
 
   if (!session?.user || (session.user as any).role !== Role.admin) {
 
@@ -76,36 +109,9 @@ export async function requireAdmin(): Promise<AuthSession> {
   return session;
 }
 
-/**
- * Get the current session (optional authentication)
- * 
- * Use this for pages that work both authenticated and unauthenticated.
- * 
- * Usage:
- * ```tsx
- * export default async function HomePage() {
- *   const session = await getSession();
- *   return <div>{session ? `Hello ${session.user.name}` : 'Welcome Guest'}</div>;
- * }
- * ```
- * 
- * @returns The session if authenticated, null otherwise
- */
-export async function getSession(): Promise<AuthSession | null> {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-
-    console.log('getSession(): Current session:', session);
-    return session;
-  } catch {
-    return null;
-  }
-}
 
 /**
- * Check if user is authenticated (boolean check)
+ * * Check if user is authenticated (boolean check)
  * 
  * Usage:
  * ```tsx
@@ -128,7 +134,7 @@ export const isAuth = async (redirectUrl?: string): Promise<boolean> => {
 /**
  * Check if user is admin (boolean check)
  */
-export async function isAdmin(): Promise<boolean> {
+export const isAdmin = async (): Promise<boolean> => {
   const session = await getSession();
 
   console.log('isAdmin(): Session user role:', (session?.user as any)?.role);
@@ -136,14 +142,14 @@ export async function isAdmin(): Promise<boolean> {
 }
 
 /**
- * Check if user has a specific role
+ * * Check if user has a specific role
  * 
  * Usage:
  * ```tsx
  * const hasRole = await hasRole(Role.admin);
  * ```
  */
-export async function hasRole(role: Role): Promise<boolean> {
+export const hasRole = async (role: Role): Promise<boolean> => {
   const session = await getSession();
 
   console.log('hasRole(): Session user role:', (session?.user as any)?.role);
@@ -151,7 +157,7 @@ export async function hasRole(role: Role): Promise<boolean> {
 }
 
 /**
- * Require a specific role for a page/route
+ * * Require a specific role for a page/route
  * 
  * Usage:
  * ```tsx
@@ -161,7 +167,7 @@ export async function hasRole(role: Role): Promise<boolean> {
  * }
  * ```
  */
-export async function requireRole(role: Role): Promise<AuthSession> {
+export const requireRole = async (role: Role): Promise<AuthSession> => {
   const session = await requireAuth();
 
   if ((session?.user as any)?.role !== role) {
