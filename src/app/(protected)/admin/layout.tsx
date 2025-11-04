@@ -1,3 +1,5 @@
+// src/app/(protected)/admin/layout.tsx
+
 import { requireAdmin } from '@/lib/auth/utils/require-auth';
 
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
