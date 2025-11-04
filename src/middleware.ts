@@ -1,20 +1,37 @@
-
-
 // middleware.ts
 
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getSessionCookie } from "better-auth/cookies";
 
-export function middleware(request: NextRequest) {
-  // Middleware is currently disabled for authentication.
-  // Add other middleware logic here if needed (rate limiting, logging, etc.)
+import {
+  AUTH_ROUTES,
+  DEFAULT_AUTHENTICATED_ROUTE
+} from './lib/auth/constants/auth.constants';
+
+const authRoutes = Object.values(AUTH_ROUTES);
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const sessionCookie = getSessionCookie(request);
+
+  // 1. Redirect authenticated users away from auth pages
+  if (sessionCookie && authRoutes.includes(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = DEFAULT_AUTHENTICATED_ROUTE;
+    return NextResponse.redirect(url);
+  }
+
+  // 2. Redirect unauthenticated users away from protected pages
+  if (!sessionCookie && !authRoutes.includes(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = AUTH_ROUTES.LOGIN;
+    return NextResponse.redirect(url);
+  }
+
   return NextResponse.next();
 }
 
-// Only run middleware on specific paths if needed in the future
+// Configuration to run middleware on most paths
 export const config = {
-  matcher: [
-    // Skip all internal paths (_next, api, static files)
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
