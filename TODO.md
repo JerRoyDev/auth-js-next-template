@@ -34,9 +34,12 @@
 GENERAL RULES:
 
 - Tailwind css
-- mobile first design/style
-- always arrow functions
-- comments written in english
+- Global style variables
+- Mobile first design/style
+- PWA ready
+- Always arrow functions (custom functions)
+- Comments always written in english
+- Short English comments (2-4 words) to all key sections and components
 - The whole App will be in english
 - Types, Interface should be global
 - Shadcn/ui
