@@ -3,10 +3,11 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
-import ThemeToggleButton from '@/components/ThemeToggleButton';
+import ModeToggle from '@/components/mode-toggle';
+import { ThemeProvider } from 'next-themes';
 
 export const metadata: Metadata = {
-  title: 'Auth.js Next Template',
+  title: 'Next.js Better Auth Starter',
   description: 'Flexible authentication template for Next.js',
 };
 
@@ -16,13 +17,15 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <html lang='en'>
-      <body>
-        <Header />
-        <main>{children}</main>
-        <div className='fixed bottom-4 right-4'>
-          <ThemeToggleButton />
-        </div>
+    <html lang='en' suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+          <Header />
+          <main>{children}</main>
+          <div className='fixed bottom-4 right-4'>
+            <ModeToggle />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
