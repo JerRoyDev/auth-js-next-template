@@ -21,7 +21,7 @@ export const PUBLIC_ROUTES = {
   HOME: '/',
   UNAUTHORIZED: '/unauthorized',
   ERROR: '/error',
-} as const;
+}
 
 // Logged-in users will be redirected to the PROTECTED_ROUTES.USER_LANDING.
 export const AUTH_ROUTES = {

@@ -5,10 +5,14 @@ import { getSessionCookie } from "better-auth/cookies";
 
 import {
   AUTH_ROUTES,
-  DEFAULT_AUTHENTICATED_ROUTE
+  DEFAULT_AUTHENTICATED_ROUTE,
+  PROTECTED_ROUTES,
+  PUBLIC_ROUTES
 } from './lib/auth/constants/auth.constants';
 
 const authRoutes = Object.values(AUTH_ROUTES);
+const publicRoutes = Object.values(PUBLIC_ROUTES);
+const protectedRoutes = Object.values(PROTECTED_ROUTES);
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -21,13 +25,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // 2. Redirect unauthenticated users away from protected pages
-  if (!sessionCookie && !authRoutes.includes(pathname)) {
+  // 2. Redirect unauthenticated users away from protected pages, EXCEPT public routes
+  if (
+    !sessionCookie &&
+    !authRoutes.includes(pathname) &&
+    protectedRoutes.includes(pathname) &&
+    !publicRoutes.includes(pathname)
+  ) {
     const url = request.nextUrl.clone();
     url.pathname = AUTH_ROUTES.LOGIN;
     return NextResponse.redirect(url);
   }
 
+  // 3. Allow everything else (including public routes)
   return NextResponse.next();
 }
 
