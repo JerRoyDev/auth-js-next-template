@@ -19,31 +19,25 @@
 - [x] Sätta user role som enum i Prisma och hämta rollerna därifrån för användning i konstanterna
   - Går det? hur skulle det se ut?
 
-- [ ] verifering vid registrering med credentials
+- [x] verifering vid registrering med credentials
   - Hur fungerar det? Är det samma logic för magic link-provider?
 
-- [ ] automatisk inlogg efter lyckad registrering (verifierad credentials signup)
+- [x] automatisk inlogg efter lyckad registrering (verifierad credentials signup)
 - [ ] Timestamps verkar inte stämma med min tid.
-- [ ] Indikera om användare är online (Real-time presence)
+- [ ] Indikera om användare är online (Real-time presence) Hur gör jag det?
   - Använda Redis (eller liknande in-memory store)
 
 - [ ] Toggle light- darkmode konfiguration
   - Ska den även gå på systeminställningar?
   - Det tar ett tag innan darkmode slås på när sidan uppdateras.
 
-  Funderingar:
-
-- [ ] Credential "account" får ingen av: "refresh_token, access_token, expires_at, token_type, scope, id_token, session_state"
-- [ ] Google "account" får ingen av: "refresh_token, session_state"
-- [ ] Discord "account" får ingen av: "id_token, session_state"
-- [ ] Kolla på ErrorBoundary för bättre felhantering i layouts/sidor
-
 GENERAL RULES:
 
 - Tailwind css
-- mobile first
+- mobile first design/style
 - always arrow functions
 - comments written in english
 - Types, Interface should be global
--
--
+- Shadcn/ui
+- Better-auth (https://www.better-auth.com/docs/introduction)
+- using custom constans for messages etc.
