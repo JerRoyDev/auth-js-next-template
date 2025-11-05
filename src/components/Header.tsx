@@ -10,6 +10,19 @@ import {
 } from '@/lib/auth/constants/auth.constants';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import ModeToggle from '@/components/mode-toggle';
 
 const Header = () => {
   // Get session data
@@ -40,97 +53,184 @@ const Header = () => {
     );
   }
 
+  // Header start
   return (
-    <header className='bg-card text-foreground shadow-sm border-b border-border transition-all duration-500 max-h-24 overflow-hidden'>
+    <header className='bg-card text-foreground shadow-sm border-b border-border'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
-          {/* Logo/App Name */}
-          <div className='flex items-center'>
-            <Link
-              href={PUBLIC_ROUTES.HOME}
-              className='text-xl font-bold hover:opacity-80 transition-colors'
-            >
-              Auth App
-            </Link>
-          </div>
+          {/* App logo */}
+          <Link
+            href={PUBLIC_ROUTES.HOME}
+            className='text-xl font-bold hover:opacity-80 transition-colors'
+          >
+            Better Auth
+          </Link>
 
-          {/* Navigation */}
-          <div className='flex items-center space-x-4'>
+          {/* Desktop nav */}
+          <nav className='hidden md:flex items-center space-x-2'>
             {data ? (
               <>
-                {/* Dashboard Link - Show for all authenticated users */}
-                <Link
-                  href={PROTECTED_ROUTES.USER_LANDING}
-                  className='inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors'
-                >
-                  Dashboard
-                </Link>
-
-                {/* Admin Link - Only show for admin users */}
+                {/* Dashboard btn */}
+                <Button asChild variant='ghost' size='sm'>
+                  <Link href={PROTECTED_ROUTES.USER_LANDING}>Dashboard</Link>
+                </Button>
+                {/* Admin btn */}
                 {data.user?.role === 'admin' && (
-                  <Link
-                    href={PROTECTED_ROUTES.ADMIN_LANDING}
-                    className='inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors'
-                  >
-                    <svg
-                      className='w-4 h-4 mr-2'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'
-                      />
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'
-                      />
-                    </svg>
-                    Admin
-                  </Link>
+                  <Button asChild variant='ghost' size='sm'>
+                    <Link href={PROTECTED_ROUTES.ADMIN_LANDING}>Admin</Link>
+                  </Button>
                 )}
-
-                {/* User Info */}
-                <div className='flex items-center space-x-3'>
+                {/* User info */}
+                <div className='flex items-center space-x-2'>
+                  <Avatar>
+                    <AvatarFallback>
+                      {data.user?.name
+                        ? data.user.name.charAt(0).toUpperCase()
+                        : data.user?.email?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
                   <span className='text-sm text-muted-foreground font-medium'>
-                    {data.user?.name
-                      ? data.user.name
-                          .split(' ')
-                          .map(
-                            (part) =>
-                              part.charAt(0).toUpperCase() +
-                              part.slice(1).toLowerCase()
-                          )
-                          .join(' ')
-                      : data.user?.email}
+                    {data.user?.name || data.user?.email}
                   </span>
-                  {/* Logout Button */}
                   <SignOutButton />
                 </div>
               </>
             ) : (
-              <div className='flex items-center space-x-3'>
-                {/* Login Link */}
-                <Link
-                  href={AUTH_ROUTES.LOGIN}
-                  className='inline-flex items-center px-4 py-2 border border-border text-sm font-medium rounded-lg text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors shadow-sm'
-                >
-                  Sign In
-                </Link>
-                {/* Register Link  */}
-                <Link
-                  href={AUTH_ROUTES.REGISTER}
-                  className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-primary-foreground bg-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors shadow-sm'
-                >
-                  Create Account
-                </Link>
-              </div>
+              <>
+                {/* Sign in btn */}
+                <Button asChild variant='outline' size='sm'>
+                  <Link href={AUTH_ROUTES.LOGIN}>Sign In</Link>
+                </Button>
+                {/* Register btn */}
+                <Button asChild variant='default' size='sm'>
+                  <Link href={AUTH_ROUTES.REGISTER}>Create Account</Link>
+                </Button>
+              </>
             )}
+            {/* Theme toggle */}
+            <ModeToggle />
+          </nav>
+
+          {/* Mobile nav */}
+          <div className='md:hidden flex items-center'>
+            <Sheet>
+              <SheetTrigger asChild>
+                {/* Menu btn */}
+                <Button variant='ghost' size='icon' aria-label='Open menu'>
+                  <svg
+                    className='w-6 h-6'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M4 6h16M4 12h16M4 18h16'
+                    />
+                  </svg>
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side='right'
+                className='p-4 flex flex-col gap-4 h-full'
+              >
+                <SheetHeader>
+                  {/* Sheet title */}
+                  <SheetTitle className='sr-only'>Navigation Menu</SheetTitle>
+                  {/* Theme toggle */}
+                  <div className='flex items-center justify-between mb-2'>
+                    <ModeToggle />
+                  </div>
+                  {/* Sheet desc */}
+                  <SheetDescription className='sr-only'>
+                    Main navigation for Better Auth app
+                  </SheetDescription>
+                </SheetHeader>
+                {/* Sheet links */}
+                <div className='flex-1 flex flex-col gap-4 justify-start'>
+                  {data ? (
+                    <>
+                      {/* Dashboard link */}
+                      <SheetClose asChild>
+                        <Button
+                          asChild
+                          variant='ghost'
+                          size='lg'
+                          className='w-full'
+                        >
+                          <Link href={PROTECTED_ROUTES.USER_LANDING}>
+                            Dashboard
+                          </Link>
+                        </Button>
+                      </SheetClose>
+                      {/* Admin link */}
+                      {data.user?.role === 'admin' && (
+                        <SheetClose asChild>
+                          <Button
+                            asChild
+                            variant='ghost'
+                            size='lg'
+                            className='w-full'
+                          >
+                            <Link href={PROTECTED_ROUTES.ADMIN_LANDING}>
+                              Admin
+                            </Link>
+                          </Button>
+                        </SheetClose>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {/* Sign in link */}
+                      <SheetClose asChild>
+                        <Button
+                          asChild
+                          variant='outline'
+                          size='lg'
+                          className='w-full'
+                        >
+                          <Link href={AUTH_ROUTES.LOGIN}>Sign In</Link>
+                        </Button>
+                      </SheetClose>
+                      {/* Register link */}
+                      <SheetClose asChild>
+                        <Button
+                          asChild
+                          variant='default'
+                          size='lg'
+                          className='w-full'
+                        >
+                          <Link href={AUTH_ROUTES.REGISTER}>
+                            Create Account
+                          </Link>
+                        </Button>
+                      </SheetClose>
+                    </>
+                  )}
+                </div>
+                {/* Sheet footer */}
+                {data && (
+                  <SheetFooter>
+                    {/* User info */}
+                    <div className='flex flex-col items-center gap-2 pt-4'>
+                      <Avatar>
+                        <AvatarFallback>
+                          {data.user?.name
+                            ? data.user.name.charAt(0).toUpperCase()
+                            : data.user?.email?.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className='text-sm text-muted-foreground font-medium'>
+                        {data.user?.name || data.user?.email}
+                      </span>
+                      <SignOutButton />
+                    </div>
+                  </SheetFooter>
+                )}
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>
