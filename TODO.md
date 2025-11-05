@@ -37,6 +37,7 @@ GENERAL RULES:
 - mobile first design/style
 - always arrow functions
 - comments written in english
+- The whole App will be in english
 - Types, Interface should be global
 - Shadcn/ui
 - Better-auth (https://www.better-auth.com/docs/introduction)
