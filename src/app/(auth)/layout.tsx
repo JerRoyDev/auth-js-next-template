@@ -1,4 +1,3 @@
-import AuthClientLayout from './AuthClientLayout';
 import { isAuth } from '@/lib/auth/utils/require-auth';
 import { PROTECTED_ROUTES } from '@/lib/auth/constants/auth.constants';
 
@@ -11,7 +10,13 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
   // Check if the user is already authenticated and redirect to user landing for authenticated users
   await isAuth(PROTECTED_ROUTES.USER_LANDING);
 
-  return <AuthClientLayout>{children}</AuthClientLayout>;
+  return (
+    <div
+      className={`min-h-screen flex items-center justify-center transition-colors duration-300 p-2 bg-gradient-to-l to-muted-foreground`}
+    >
+      {children}
+    </div>
+  );
 };
 
 export default AuthLayout;
