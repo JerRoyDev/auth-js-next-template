@@ -3,7 +3,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
-import ModeToggle from '@/components/mode-toggle';
 import { ThemeProvider } from 'next-themes';
 
 export const metadata: Metadata = {
@@ -18,10 +17,10 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body suppressHydrationWarning>
+      <body className='' suppressHydrationWarning>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <Header />
-          <main>{children}</main>
+          <main className='flex-1 '>{children}</main>
         </ThemeProvider>
       </body>
     </html>
