@@ -1,10 +1,11 @@
+import PageWrapper from '@/components/PageWrapper';
 import { Card, CardContent } from '@/components/ui/card';
 
 export const Home = () => {
   return (
-    <main className='min-h-screen bg-background text-foreground flex items-center justify-center py-8 px-2'>
+    <PageWrapper>
       <Card className='w-full max-w-2xl mx-auto shadow-xl rounded-2xl border border-border'>
-        <CardContent className='p-6 md:p-10 text-center'>
+        <CardContent className=' md:p-10 text-center'>
           <h1 className='text-3xl md:text-5xl font-bold text-foreground mb-4'>
             Better-Auth Next.js Template
           </h1>
@@ -93,7 +94,7 @@ export const Home = () => {
           </div>
         </CardContent>
       </Card>
-    </main>
+    </PageWrapper>
   );
 };
 
