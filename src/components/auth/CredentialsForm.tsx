@@ -2,8 +2,9 @@
 
 'use client';
 
-import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   AUTH_ROUTES,
   PROTECTED_ROUTES,
@@ -14,7 +15,15 @@ import {
   registerFormSchema,
 } from '@/lib/auth/validations/auth.validations';
 import { CredentialsFormProps } from '@/lib/auth/types';
-import { set } from 'zod';
+import {
+  Field,
+  FieldLabel,
+  FieldError,
+  FieldGroup,
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import * as z from 'zod';
 
 export const CredentialsForm = ({
   mode,
@@ -22,56 +31,32 @@ export const CredentialsForm = ({
   isLoading,
   setIsLoading,
 }: CredentialsFormProps) => {
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [formValues, setFormValues] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const emailParam = searchParams.get('email');
+
+  // Determine which schema to use based on mode
+  const schema = mode === 'signin' ? signInSchema : registerFormSchema;
+
+  // Initialize React Hook Form with proper typing
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: emailParam || '',
+      password: '',
+      ...(mode === 'register' && { confirmPassword: '' }),
+    },
   });
 
-  // Pre-fill email from query parameter
-  const emailParam = useSearchParams().get('email');
-  if (emailParam && !formValues.email) {
-    setFormValues((prev) => ({ ...prev, email: emailParam }));
-  }
-
-  // * Router for navigation
-  const router = useRouter();
-
-  // * Handle form submission
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  // Handle form submission
+  const onSubmit = async (data: any) => {
     setIsLoading(true);
-    setFieldErrors({});
 
     // * SIGN IN (email/password)
     if (mode === 'signin') {
-      // Validate with Zod before sending to Better Auth
-      const validation = signInSchema.safeParse({
-        email: formValues.email,
-        password: formValues.password,
-      });
-
-      if (!validation.success) {
-        // Extract field errors from Zod
-        const fieldErrors = validation.error.flatten().fieldErrors;
-        setFieldErrors(
-          Object.fromEntries(
-            Object.entries(fieldErrors).map(([key, value]) => [
-              key,
-              value?.[0] || '',
-            ])
-          )
-        );
-        setIsLoading(false);
-        return;
-      }
-
-      // Call Better Auth signIn method
-      const { data, error } = await signIn.email({
-        email: formValues.email,
-        password: formValues.password,
-        // rememberMe: true,  //If false, the user will be signed out when the browser is closed. (optional) (default: true)
+      await signIn.email({
+        email: data.email,
+        password: data.password,
         callbackURL: callbackUrl || PROTECTED_ROUTES.USER_LANDING,
         fetchOptions: {
           onRequest: () => {
@@ -84,23 +69,19 @@ export const CredentialsForm = ({
           },
           onError: (ctx) => {
             console.error('Login error:', ctx.error);
+            setIsLoading(false);
 
             if (ctx.error?.code === 'EMAIL_NOT_VERIFIED') {
-              // Redirect to verify-email page
               router.push(
-                `${AUTH_ROUTES.VERIFY_EMAIL}?email=${encodeURIComponent(
-                  formValues.email
-                )}`
+                `${AUTH_ROUTES.VERIFY_EMAIL}?email=${encodeURIComponent(data.email)}`
               );
               return;
             }
-            // Redirect to login with error code
             router.push(
               `${AUTH_ROUTES.LOGIN}?error=${encodeURIComponent(
                 ctx.error?.code || 'login_error'
               )}`
             );
-            return;
           },
           onSuccess: () => {
             console.log('Login successful');
@@ -110,36 +91,12 @@ export const CredentialsForm = ({
       });
     }
 
-    // *  REGISTER (email/password)
+    // * REGISTER (email/password)
     if (mode === 'register') {
-      // Validate with Zod before sending to Better Auth
-      const validation = registerFormSchema.safeParse({
-        email: formValues.email,
-        password: formValues.password,
-        confirmPassword: formValues.confirmPassword,
-      });
-
-      if (!validation.success) {
-        // Extract field errors from Zod
-        const fieldErrors = validation.error.flatten().fieldErrors;
-        setFieldErrors(
-          Object.fromEntries(
-            Object.entries(fieldErrors).map(([key, value]) => [
-              key,
-              value?.[0] || '',
-            ])
-          )
-        );
-        setIsLoading(false);
-        return;
-      }
-
-      // Call Better Auth signUp method
-      const { data, error } = await signUp.email({
-        email: formValues.email,
-        password: formValues.password,
-        name: formValues.email.split('@')[0], // or a real name if you have it
-
+      await signUp.email({
+        email: data.email,
+        password: data.password,
+        name: data.email.split('@')[0],
         fetchOptions: {
           onRequest: () => {
             console.log('Registering...');
@@ -151,6 +108,7 @@ export const CredentialsForm = ({
           },
           onError: (ctx) => {
             console.error('Register error:', ctx.error);
+            setIsLoading(false);
             router.push(
               `${AUTH_ROUTES.REGISTER}?error=${encodeURIComponent(
                 ctx.error?.code || 'registration_error'
@@ -158,10 +116,10 @@ export const CredentialsForm = ({
             );
           },
           onSuccess: (ctx) => {
-            // OTP skickas automatiskt om sendVerificationOnSignUp: true
-            // Redirect directly to verify-email page
             router.push(
-              `${AUTH_ROUTES.VERIFY_EMAIL}?email=${encodeURIComponent(ctx.data?.user.email as string)}`
+              `${AUTH_ROUTES.VERIFY_EMAIL}?email=${encodeURIComponent(
+                ctx.data?.user.email as string
+              )}`
             );
           },
         },
@@ -170,111 +128,78 @@ export const CredentialsForm = ({
   };
 
   return (
-    <div className='space-y-6'>
-      <form onSubmit={handleSubmit} className='space-y-5'>
-        <div>
-          <label
-            htmlFor='email'
-            className='block text-sm font-semibold text-foreground mb-2'
-          >
-            Email
-          </label>
-          <input
-            id='email'
-            name='email'
-            type='text' // Use 'text' to use custom validation (see fieldErrors)
-            autoComplete='email' // Enable autofill for email
-            autoFocus // Autofocus on email field
-            required
-            disabled={isLoading}
-            value={formValues.email}
-            onChange={(e) =>
-              setFormValues((prev) => ({ ...prev, email: e.target.value }))
-            }
-            placeholder='john@example.com'
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors text-foreground placeholder:text-muted-foreground ${
-              fieldErrors.email
-                ? 'border-destructive focus:ring-destructive focus:border-destructive bg-destructive/10'
-                : 'border-border focus:ring-ring focus:border-ring bg-card hover:border-border'
-            }`}
-          />
-          {fieldErrors.email && (
-            <p className='mt-1 text-sm text-destructive'>{fieldErrors.email}</p>
+    <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-5'>
+      <FieldGroup>
+        {/* Email Field */}
+        <Controller
+          name='email'
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor='email'>Email</FieldLabel>
+              <Input
+                {...field}
+                id='email'
+                type='email'
+                autoComplete='email'
+                autoFocus
+                disabled={isLoading}
+                aria-invalid={fieldState.invalid}
+                placeholder='john@example.com'
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
           )}
-        </div>
+        />
 
-        <div>
-          <label
-            htmlFor='password'
-            className='block text-sm font-semibold text-foreground mb-2'
-          >
-            Password
-          </label>
-          <input
-            id='password'
-            name='password'
-            type='password'
-            required
-            disabled={isLoading}
-            value={/* formValues.password */ 'Hejhej123!'}
-            onChange={(e) =>
-              setFormValues((prev) => ({ ...prev, password: e.target.value }))
-            }
-            placeholder='Your password'
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors text-foreground placeholder:text-muted-foreground ${
-              fieldErrors.password
-                ? 'border-destructive focus:ring-destructive focus:border-destructive bg-destructive/10'
-                : 'border-border focus:ring-ring focus:border-ring bg-card hover:border-border'
-            }`}
-          />
-          {fieldErrors.password && (
-            <p className='mt-1 text-sm text-destructive'>
-              {fieldErrors.password}
-            </p>
+        {/* Password Field */}
+        <Controller
+          name='password'
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor='password'>Password</FieldLabel>
+              <Input
+                {...field}
+                id='password'
+                type='password'
+                disabled={isLoading}
+                aria-invalid={fieldState.invalid}
+                placeholder='Your password'
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
           )}
-        </div>
+        />
 
+        {/* Confirm Password Field (only for register mode) */}
         {mode === 'register' && (
-          <div>
-            <label
-              htmlFor='confirmPassword'
-              className='block text-sm font-semibold text-foreground mb-2'
-            >
-              Confirm Password
-            </label>
-            <input
-              id='confirmPassword'
-              name='confirmPassword'
-              type='password'
-              required
-              disabled={isLoading}
-              value={/* formValues.confirmPassword */ 'Hejhej123!'}
-              onChange={(e) =>
-                setFormValues((prev) => ({
-                  ...prev,
-                  confirmPassword: e.target.value,
-                }))
-              }
-              placeholder='Confirm your password'
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-0 disabled:opacity-50 transition-colors text-foreground placeholder:text-muted-foreground ${
-                fieldErrors.confirmPassword
-                  ? 'border-destructive focus:ring-destructive focus:border-destructive bg-destructive/10'
-                  : 'border-border focus:ring-ring focus:border-ring bg-card hover:border-border'
-              }`}
-            />
-            {fieldErrors.confirmPassword && (
-              <p className='mt-1 text-sm text-destructive'>
-                {fieldErrors.confirmPassword}
-              </p>
+          <Controller
+            name={'confirmPassword' as any}
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor='confirmPassword'>
+                  Confirm Password
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id='confirmPassword'
+                  type='password'
+                  disabled={isLoading}
+                  aria-invalid={fieldState.invalid}
+                  placeholder='Confirm your password'
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
             )}
-          </div>
+          />
         )}
 
-        <button
-          type='submit'
-          disabled={isLoading}
-          className='w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-base transition-colors shadow-sm hover:shadow-md'
-        >
+        {/* Submit Button */}
+        <Button type='submit' disabled={isLoading} className='w-full'>
           {isLoading
             ? mode === 'signin'
               ? 'Signing in...'
@@ -282,8 +207,8 @@ export const CredentialsForm = ({
             : mode === 'signin'
               ? 'Sign In'
               : 'Create Account'}
-        </button>
-      </form>
-    </div>
+        </Button>
+      </FieldGroup>
+    </form>
   );
 };

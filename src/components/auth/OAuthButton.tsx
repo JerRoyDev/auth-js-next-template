@@ -7,6 +7,7 @@ import {
   DiscordIcon,
   FacebookIcon,
 } from './ProviderIcons';
+import { Button } from '@/components/ui/button';
 
 interface OAuthButtonProps {
   provider: string;
@@ -31,14 +32,9 @@ export const OAuthButton = ({ provider, callbackUrl }: OAuthButtonProps) => {
   const icon = providerIcons[provider] || null;
 
   return (
-    <div>
-      <button
-        onClick={handleClick}
-        className={`flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg shadow-sm bg-card text-foreground text-sm font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors`}
-      >
-        {icon}
-        {provider.charAt(0).toUpperCase() + provider.slice(1)}
-      </button>
-    </div>
+    <Button variant='outline' onClick={handleClick} className='gap-2'>
+      {icon}
+      {provider.charAt(0).toUpperCase() + provider.slice(1)}
+    </Button>
   );
 };
