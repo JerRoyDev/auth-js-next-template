@@ -30,10 +30,10 @@ const Header = () => {
   const { data, error, isPending } = useSession();
   const { isScrolledY, directionY } = useScrollPosition(50);
 
-  // Exclude header on auth pages
-  const excludedPaths = [AUTH_ROUTES.LOGIN, AUTH_ROUTES.REGISTER];
-  const pathname = usePathname();
-  if (excludedPaths.includes(pathname)) return null;
+  // // Exclude header on auth pages
+  // const excludedPaths = [AUTH_ROUTES.LOGIN, AUTH_ROUTES.REGISTER];
+  // const pathname = usePathname();
+  // if (excludedPaths.includes(pathname)) return null;
 
   // 2. Define opacity for layers
   const solidOpacity = isScrolledY ? 'opacity-0' : 'opacity-80';
@@ -43,13 +43,13 @@ const Header = () => {
   return (
     <header
       className={
-        // Container is sticky and has correct height.
-        'sticky top-0 z-30 h-16'
+        // Container is fixed and has correct height.
+        'fixed top-0 left-0 right-0 z-30 h-16'
       }
     >
       {/* --- BACKGROUND LAYERS --- */}
 
-      {/* LAYER 1: Solid background (for top of page) */}
+      {/* LAYER 1: Solid background (for top of page)
       <div
         className={`
           absolute inset-0 z-10 
@@ -57,9 +57,9 @@ const Header = () => {
           transition-opacity duration-200 ease-in-out
           ${solidOpacity}
         `}
-      />
+      /> */}
 
-      {/* LAYER 2: Masked background (for when scrolled) */}
+      {/* LAYER 2: Masked background (for when scrolled)
       <div
         className={`
           absolute inset-0 z-10 
@@ -68,15 +68,15 @@ const Header = () => {
           transition-opacity duration-300 ease-in-out
           ${maskedOpacity}
         `}
-      />
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-20 relative'>
+      /> */}
+      <div className='max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 z-20 relative'>
         <div className='flex justify-between items-center h-16'>
           {/* App logo */}
           <Link
             href={PUBLIC_ROUTES.HOME}
             className={
               'text-xl font-bold hover:opacity-80 transition-colors ' +
-              (isScrolledY && ' opacity-0 transition-opacity duration-200 ')
+              (isScrolledY && ' opacity-0 transition-opacity duration-75 ')
             }
           >
             Better Auth

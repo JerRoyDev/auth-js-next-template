@@ -1,3 +1,4 @@
+import PageWrapper from '@/components/PageWrapper';
 import { requireAuth } from '@/lib/auth/utils/require-auth';
 
 const DashboardPage = async () => {
@@ -5,7 +6,7 @@ const DashboardPage = async () => {
   const session = await requireAuth();
 
   return (
-    <div className='min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8'>
+    <PageWrapper>
       <div className='max-w-4xl mx-auto'>
         <div className='bg-card shadow-xl rounded-xl p-8 border border-border'>
           <div className='text-center mb-8'>
@@ -97,7 +98,7 @@ const DashboardPage = async () => {
           </div>
         </div>
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 
