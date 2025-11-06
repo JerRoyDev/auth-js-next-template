@@ -28,7 +28,7 @@ import useScrollPosition from '@/hooks/useScrollInfo';
 const Header = () => {
   // Get session data
   const { data, error, isPending } = useSession();
-  const { isScrolledY, directionY } = useScrollPosition(80);
+  const { isScrolledY, directionY } = useScrollPosition(50);
 
   // Exclude header on auth pages
   const excludedPaths = [AUTH_ROUTES.LOGIN, AUTH_ROUTES.REGISTER];
@@ -36,8 +36,8 @@ const Header = () => {
   if (excludedPaths.includes(pathname)) return null;
 
   // 2. Define opacity for layers
-  const solidOpacity = isScrolledY ? 'opacity-0' : 'opacity-100';
-  const maskedOpacity = isScrolledY ? 'opacity-100' : 'opacity-0';
+  const solidOpacity = isScrolledY ? 'opacity-0' : 'opacity-80';
+  const maskedOpacity = isScrolledY ? 'opacity-80' : 'opacity-0';
 
   // 3. Header start (now as a transparent container)
   return (
@@ -54,7 +54,7 @@ const Header = () => {
         className={`
           absolute inset-0 z-10 
           bg-card text-foreground shadow-sm border-b border-border 
-          transition-opacity duration-300 ease-in-out
+          transition-opacity duration-200 ease-in-out
           ${solidOpacity}
         `}
       />
@@ -76,7 +76,7 @@ const Header = () => {
             href={PUBLIC_ROUTES.HOME}
             className={
               'text-xl font-bold hover:opacity-80 transition-colors ' +
-              (isScrolledY && ' opacity-0 transition-opacity duration-500 ')
+              (isScrolledY && ' opacity-0 transition-opacity duration-200 ')
             }
           >
             Better Auth
