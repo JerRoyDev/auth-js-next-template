@@ -23,45 +23,61 @@ import {
 } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import ModeToggle from '@/components/mode-toggle';
+import useScrollPosition from '@/hooks/useScrollInfo';
 
 const Header = () => {
   // Get session data
   const { data, error, isPending } = useSession();
+  const { isScrolledY, directionY } = useScrollPosition(80);
 
   // Exclude header on auth pages
   const excludedPaths = [AUTH_ROUTES.LOGIN, AUTH_ROUTES.REGISTER];
   const pathname = usePathname();
   if (excludedPaths.includes(pathname)) return null;
 
-  if (isPending) {
-    return (
-      <header className='bg-card text-foreground shadow-sm border-b border-border transition-all duration-500 max-h-0 overflow-hidden'>
-        <div className='flex items-center space-x-4'></div>
-      </header>
-    );
-  }
+  // 2. Define opacity for layers
+  const solidOpacity = isScrolledY ? 'opacity-0' : 'opacity-100';
+  const maskedOpacity = isScrolledY ? 'opacity-100' : 'opacity-0';
 
-  if (error) {
-    return (
-      <header className='bg-card text-foreground shadow-sm border-b border-border'>
-        <div className='flex items-center space-x-4'>
-          <span className='text-sm text-muted-foreground font-medium'>
-            `Error: {error.message}
-          </span>
-        </div>
-      </header>
-    );
-  }
-
-  // Header start
+  // 3. Header start (now as a transparent container)
   return (
-    <header className='bg-card text-foreground shadow-sm border-b border-border'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+    <header
+      className={
+        // Container is sticky and has correct height.
+        'sticky top-0 z-30 h-16'
+      }
+    >
+      {/* --- BACKGROUND LAYERS --- */}
+
+      {/* LAYER 1: Solid background (for top of page) */}
+      <div
+        className={`
+          absolute inset-0 z-10 
+          bg-card text-foreground shadow-sm border-b border-border 
+          transition-opacity duration-300 ease-in-out
+          ${solidOpacity}
+        `}
+      />
+
+      {/* LAYER 2: Masked background (for when scrolled) */}
+      <div
+        className={`
+          absolute inset-0 z-10 
+          bg-card text-foreground 
+          mask-b-from-20% mask-b-to-70% 
+          transition-opacity duration-300 ease-in-out
+          ${maskedOpacity}
+        `}
+      />
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-20 relative'>
         <div className='flex justify-between items-center h-16'>
           {/* App logo */}
           <Link
             href={PUBLIC_ROUTES.HOME}
-            className='text-xl font-bold hover:opacity-80 transition-colors'
+            className={
+              'text-xl font-bold hover:opacity-80 transition-colors ' +
+              (isScrolledY && ' opacity-0 transition-opacity duration-500 ')
+            }
           >
             Better Auth
           </Link>
