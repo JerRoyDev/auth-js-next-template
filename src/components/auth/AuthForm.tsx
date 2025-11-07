@@ -1,6 +1,6 @@
 'use client';
 
-import { OAuthButton } from './OAuthButton';
+import { OAuthButtonGroup } from './OAuthButtonGroup';
 import { CredentialsForm } from './CredentialsForm';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -61,13 +61,8 @@ export const AuthForm = ({
           </div>
         </div>
 
-        {/* OAuth Providers: Manually added to prevent hydration errors */}
-        <div className='flex flex-wrap justify-center items-center gap-3'>
-          <OAuthButton provider='google' callbackUrl={callbackUrl} />
-          <OAuthButton provider='github' callbackUrl={callbackUrl} />
-          <OAuthButton provider='discord' callbackUrl={callbackUrl} />
-          <OAuthButton provider='facebook' callbackUrl={callbackUrl} />
-        </div>
+        {/* OAuth Providers */}
+        <OAuthButtonGroup callbackUrl={callbackUrl} />
       </CardContent>
       <CardFooter>
         <div className='w-full text-sm text-muted-foreground text-center pt-4 border-t border-border'>

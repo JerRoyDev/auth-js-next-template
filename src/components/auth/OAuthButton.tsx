@@ -1,12 +1,7 @@
 'use client';
 
 import { signIn } from '@/lib/auth/config/auth-client';
-import {
-  GoogleIcon,
-  GitHubIcon,
-  DiscordIcon,
-  FacebookIcon,
-} from './ProviderIcons';
+import { SiGithub, SiGoogle, SiFacebook, SiDiscord } from 'react-icons/si';
 import { Button } from '@/components/ui/button';
 
 interface OAuthButtonProps {
@@ -14,11 +9,11 @@ interface OAuthButtonProps {
   callbackUrl?: string;
 }
 
-const providerIcons: Record<string, React.JSX.Element> = {
-  google: <GoogleIcon size={20} />,
-  github: <GitHubIcon size={20} />,
-  discord: <DiscordIcon size={20} />,
-  facebook: <FacebookIcon size={20} />,
+const providerIcons: Record<string, React.ReactNode> = {
+  google: <SiGoogle size={18} />,
+  github: <SiGithub size={18} />,
+  discord: <SiDiscord size={18} />,
+  facebook: <SiFacebook size={18} />,
 };
 
 export const OAuthButton = ({ provider, callbackUrl }: OAuthButtonProps) => {
@@ -32,9 +27,13 @@ export const OAuthButton = ({ provider, callbackUrl }: OAuthButtonProps) => {
   const icon = providerIcons[provider] || null;
 
   return (
-    <Button variant='outline' onClick={handleClick} className='gap-2'>
+    <Button
+      variant='outline'
+      onClick={handleClick}
+      className='gap-2 w-full min-w-[140px] justify-center'
+    >
       {icon}
-      {provider.charAt(0).toUpperCase() + provider.slice(1)}
+      <span className='capitalize'>{provider}</span>
     </Button>
   );
 };
