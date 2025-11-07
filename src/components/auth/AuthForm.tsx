@@ -54,7 +54,7 @@ export const AuthForm = ({
         {/* Divider */}
         <div className='relative'>
           <Separator />
-          <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2'>
+          <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2'>
             <span className='text-xs text-muted-foreground'>
               {isSignIn ? 'Or continue with' : 'Or sign up with'}
             </span>

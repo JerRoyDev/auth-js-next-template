@@ -13,7 +13,7 @@ export default function ClientLayout({
   return (
     <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
       <Header />
-      <main className='flex-1 pt-16'>
+      <main className='flex flex-col justify-center min-h-[calc(100vh-4rem)] pt-16'>
         <FadeIn key={pathname}>{children}</FadeIn>
       </main>
     </ThemeProvider>
