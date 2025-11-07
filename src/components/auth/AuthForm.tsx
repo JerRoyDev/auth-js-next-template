@@ -34,7 +34,7 @@ export const AuthForm = ({
   const isSignIn = mode === 'signin';
 
   return (
-    <Card className="max-w-md w-full mx-auto">
+    <Card className='max-w-md w-full mx-auto'>
       <CardHeader className='text-center'>
         <CardTitle>{title || 'Authentication'}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}

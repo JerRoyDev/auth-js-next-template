@@ -1,14 +1,27 @@
 'use client';
 
 import { authClient } from '@/lib/auth/config/auth-client';
-import { useSearchParams } from 'next/navigation';
-import { use, useEffect, useState } from 'react';
-
-import { useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
+
 const VerifyEmailPage = () => {
-  // I VerifyEmailPage.tsx - Lägg till dessa states
   const [otp, setOtp] = useState('');
   const [verifying, setVerifying] = useState(false);
   const [status, setStatus] = useState<{
@@ -19,6 +32,7 @@ const VerifyEmailPage = () => {
   const [emailInput, setEmailInput] = useState('');
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Reset states on component mount and when OTP changes
   useEffect(() => {
@@ -27,49 +41,15 @@ const VerifyEmailPage = () => {
   }, [otp]);
 
   // Pre-fill email from query parameter
-  const emailParam = useSearchParams().get('email');
   useEffect(() => {
+    const emailParam = searchParams.get('email');
     if (emailParam) {
       setEmailInput(emailParam);
     }
-  }, [emailParam]);
+  }, [searchParams]);
 
   const handleClick = async () => {
-    await checkOTP('email-verification');
     await verifyOTP();
-  };
-
-  // * check if an OTP is valid.
-  const checkOTP = async (
-    type: 'email-verification' | 'sign-in' | 'forget-password'
-  ) => {
-    const { data, error } = await authClient.emailOtp.checkVerificationOtp({
-      email: emailInput,
-      type: type,
-      otp: otp,
-      fetchOptions: {
-        onRequest: () => {
-          console.log('Checking OTP...');
-          setVerifying(true);
-        },
-        onResponse: (ctx) => {
-          console.log('OTP checked response received.', ctx);
-          setVerifying(false);
-        },
-        onError: (ctx) => {
-          console.error('Error checking OTP.', ctx);
-          setStatus({
-            type: 'error',
-            message:
-              ctx.error?.message || 'Failed to check OTP. Please try again.',
-          });
-        },
-        onSuccess: (ctx) => {
-          console.log('OTP is valid.', ctx);
-          setStatus({ type: 'success', message: 'OTP is valid!' });
-        },
-      },
-    });
   };
 
   // * verify the user's email address with OTP
@@ -98,7 +78,9 @@ const VerifyEmailPage = () => {
           console.log('OTP verified successfully.', ctx);
           setStatus({ type: 'success', message: 'OTP verified successfully!' });
           router.push(
-            `${AUTH_ROUTES.LOGIN}?verified=true&email=${encodeURIComponent(emailInput)}`
+            `${AUTH_ROUTES.LOGIN}?verified=true&email=${encodeURIComponent(
+              emailInput
+            )}`
           );
         },
       },
@@ -149,63 +131,66 @@ const VerifyEmailPage = () => {
   };
 
   return (
-    <>
-      <div className='mb-4'>
-        <label
-          htmlFor='otp'
-          className='block text-sm font-medium text-muted-foreground mb-2'
-        >
-          Enter verification code
-        </label>
-        <input
-          id='otp'
-          type='text'
-          inputMode='numeric'
-          pattern='[0-9]*'
-          maxLength={6}
-          value={otp}
-          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-          placeholder='123456'
-          className='w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-card text-foreground text-center text-lg'
-        />
-        <p className='text-xs text-muted-foreground mt-2'>
-          Enter the 6-digit code sent to your email
-        </p>
-        {status && (
-          <p
-            className={`mt-2 text-sm ${
-              status.type === 'error'
-                ? 'text-destructive'
-                : status.type === 'success'
-                  ? 'text-green-600'
-                  : ''
-            }`}
+    <div className='min-h-[calc(100vh-4rem)] flex items-center justify-center p-2'>
+      <Card className='w-full max-w-md mx-auto'>
+        <CardHeader className='text-center'>
+          <CardTitle>Email Verification</CardTitle>
+          <CardDescription>
+            Enter the 6-digit code sent to{' '}
+            <span className='font-semibold text-foreground'>{emailInput}</span>.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleClick();
+            }}
+            className='space-y-4'
           >
-            {status.message}
-          </p>
-        )}
-        <button
-          type='button'
-          className={`mt-2 text-xs underline text-muted-foreground hover:text-primary transition-colors ${
-            status?.type === 'error' ? 'font-semibold text-primary' : ''
-          }`}
-          onClick={() => sendOTP('email-verification')}
-          disabled={loading}
-        >
-          {status?.type === 'error'
-            ? 'Skicka ny kod'
-            : 'Har du inte fått någon kod? Skicka ny kod'}
-        </button>
-      </div>
-
-      <button
-        className='mt-2 px-4 py-2 bg-primary text-primary-foreground rounded hover:opacity-90 disabled:opacity-50 mr-2'
-        onClick={handleClick}
-        disabled={verifying || otp.length !== 6}
-      >
-        {verifying ? 'Verifying...' : 'Verify Code'}
-      </button>
-    </>
+            <div className='flex flex-col items-center'>
+              <Label htmlFor='otp' className='sr-only'>
+                Verification code
+              </Label>
+              <InputOTP maxLength={6} value={otp} onChange={setOtp} autoFocus>
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
+            </div>
+            {status && (
+              <Alert
+                variant={status.type === 'error' ? 'destructive' : 'default'}
+                className='mt-2'
+              >
+                <AlertDescription>{status.message}</AlertDescription>
+              </Alert>
+            )}
+            <Button
+              type='submit'
+              className='w-full'
+              disabled={verifying || otp.length !== 6}
+            >
+              {verifying ? 'Verifying...' : 'Verify Code'}
+            </Button>
+          </form>
+          <Button
+            type='button'
+            variant='link'
+            className='w-full mt-4 text-xs text-muted-foreground'
+            onClick={() => sendOTP('email-verification')}
+            disabled={loading}
+          >
+            {loading ? 'Sending...' : "Didn't receive a code? Send again"}
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
