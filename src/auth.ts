@@ -10,11 +10,11 @@ import OTPVerificationEmail from './components/auth/email/OTPverificationEmail';
 
 export const auth = betterAuth({
 
-  baseUrl: process.env.BETTER_AUTH_BASE_URL as string, // Viktigt för korrekta callback URLs
+  baseUrl: process.env.BETTER_AUTH_URL as string, // Viktigt för korrekta callback URLs
 
   secret: process.env.BETTER_AUTH_SECRET as string,
 
-  trustedOrigins: ['http://localhost:3000', process.env.BETTER_AUTH_BASE_URL as string],
+  trustedOrigins: ['http://localhost:3000', process.env.BETTER_AUTH_URL as string],
 
   database: prismaAdapter(prisma, {
     provider: 'sqlite', // Eller 'postgresql', 'mysql', etc., beroende på vad du använder.
