@@ -45,5 +45,6 @@ const signOutAction = async () => {
 
 export {
   signUpAction,
-  signInAction
+  signInAction,
+  signOutAction
 }
