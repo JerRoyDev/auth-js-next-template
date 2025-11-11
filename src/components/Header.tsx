@@ -24,8 +24,17 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import ModeToggle from '@/components/mode-toggle';
 import useScrollPosition from '@/hooks/useScrollInfo';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from './ui/accordion';
+import NavButton from './NavButton';
 
 const Header = () => {
+  const pathname = usePathname();
+  const isAdminPage = pathname?.startsWith('/admin');
   // Get session data
   const { data, error, isPending } = useSession();
   const { isScrolledY, directionY } = useScrollPosition(50);
@@ -126,7 +135,7 @@ const Header = () => {
             {/* Theme toggle */}
             <ModeToggle />
           </nav>
-
+          {/* ------------------------------------------------------- */}
           {/* Mobile nav */}
           <div className='md:hidden flex items-center'>
             <Sheet>
@@ -170,31 +179,53 @@ const Header = () => {
                     <>
                       {/* Dashboard link */}
                       <SheetClose asChild>
-                        <Button
-                          asChild
-                          variant='ghost'
-                          size='lg'
-                          className='w-full'
-                        >
-                          <Link href={PROTECTED_ROUTES.USER_LANDING}>
-                            Dashboard
-                          </Link>
-                        </Button>
+                        <NavButton href={PROTECTED_ROUTES.USER_LANDING}>
+                          Dashboard
+                        </NavButton>
                       </SheetClose>
                       {/* Admin link */}
                       {data.user?.role === 'admin' && (
-                        <SheetClose asChild>
-                          <Button
-                            asChild
-                            variant='ghost'
-                            size='lg'
-                            className='w-full'
+                        <div className='flex flex-col items-center justify-center w-full gap-2 py-2'>
+                          <Accordion
+                            className='w-full max-w-xs mx-auto'
+                            type='single'
+                            collapsible
+                            defaultValue={
+                              isAdminPage ? 'admin-menu' : undefined
+                            }
                           >
-                            <Link href={PROTECTED_ROUTES.ADMIN_LANDING}>
-                              Admin
-                            </Link>
-                          </Button>
-                        </SheetClose>
+                            <AccordionItem value='admin-menu'>
+                              <AccordionTrigger className='flex items-center justify-center gap-2 text-base font-semibold'>
+                                <span>Admin</span>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <div className='flex flex-col items-center gap-2 w-full'>
+                                  <SheetClose asChild>
+                                    <NavButton
+                                      href={PROTECTED_ROUTES.ADMIN_LANDING}
+                                      exact
+                                    >
+                                      Overview
+                                    </NavButton>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <NavButton
+                                      href={PROTECTED_ROUTES.ADMIN_USERS}
+                                      exact
+                                    >
+                                      Users
+                                    </NavButton>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <NavButton href={'/admin/settings'} exact>
+                                      Settings
+                                    </NavButton>
+                                  </SheetClose>
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+                        </div>
                       )}
                     </>
                   ) : (
