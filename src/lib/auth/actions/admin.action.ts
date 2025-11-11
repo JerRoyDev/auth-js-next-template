@@ -8,6 +8,7 @@ import { PROTECTED_ROUTES } from '@/lib/auth/constants/auth.constants';
 import { Role } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
+import { prisma } from '@/lib/prisma';
 
 /**
  * * Update a user's role using Better Auth Admin Plugin API
@@ -15,7 +16,7 @@ import { headers } from 'next/headers';
  * @see https://www.better-auth.com/docs/plugins/admin#set-user-role - setRole API
  * Date: October 14, 2025
  */
-const updateUserRole = async (userId: string, newRole: string) => {
+export const updateUserRole = async (userId: string, newRole: string) => {
   try {
     // Better Auth: Use requireAdmin() helper - automatically checks and redirects if not admin
     const session = await requireAdmin();
@@ -68,7 +69,7 @@ const updateUserRole = async (userId: string, newRole: string) => {
  * @see https://www.better-auth.com/docs/plugins/admin#remove-user - removeUser API
  * Date: October 14, 2025
  */
-const deleteUser = async (userId: string) => {
+export const deleteUser = async (userId: string) => {
   try {
     // Better Auth: Use requireAdmin() helper
     const session = await requireAdmin();
@@ -127,9 +128,8 @@ export type ListUsersParams = {
   filterOperator?: 'eq' | 'ne' | 'lt' | 'lte' | 'gt' | 'gte';
 };
 
-const listUsers = async (params: ListUsersParams = {}) => {
+export const listUsers = async (params: ListUsersParams = {}) => {
   try {
-    await requireAdmin();
     const result = await auth.api.listUsers({
       query: {
         limit: params.limit ?? 20,
@@ -168,8 +168,64 @@ const listUsers = async (params: ListUsersParams = {}) => {
 };
 
 
-export {
-  updateUserRole,
-  deleteUser,
-  listUsers,
+export const ListUserSessions = async (userId: string) => {
+  try {
+    await requireAdmin();
+    const data = await auth.api.listUserSessions({
+      body: {
+        userId: userId, // required
+      },
+      // This endpoint requires session cookies.
+      headers: await headers(),
+    });
+    return data;
+  } catch (error) {
+    console.error('Error listing user sessions:', error);
+    return {
+      success: false,
+      error: 'Failed to list user sessions. Please try again.',
+    };
+  }
+};
+
+/**
+ * Hämta statistik för aktiva sessions och device breakdown
+ * Device-typ bestäms via userAgent (förenklad parsing)
+ */
+export const getSessionDeviceStats = async () => {
+  // Hämta alla sessions som inte har gått ut
+  const now = new Date();
+  const sessions = await prisma.session.findMany({
+    where: {
+      expiresAt: {
+        gt: now,
+      },
+    },
+    select: {
+      id: true,
+      userAgent: true,
+    },
+  });
+
+  // Device breakdown
+  let desktop = 0, tablet = 0, mobile = 0;
+  sessions.forEach(s => {
+    const ua = s.userAgent?.toLowerCase() || '';
+    if (ua.includes('mobile') || ua.includes('android') || ua.includes('iphone')) {
+      mobile++;
+    } else if (ua.includes('ipad') || ua.includes('tablet')) {
+      tablet++;
+    } else {
+      desktop++;
+    }
+  });
+  const total = sessions.length;
+  return {
+    total,
+    breakdown: [
+      { type: 'Desktop', count: desktop, percent: total ? Math.round((desktop / total) * 100) : 0 },
+      { type: 'Tablet', count: tablet, percent: total ? Math.round((tablet / total) * 100) : 0 },
+      { type: 'Mobile', count: mobile, percent: total ? Math.round((mobile / total) * 100) : 0 },
+    ],
+  };
 };
