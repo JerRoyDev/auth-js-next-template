@@ -5,7 +5,6 @@ import { getSessionCookie } from "better-auth/cookies";
 
 import {
   AUTH_ROUTES,
-  DEFAULT_AUTHENTICATED_ROUTE,
   PROTECTED_ROUTES,
   PUBLIC_ROUTES
 } from './lib/auth/constants/auth.constants';
@@ -21,7 +20,7 @@ export async function middleware(request: NextRequest) {
   // 1. Redirect authenticated users away from auth pages
   if (sessionCookie && authRoutes.includes(pathname)) {
     const url = request.nextUrl.clone();
-    url.pathname = DEFAULT_AUTHENTICATED_ROUTE;
+    url.pathname = PROTECTED_ROUTES.USER_LANDING || "/";
     return NextResponse.redirect(url);
   }
 

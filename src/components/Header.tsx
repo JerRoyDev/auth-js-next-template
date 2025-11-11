@@ -31,11 +31,26 @@ import {
   AccordionTrigger,
 } from './ui/accordion';
 import NavButton from './NavButton';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useMemo } from 'react';
 
-const Header = () => {
+interface HeaderProps {
+  excludedPaths?: string[];
+}
+
+const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
   const pathname = usePathname();
+  const isExcluded = useMemo(
+    () => excludedPaths.includes(pathname || ''),
+    [pathname, excludedPaths]
+  );
   const isAdminPage = pathname?.startsWith('/admin');
-  // Get session data
   const { data, error, isPending } = useSession();
   const { isScrolledY, directionY } = useScrollPosition(50);
 
@@ -48,36 +63,18 @@ const Header = () => {
   const solidOpacity = isScrolledY ? 'opacity-0' : 'opacity-80';
   const maskedOpacity = isScrolledY ? 'opacity-80' : 'opacity-0';
 
+  if (isExcluded) {
+    return <div className='sr-only'>Header hidden on this page</div>;
+  }
+
   // 3. Header start (now as a transparent container)
   return (
     <header
       className={
         // Container is fixed and has correct height.
-        'fixed top-0 left-0 right-0 z-30 h-16'
+        'border border-blue-200 fixed top-0 left-0 right-0 z-30 h-16'
       }
     >
-      {/* --- BACKGROUND LAYERS --- */}
-
-      {/* LAYER 1: Solid background (for top of page)
-      <div
-        className={`
-          absolute inset-0 z-10 
-          bg-card text-foreground shadow-sm border-b border-border 
-          transition-opacity duration-200 ease-in-out
-          ${solidOpacity}
-        `}
-      /> */}
-
-      {/* LAYER 2: Masked background (for when scrolled)
-      <div
-        className={`
-          absolute inset-0 z-10 
-          bg-card text-foreground 
-          mask-b-from-20% mask-b-to-70% 
-          transition-opacity duration-300 ease-in-out
-          ${maskedOpacity}
-        `}
-      /> */}
       <div className='max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 z-20 relative'>
         <div className='flex justify-between items-center h-16'>
           {/* App logo */}
@@ -99,12 +96,32 @@ const Header = () => {
                 <Button asChild variant='ghost' size='sm'>
                   <Link href={PROTECTED_ROUTES.USER_LANDING}>Dashboard</Link>
                 </Button>
-                {/* Admin btn */}
+
+                {/* Admin dropdown */}
                 {data.user?.role === 'admin' && (
-                  <Button asChild variant='ghost' size='sm'>
-                    <Link href={PROTECTED_ROUTES.ADMIN_LANDING}>Admin</Link>
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant='ghost' size='sm'>
+                        Admin
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>Admin Pages</DropdownMenuLabel>
+                      <DropdownMenuItem asChild>
+                        <Link href={PROTECTED_ROUTES.ADMIN_LANDING}>
+                          Overview
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href={PROTECTED_ROUTES.ADMIN_USERS}>Users</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href='/admin/settings'>Settings</Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
+
                 {/* User info */}
                 <div className='flex items-center space-x-2'>
                   <Avatar>

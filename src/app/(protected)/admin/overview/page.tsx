@@ -1,12 +1,11 @@
-import PageWrapper from '@/components/PageWrapper';
 import { Card, CardContent } from '@/components/ui/card';
 import { StatsCard } from '@/components/admin/StatsCard';
 import { Users, DollarSign, CreditCard, Activity } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   return (
-    <PageWrapper>
-      <Card className='w-full max-w-2xl mx-auto shadow-xl rounded-2xl border border-border'>
+    <>
+      <Card className='w-full shadow-xl rounded-2xl border border-border'>
         <CardContent className='md:p-10 text-center'>
           <h1 className='text-3xl md:text-5xl font-bold text-foreground mb-4'>
             Admin Dashboard
@@ -42,6 +41,6 @@ export default function AdminDashboardPage() {
           </div>
         </CardContent>
       </Card>
-    </PageWrapper>
+    </>
   );
 }

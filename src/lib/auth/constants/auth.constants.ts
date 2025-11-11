@@ -13,8 +13,6 @@ export const ROLE_LABELS: Record<Role, string> = {
 
 // ** Route Definitions ** //
 
-// The default redirect path after a user logs in.
-export const DEFAULT_AUTHENTICATED_ROUTE = '/dashboard';
 
 // These routes do not require authentication and will not trigger redirects.
 export const PUBLIC_ROUTES = {
@@ -34,9 +32,10 @@ export const AUTH_ROUTES = {
 
 // Routes that require authentication.
 export const PROTECTED_ROUTES = {
-  USER_LANDING: DEFAULT_AUTHENTICATED_ROUTE, /* could be dashboard, Overview etc. */
-  ADMIN_LANDING: '/admin',
+  USER_LANDING: '/dashboard', /* could be dashboard, Overview etc. */
+  ADMIN_LANDING: '/admin/overview',
   ADMIN_USERS: '/admin/users',
+  ADMIN_SETTINGS: '/admin/settings',
   USER_SETTINGS: '/settings',
   USER_PROFILE: '/profile',
 }

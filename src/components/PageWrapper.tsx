@@ -9,12 +9,7 @@ interface PageWrapperProps {
 
 const PageWrapper = ({ children, className }: PageWrapperProps) => {
   return (
-    <div
-      className={cn(
-        'flex flex-col items-center justify-center px-2 py-2',
-        className
-      )}
-    >
+    <div className={cn('border border-green-500 w-full max-w-4xl ', className)}>
       {children}
     </div>
   );

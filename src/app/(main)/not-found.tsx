@@ -1,5 +1,4 @@
 'use client';
-import PageWrapper from '@/components/PageWrapper';
 import {
   Card,
   CardHeader,
@@ -16,7 +15,7 @@ import { useRouter } from 'next/navigation';
 const NotFoundPage = () => {
   const router = useRouter();
   return (
-    <PageWrapper>
+    <>
       <Card className='w-full max-w-xs mx-auto p-4 sm:p-6'>
         <CardHeader className='flex flex-col items-center justify-center text-center gap-2'>
           <AlertTriangle
@@ -43,7 +42,7 @@ const NotFoundPage = () => {
           </Button>
         </CardContent>
       </Card>
-    </PageWrapper>
+    </>
   );
 };
 

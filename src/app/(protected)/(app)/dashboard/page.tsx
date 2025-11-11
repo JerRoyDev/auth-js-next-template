@@ -1,30 +1,28 @@
-import PageWrapper from '@/components/PageWrapper';
 import { requireAuth } from '@/lib/auth/utils/require-auth';
-
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 const DashboardPage = async () => {
   // Get the authenticated user's session or redirect if not authenticated
   const session = await requireAuth();
 
   return (
-    <PageWrapper>
-      <div className='max-w-4xl mx-auto'>
-        <div className='bg-card shadow-xl rounded-xl p-8 border border-border'>
-          <div className='text-center mb-8'>
-            <h1 className='text-3xl font-bold text-foreground mb-2'>
-              Welcome, {session?.user.name || session?.user.email}!
-            </h1>
-            <p className='text-muted-foreground'>
-              Email: {session?.user.email}
-            </p>
-            {session?.user.role && (
-              <span className='inline-block mt-2 px-3 py-1 bg-secondary text-secondary-foreground text-sm font-medium rounded-full'>
-                {session?.user.role}
-              </span>
-            )}
-          </div>
+    <Card className='max-w-4xl mx-auto bg-card shadow-xl rounded-xl p-8 border border-border'>
+      <CardContent>
+        <div className='text-center mb-8'>
+          <h1 className='text-3xl font-bold text-foreground mb-2'>
+            Welcome, {session?.user.name || session?.user.email}!
+          </h1>
+          <p className='text-muted-foreground'>Email: {session?.user.email}</p>
+          {session?.user.role && (
+            <Badge className='mt-2 bg-secondary text-secondary-foreground'>
+              {session?.user.role}
+            </Badge>
+          )}
+        </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-            <div className='bg-accent rounded-lg p-6 border border-border hover:bg-muted transition-colors cursor-pointer'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+          <Card className='bg-accent rounded-lg p-6 border border-border hover:bg-muted transition-colors cursor-pointer'>
+            <CardContent>
               <div className='flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4'>
                 <svg
                   className='w-6 h-6 text-primary'
@@ -46,9 +44,11 @@ const DashboardPage = async () => {
               <p className='text-muted-foreground text-sm'>
                 Manage your account and personal details
               </p>
-            </div>
+            </CardContent>
+          </Card>
 
-            <div className='bg-accent rounded-lg p-6 border border-border hover:bg-muted transition-colors cursor-pointer'>
+          <Card className='bg-accent rounded-lg p-6 border border-border hover:bg-muted transition-colors cursor-pointer'>
+            <CardContent>
               <div className='flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4'>
                 <svg
                   className='w-6 h-6 text-primary'
@@ -70,9 +70,11 @@ const DashboardPage = async () => {
               <p className='text-muted-foreground text-sm'>
                 See your latest actions and activities
               </p>
-            </div>
+            </CardContent>
+          </Card>
 
-            <div className='bg-accent rounded-lg p-6 border border-border hover:bg-muted transition-colors cursor-pointer'>
+          <Card className='bg-accent rounded-lg p-6 border border-border hover:bg-muted transition-colors cursor-pointer'>
+            <CardContent>
               <div className='flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4'>
                 <svg
                   className='w-6 h-6 text-primary'
@@ -94,11 +96,11 @@ const DashboardPage = async () => {
               <p className='text-muted-foreground text-sm'>
                 Manage your messages and alerts
               </p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
-      </div>
-    </PageWrapper>
+      </CardContent>
+    </Card>
   );
 };
 

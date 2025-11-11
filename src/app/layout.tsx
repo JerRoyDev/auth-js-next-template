@@ -2,11 +2,10 @@
 
 import type { Metadata } from 'next';
 import './globals.css';
-import Header from '@/components/Header';
-import FadeIn from '@/components/FadeIn';
-
 import { ThemeProvider } from 'next-themes';
-import ClientLayout from './client-layout';
+import FadeInWrapper from '@/components/FadeInWrapper';
+import Header from '@/components/Header';
+import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 
 export const metadata: Metadata = {
   title: 'Next.js Better Auth Starter',
@@ -20,8 +19,11 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className='' suppressHydrationWarning>
-        <ClientLayout>{children}</ClientLayout>
+      <body suppressHydrationWarning>
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+          <Header />
+          <FadeInWrapper>{children}</FadeInWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );
