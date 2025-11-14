@@ -6,8 +6,8 @@ const DashboardPage = async () => {
   const session = await requireAuth();
 
   return (
-    <Card className='max-w-4xl mx-auto bg-card shadow-xl rounded-xl p-8 border border-border'>
-      <CardContent>
+    <Card className='w-full bg-card shadow-xl rounded-xl border border-border'>
+      <CardContent className='p-6 md:p-8'>
         <div className='text-center mb-8'>
           <h1 className='text-3xl font-bold text-foreground mb-2'>
             Welcome, {session?.user.name || session?.user.email}!

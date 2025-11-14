@@ -8,11 +8,7 @@ interface PageWrapperProps {
 }
 
 const PageWrapper = ({ children, className }: PageWrapperProps) => {
-  return (
-    <div className={cn('border border-green-500 w-full max-w-4xl ', className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn('w-full', className)}>{children}</div>;
 };
 
 export default PageWrapper;
