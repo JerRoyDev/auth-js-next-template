@@ -54,11 +54,6 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
   const { data, error, isPending } = useSession();
   const { isScrolledY, directionY } = useScrollPosition(50);
 
-  // // Exclude header on auth pages
-  // const excludedPaths = [AUTH_ROUTES.LOGIN, AUTH_ROUTES.REGISTER];
-  // const pathname = usePathname();
-  // if (excludedPaths.includes(pathname)) return null;
-
   // 2. Define opacity for layers
   const solidOpacity = isScrolledY ? 'opacity-0' : 'opacity-80';
   const maskedOpacity = isScrolledY ? 'opacity-80' : 'opacity-0';
@@ -71,11 +66,10 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
   return (
     <header
       className={
-        // Container is fixed and has correct height.
-        'border border-blue-200 fixed top-0 left-0 right-0 z-30 h-16'
+        'w-full border-b border-accent shadow-md fixed top-0 left-0 right-0 z-30 h-16'
       }
     >
-      <div className='max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 z-20 relative'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-20 relative'>
         <div className='flex justify-between items-center h-16'>
           {/* App logo */}
           <Link
@@ -88,10 +82,11 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
             Better Auth
           </Link>
 
-          {/* Desktop nav */}
-          <nav className='hidden md:flex items-center space-x-2'>
-            {data ? (
-              <>
+          {/* Desktop nav and actions */}
+          <div className='hidden lg:flex items-center space-x-2'>
+            {/* Navigation links */}
+            {data && (
+              <nav className='flex items-center space-x-2'>
                 {/* Dashboard btn */}
                 <Button asChild variant='ghost' size='sm'>
                   <Link href={PROTECTED_ROUTES.USER_LANDING}>Dashboard</Link>
@@ -121,9 +116,27 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
+              </nav>
+            )}
 
-                {/* User info */}
-                <div className='flex items-center space-x-2'>
+            {/* Auth buttons for non-authenticated users - CTA, not navigation */}
+            {!data && (
+              <div className='flex items-center space-x-2'>
+                {/* Sign in btn */}
+                <Button asChild variant='outline' size='sm'>
+                  <Link href={AUTH_ROUTES.LOGIN}>Sign In</Link>
+                </Button>
+                {/* Register btn */}
+                <Button asChild variant='default' size='sm'>
+                  <Link href={AUTH_ROUTES.REGISTER}>Create Account</Link>
+                </Button>
+              </div>
+            )}
+
+            {/* User actions - separate from navigation */}
+            <div className='flex items-center space-x-2'>
+              {data && (
+                <>
                   <Avatar>
                     <AvatarFallback>
                       {data.user?.name
@@ -135,26 +148,15 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
                     {data.user?.name || data.user?.email}
                   </span>
                   <SignOutButton />
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Sign in btn */}
-                <Button asChild variant='outline' size='sm'>
-                  <Link href={AUTH_ROUTES.LOGIN}>Sign In</Link>
-                </Button>
-                {/* Register btn */}
-                <Button asChild variant='default' size='sm'>
-                  <Link href={AUTH_ROUTES.REGISTER}>Create Account</Link>
-                </Button>
-              </>
-            )}
-            {/* Theme toggle */}
-            <ModeToggle />
-          </nav>
+                </>
+              )}
+              {/* Theme toggle */}
+              <ModeToggle />
+            </div>
+          </div>
           {/* ------------------------------------------------------- */}
-          {/* Mobile nav */}
-          <div className='md:hidden flex items-center'>
+          {/* Mobile/Tablet nav */}
+          <div className='lg:hidden flex items-center'>
             <Sheet>
               <SheetTrigger asChild>
                 {/* Menu btn */}
@@ -181,99 +183,93 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
                 <SheetHeader>
                   {/* Sheet title */}
                   <SheetTitle className='sr-only'>Navigation Menu</SheetTitle>
-                  {/* Theme toggle */}
-                  <div className='flex items-center justify-between mb-2'>
-                    <ModeToggle />
-                  </div>
                   {/* Sheet desc */}
                   <SheetDescription className='sr-only'>
                     Main navigation for Better Auth app
                   </SheetDescription>
                 </SheetHeader>
-                {/* Sheet links */}
-                <div className='flex-1 flex flex-col gap-4 justify-start'>
-                  {data ? (
-                    <>
-                      {/* Dashboard link */}
-                      <SheetClose asChild>
-                        <NavButton href={PROTECTED_ROUTES.USER_LANDING}>
-                          Dashboard
-                        </NavButton>
-                      </SheetClose>
-                      {/* Admin link */}
-                      {data.user?.role === 'admin' && (
-                        <div className='flex flex-col items-center justify-center w-full gap-2 py-2'>
-                          <Accordion
-                            className='w-full max-w-xs mx-auto'
-                            type='single'
-                            collapsible
-                            defaultValue={
-                              isAdminPage ? 'admin-menu' : undefined
-                            }
-                          >
-                            <AccordionItem value='admin-menu'>
-                              <AccordionTrigger className='flex items-center justify-center gap-2 text-base font-semibold'>
-                                <span>Admin</span>
-                              </AccordionTrigger>
-                              <AccordionContent>
-                                <div className='flex flex-col items-center gap-2 w-full'>
-                                  <SheetClose asChild>
-                                    <NavButton
-                                      href={PROTECTED_ROUTES.ADMIN_LANDING}
-                                      exact
-                                    >
-                                      Overview
-                                    </NavButton>
-                                  </SheetClose>
-                                  <SheetClose asChild>
-                                    <NavButton
-                                      href={PROTECTED_ROUTES.ADMIN_USERS}
-                                      exact
-                                    >
-                                      Users
-                                    </NavButton>
-                                  </SheetClose>
-                                  <SheetClose asChild>
-                                    <NavButton href={'/admin/settings'} exact>
-                                      Settings
-                                    </NavButton>
-                                  </SheetClose>
-                                </div>
-                              </AccordionContent>
-                            </AccordionItem>
-                          </Accordion>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {/* Sign in link */}
-                      <SheetClose asChild>
-                        <Button
-                          asChild
-                          variant='outline'
-                          size='lg'
-                          className='w-full'
-                        >
-                          <Link href={AUTH_ROUTES.LOGIN}>Sign In</Link>
-                        </Button>
-                      </SheetClose>
-                      {/* Register link */}
-                      <SheetClose asChild>
-                        <Button
-                          asChild
-                          variant='default'
-                          size='lg'
-                          className='w-full'
-                        >
-                          <Link href={AUTH_ROUTES.REGISTER}>
-                            Create Account
-                          </Link>
-                        </Button>
-                      </SheetClose>
-                    </>
-                  )}
+                {/* Theme toggle - action, not part of header */}
+                <div className='flex items-center justify-end'>
+                  <ModeToggle />
                 </div>
+                {/* Sheet content */}
+                {data ? (
+                  <nav className='flex-1 flex flex-col gap-4 justify-start'>
+                    {/* Dashboard link */}
+                    <SheetClose asChild>
+                      <NavButton href={PROTECTED_ROUTES.USER_LANDING}>
+                        Dashboard
+                      </NavButton>
+                    </SheetClose>
+                    {/* Admin link */}
+                    {data.user?.role === 'admin' && (
+                      <div className='flex flex-col items-center justify-center w-full gap-2 py-2'>
+                        <Accordion
+                          className='w-full max-w-xs mx-auto'
+                          type='single'
+                          collapsible
+                          defaultValue={isAdminPage ? 'admin-menu' : undefined}
+                        >
+                          <AccordionItem value='admin-menu'>
+                            <AccordionTrigger className='flex items-center justify-center gap-2 text-base font-semibold'>
+                              <span>Admin</span>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              <div className='flex flex-col items-center gap-2 w-full'>
+                                <SheetClose asChild>
+                                  <NavButton
+                                    href={PROTECTED_ROUTES.ADMIN_LANDING}
+                                    exact
+                                  >
+                                    Overview
+                                  </NavButton>
+                                </SheetClose>
+                                <SheetClose asChild>
+                                  <NavButton
+                                    href={PROTECTED_ROUTES.ADMIN_USERS}
+                                    exact
+                                  >
+                                    Users
+                                  </NavButton>
+                                </SheetClose>
+                                <SheetClose asChild>
+                                  <NavButton href={'/admin/settings'} exact>
+                                    Settings
+                                  </NavButton>
+                                </SheetClose>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      </div>
+                    )}
+                  </nav>
+                ) : (
+                  <div className='flex-1 flex flex-col gap-4 justify-start'>
+                    {/* Sign in link - CTA, not navigation */}
+                    <SheetClose asChild>
+                      <Button
+                        asChild
+                        variant='outline'
+                        size='lg'
+                        className='w-full'
+                      >
+                        <Link href={AUTH_ROUTES.LOGIN}>Sign In</Link>
+                      </Button>
+                    </SheetClose>
+                    {/* Register link - CTA, not navigation */}
+                    <SheetClose asChild>
+                      <Button
+                        asChild
+                        variant='default'
+                        size='lg'
+                        className='w-full'
+                      >
+                        <Link href={AUTH_ROUTES.REGISTER}>Create Account</Link>
+                      </Button>
+                    </SheetClose>
+                  </div>
+                )}
                 {/* Sheet footer */}
                 {data && (
                   <SheetFooter>
