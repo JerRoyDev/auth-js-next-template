@@ -32,12 +32,13 @@ import {
 } from './ui/accordion';
 import NavButton from './NavButton';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+  NavigationMenuLink,
+} from '@/components/ui/navigation-menu';
 import { useMemo } from 'react';
 
 interface HeaderProps {
@@ -94,27 +95,36 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
 
                 {/* Admin dropdown */}
                 {data.user?.role === 'admin' && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant='ghost' size='sm'>
-                        Admin
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuLabel>Admin Pages</DropdownMenuLabel>
-                      <DropdownMenuItem asChild>
-                        <Link href={PROTECTED_ROUTES.ADMIN_LANDING}>
-                          Overview
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href={PROTECTED_ROUTES.ADMIN_USERS}>Users</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href='/admin/settings'>Settings</Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <NavigationMenu>
+                    <NavigationMenuList>
+                      <NavigationMenuItem>
+                        <NavigationMenuTrigger>Admin</NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <ul className='p-2'>
+                            <li>
+                              <NavigationMenuLink asChild>
+                                <Link href={PROTECTED_ROUTES.ADMIN_LANDING}>
+                                  Overview
+                                </Link>
+                              </NavigationMenuLink>
+                            </li>
+                            <li>
+                              <NavigationMenuLink asChild>
+                                <Link href={PROTECTED_ROUTES.ADMIN_USERS}>
+                                  Users
+                                </Link>
+                              </NavigationMenuLink>
+                            </li>
+                            <li>
+                              <NavigationMenuLink asChild>
+                                <Link href='/admin/settings'>Settings</Link>
+                              </NavigationMenuLink>
+                            </li>
+                          </ul>
+                        </NavigationMenuContent>
+                      </NavigationMenuItem>
+                    </NavigationMenuList>
+                  </NavigationMenu>
                 )}
               </nav>
             )}
