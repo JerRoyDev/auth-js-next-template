@@ -5,7 +5,19 @@ import { useState, useEffect, useRef } from 'react';
  *
  * @param {number} threshold - Antal pixlar att scrolla innan isScrolled blir true.
  * @returns {object} { scrollY, scrollX, isScrolledY, isScrolledX, directionY, directionX }
+ * 
  */
+
+
+export interface ScrollInfo {
+  scrollY: number;
+  scrollX: number;
+  isScrolledY: boolean;
+  isScrolledX: boolean;
+  directionY: 'up' | 'down' | null;
+  directionX: 'left' | 'right' | null;
+}
+
 const useScrollPosition = (threshold = 50) => {
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(0);
