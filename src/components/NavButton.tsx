@@ -20,13 +20,18 @@ const NavButton: React.FC<NavButtonProps> = ({
   ...props
 }) => {
   const pathname = usePathname();
-  const isActive = exact ? pathname === href : pathname?.startsWith(href);
+  const isActive =
+    href === '/'
+      ? pathname === href
+      : exact
+        ? pathname === href
+        : pathname?.startsWith(href);
 
   return (
     <Button
       asChild
       variant='ghost'
-      className={cn('w-full', className)}
+      className={cn(className)}
       {...props}
     >
       <Link
