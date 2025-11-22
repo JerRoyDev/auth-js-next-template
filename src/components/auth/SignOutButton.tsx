@@ -7,7 +7,12 @@ import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-function SignOutButtonContent() {
+interface SignOutButtonProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+function SignOutButtonContent({ className, children }: SignOutButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,15 +42,18 @@ function SignOutButtonContent() {
     <button
       onClick={handleSignOut}
       disabled={isLoading}
-      className='flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg shadow-sm bg-card text-sm font-medium text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+      className={
+        className ||
+        'flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg shadow-sm bg-card text-sm font-medium text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+      }
     >
-      {isLoading ? 'Signing out...' : 'Sign Out'}
+      {children || (isLoading ? 'Signing out...' : 'Sign Out')}
     </button>
   );
 }
 
-export const SignOutButton = () => {
-  return <SignOutButtonContent />;
+export const SignOutButton = (props: SignOutButtonProps) => {
+  return <SignOutButtonContent {...props} />;
 };
 
 export default SignOutButton;

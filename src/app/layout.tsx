@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
 import FadeInWrapper from '@/components/FadeInWrapper';
-import Header from '@/components/header/Header';
 import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 
 export const metadata: Metadata = {
@@ -21,7 +20,6 @@ const RootLayout = ({
     <html lang='en' suppressHydrationWarning>
       <body suppressHydrationWarning>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <Header />
           <FadeInWrapper>{children}</FadeInWrapper>
         </ThemeProvider>
       </body>

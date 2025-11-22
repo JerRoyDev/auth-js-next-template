@@ -1,8 +1,13 @@
 'use client';
 
+import { PROTECTED_ROUTES } from '@/lib/auth/constants/auth.constants';
 import NavButton from '../NavButton';
 
-const HeaderNav = () => {
+interface HeaderNavProps {
+  isAuthenticated?: boolean;
+}
+
+const HeaderNav = ({ isAuthenticated }: HeaderNavProps) => {
   const mobileNavBtnClass = 'text-base text-sm w-full';
 
   return (
@@ -21,6 +26,14 @@ const HeaderNav = () => {
         <NavButton href='/contact' className={`${mobileNavBtnClass} `}>
           Contact
         </NavButton>
+        {isAuthenticated && (
+          <NavButton
+            href={PROTECTED_ROUTES.USER_LANDING}
+            className={`${mobileNavBtnClass} font-semibold text-primary`}
+          >
+            Dashboard
+          </NavButton>
+        )}
       </nav>
 
       {/* Desktop version */}
@@ -46,6 +59,14 @@ const HeaderNav = () => {
         >
           Contact
         </NavButton>
+        {isAuthenticated && (
+          <NavButton
+            href={PROTECTED_ROUTES.USER_LANDING}
+            className='text-base hover:underline text-primary font-semibold'
+          >
+            Dashboard
+          </NavButton>
+        )}
       </nav>
     </>
   );

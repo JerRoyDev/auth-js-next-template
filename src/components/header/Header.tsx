@@ -54,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
             <HeaderLogo />
           </div>
           <div className='flex-1 flex justify-center'>
-            <HeaderNav />
+            <HeaderNav isAuthenticated={!!data} />
           </div>
           <div className='flex-shrink-0 flex items-center gap-4'>
             <HeaderCTA data={data} />
@@ -102,7 +102,7 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
 
               {/* Scrollable content area */}
               <div className='flex-1 overflow-y-auto flex flex-col gap-4 py-4'>
-                <HeaderNav />
+                <HeaderNav isAuthenticated={!!data} />
               </div>
               <HeaderCTA data={data} />
 
