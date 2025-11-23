@@ -34,7 +34,7 @@ export function AppHeader() {
           <Separator orientation='vertical' className='mr-2 h-4' />
           <Breadcrumb>
             <BreadcrumbList>
-              {breadcrumbs.map((crumb, index) => (
+              {breadcrumbs.map((crumb) => (
                 <div key={crumb.href} className='flex items-center gap-2'>
                   <BreadcrumbItem>
                     {crumb.isLast ? (

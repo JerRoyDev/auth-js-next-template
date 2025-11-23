@@ -3,7 +3,6 @@
 
 import { useSession } from '@/lib/auth/config/auth-client';
 import { usePathname } from 'next/navigation';
-import useScrollPosition from '@/hooks/useScrollInfo';
 import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -35,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
     [pathname, excludedPaths]
   );
 
-  const { data, error, isPending } = useSession();
+  const { data, error: _error, isPending: _isPending } = useSession();
 
   if (isExcluded) {
     return <div className='sr-only'>Header hidden on this page</div>;

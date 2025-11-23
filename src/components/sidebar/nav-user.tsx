@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  BadgeCheck,
-  ChevronsUpDown,
-  LogOut,
-  Settings,
-  User,
-} from 'lucide-react';
+import { ChevronsUpDown, LogOut, Settings, User } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {

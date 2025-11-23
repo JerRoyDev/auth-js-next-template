@@ -22,7 +22,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   const router = useRouter();
-  const [pending, startTransition] = useTransition();
+  const [pending, _startTransition] = useTransition();
 
   return (
     <Card className='w-full max-w-xs mx-auto p-4 sm:p-6'>

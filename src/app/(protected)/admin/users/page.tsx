@@ -4,7 +4,7 @@
 
 import { requireAdmin } from '@/lib/auth/utils/require-auth';
 
-import UserTable, { User } from '@/components/admin/UserTable';
+import UserTable from '@/components/admin/UserTable';
 import { listUsers } from '@/lib/auth/actions/admin.action';
 import { UserTableProps } from '@/components/admin/UserTable';
 

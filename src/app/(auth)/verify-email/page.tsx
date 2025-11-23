@@ -2,7 +2,7 @@
 
 import { authClient } from '@/lib/auth/config/auth-client';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 
 import {
@@ -21,7 +21,7 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 
-const VerifyEmailPage = () => {
+const VerifyEmailContent = () => {
   const [otp, setOtp] = useState('');
   const [verifying, setVerifying] = useState(false);
   const [status, setStatus] = useState<{
@@ -54,37 +54,41 @@ const VerifyEmailPage = () => {
 
   // * verify the user's email address with OTP
   const verifyOTP = async () => {
-    const { data, error } = await authClient.emailOtp.verifyEmail({
-      email: emailInput,
-      otp: otp,
-      fetchOptions: {
-        onRequest: () => {
-          console.log('Verifying OTP...');
-          setVerifying(true);
+    const { data: _data, error: _error } =
+      await authClient.emailOtp.verifyEmail({
+        email: emailInput,
+        otp: otp,
+        fetchOptions: {
+          onRequest: () => {
+            console.log('Verifying OTP...');
+            setVerifying(true);
+          },
+          onResponse: (ctx) => {
+            console.log('OTP verification response received.', ctx);
+            setVerifying(false);
+          },
+          onError: (ctx) => {
+            console.error('Error verifying OTP.', ctx);
+            setStatus({
+              type: 'error',
+              message:
+                ctx.error?.message || 'Failed to verify OTP. Please try again.',
+            });
+          },
+          onSuccess: (ctx) => {
+            console.log('OTP verified successfully.', ctx);
+            setStatus({
+              type: 'success',
+              message: 'OTP verified successfully!',
+            });
+            router.push(
+              `${AUTH_ROUTES.LOGIN}?verified=true&email=${encodeURIComponent(
+                emailInput
+              )}`
+            );
+          },
         },
-        onResponse: (ctx) => {
-          console.log('OTP verification response received.', ctx);
-          setVerifying(false);
-        },
-        onError: (ctx) => {
-          console.error('Error verifying OTP.', ctx);
-          setStatus({
-            type: 'error',
-            message:
-              ctx.error?.message || 'Failed to verify OTP. Please try again.',
-          });
-        },
-        onSuccess: (ctx) => {
-          console.log('OTP verified successfully.', ctx);
-          setStatus({ type: 'success', message: 'OTP verified successfully!' });
-          router.push(
-            `${AUTH_ROUTES.LOGIN}?verified=true&email=${encodeURIComponent(
-              emailInput
-            )}`
-          );
-        },
-      },
-    });
+      });
   };
 
   // * send an OTP to the user's email address
@@ -97,37 +101,39 @@ const VerifyEmailPage = () => {
     }
     setStatus(null);
 
-    const { data, error } = await authClient.emailOtp.sendVerificationOtp({
-      email: emailInput, // required
-      type: type, // required
-      fetchOptions: {
-        onRequest: () => {
-          console.log('Sending new OTP...');
-          setLoading(true);
+    const { data: _data, error: _error } =
+      await authClient.emailOtp.sendVerificationOtp({
+        email: emailInput, // required
+        type: type, // required
+        fetchOptions: {
+          onRequest: () => {
+            console.log('Sending new OTP...');
+            setLoading(true);
+          },
+          onResponse: (ctx) => {
+            console.log('New OTP sent.', ctx);
+            setLoading(false);
+          },
+          onError: (ctx) => {
+            console.error('Error sending new OTP.', ctx);
+            setStatus({
+              type: 'error',
+              message:
+                ctx.error?.message ||
+                'Failed to send new OTP. Please try again.',
+            });
+            setLoading(false);
+          },
+          onSuccess: (ctx) => {
+            console.log('New OTP sent successfully.', ctx);
+            setStatus({
+              type: 'success',
+              message: 'A new OTP has been sent to your email.',
+            });
+            setLoading(false);
+          },
         },
-        onResponse: (ctx) => {
-          console.log('New OTP sent.', ctx);
-          setLoading(false);
-        },
-        onError: (ctx) => {
-          console.error('Error sending new OTP.', ctx);
-          setStatus({
-            type: 'error',
-            message:
-              ctx.error?.message || 'Failed to send new OTP. Please try again.',
-          });
-          setLoading(false);
-        },
-        onSuccess: (ctx) => {
-          console.log('New OTP sent successfully.', ctx);
-          setStatus({
-            type: 'success',
-            message: 'A new OTP has been sent to your email.',
-          });
-          setLoading(false);
-        },
-      },
-    });
+      });
   };
 
   return (
@@ -188,6 +194,33 @@ const VerifyEmailPage = () => {
           >
             {loading ? 'Sending...' : "Didn't receive a code? Send again"}
           </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+const VerifyEmailPage = () => {
+  return (
+    <Suspense fallback={<VerifyEmailSkeleton />}>
+      <VerifyEmailContent />
+    </Suspense>
+  );
+};
+
+const VerifyEmailSkeleton = () => {
+  return (
+    <div className='min-h-[calc(100vh-4rem)] flex items-center justify-center p-2'>
+      <Card className='w-full max-w-md mx-auto'>
+        <CardHeader className='text-center'>
+          <div className='h-8 bg-muted animate-pulse rounded' />
+          <div className='h-4 bg-muted animate-pulse rounded mt-2' />
+        </CardHeader>
+        <CardContent className='space-y-4'>
+          <div className='flex justify-center'>
+            <div className='h-14 w-64 bg-muted animate-pulse rounded' />
+          </div>
+          <div className='h-10 bg-muted animate-pulse rounded' />
         </CardContent>
       </Card>
     </div>

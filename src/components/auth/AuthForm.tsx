@@ -7,8 +7,8 @@ import {
   AUTH_ROUTES,
   PROTECTED_ROUTES,
 } from '@/lib/auth/constants/auth.constants';
-import { useState } from 'react';
-import { AuthFormProps, BetterAuthError } from '@/lib/auth/types';
+import { useState, Suspense } from 'react';
+import { AuthFormProps } from '@/lib/auth/types';
 import { AuthStatusMessage } from './AuthStatusMessage';
 import {
   Card,
@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
-export const AuthForm = ({
+const AuthFormContent = ({
   mode,
   title,
   description,
@@ -89,6 +89,34 @@ export const AuthForm = ({
           )}
         </div>
       </CardFooter>
+    </Card>
+  );
+};
+
+export const AuthForm = (
+  props: AuthFormProps & { title: string; description?: string }
+) => {
+  return (
+    <Suspense fallback={<AuthFormSkeleton />}>
+      <AuthFormContent {...props} />
+    </Suspense>
+  );
+};
+
+const AuthFormSkeleton = () => {
+  return (
+    <Card className='max-w-md w-full mx-auto'>
+      <CardHeader className='text-center'>
+        <div className='h-8 bg-muted animate-pulse rounded' />
+        <div className='h-4 bg-muted animate-pulse rounded mt-2' />
+      </CardHeader>
+      <CardContent className='space-y-6'>
+        <div className='space-y-4'>
+          <div className='h-10 bg-muted animate-pulse rounded' />
+          <div className='h-10 bg-muted animate-pulse rounded' />
+          <div className='h-10 bg-muted animate-pulse rounded' />
+        </div>
+      </CardContent>
     </Card>
   );
 };
