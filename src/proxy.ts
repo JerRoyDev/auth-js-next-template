@@ -13,7 +13,7 @@ const authRoutes = Object.values(AUTH_ROUTES);
 const publicRoutes = Object.values(PUBLIC_ROUTES);
 const protectedRoutes = Object.values(PROTECTED_ROUTES);
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionCookie = getSessionCookie(request);
 
@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Configuration to run middleware on most paths
+// Configuration to run proxy on most paths
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
