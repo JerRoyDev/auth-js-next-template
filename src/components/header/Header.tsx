@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 import useScrollPosition from '@/hooks/useScrollInfo';
 import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
 import {
   Sheet,
   SheetClose,
@@ -104,7 +106,32 @@ const Header: React.FC<HeaderProps> = ({ excludedPaths = [] }) => {
               <div className='flex-1 overflow-y-auto flex flex-col gap-4 py-4'>
                 <HeaderNav isAuthenticated={!!data} />
               </div>
-              <HeaderCTA data={data} />
+
+              {/* CTA buttons - wrapped with SheetClose */}
+              {!data && (
+                <div className='flex flex-col gap-4 px-2 pb-4'>
+                  <SheetClose asChild>
+                    <Button
+                      asChild
+                      variant='outline'
+                      size='lg'
+                      className='w-full'
+                    >
+                      <Link href={AUTH_ROUTES.LOGIN}>Sign In</Link>
+                    </Button>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Button
+                      asChild
+                      variant='default'
+                      size='lg'
+                      className='w-full'
+                    >
+                      <Link href={AUTH_ROUTES.REGISTER}>Create Account</Link>
+                    </Button>
+                  </SheetClose>
+                </div>
+              )}
 
               {/* User section in footer - fixed at bottom */}
               {data && (
