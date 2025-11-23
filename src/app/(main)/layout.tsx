@@ -1,11 +1,15 @@
 import ContentLayout from '@/components/layouts/ContentLayout';
 import Header from '@/components/header/Header';
+import FadeInWrapper from '@/components/FadeInWrapper';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Header />
-      <ContentLayout maxWidth='7xl'>{children}</ContentLayout>
+      <FadeInWrapper>
+        <ContentLayout maxWidth='7xl'>{children}</ContentLayout>
+      </FadeInWrapper>
+      {/* <Footer /> */}
     </>
   );
 };

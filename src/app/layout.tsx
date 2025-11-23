@@ -20,7 +20,7 @@ const RootLayout = ({
     <html lang='en' suppressHydrationWarning>
       <body suppressHydrationWarning>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <FadeInWrapper>{children}</FadeInWrapper>
+          {children}
         </ThemeProvider>
       </body>
     </html>

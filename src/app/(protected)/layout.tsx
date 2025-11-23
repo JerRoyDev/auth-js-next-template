@@ -2,6 +2,7 @@ import { requireAuth } from '@/lib/auth/utils/require-auth';
 import { AppSidebar } from '@/components/sidebar/app-sidebar';
 import { AppHeader } from '@/components/app/AppHeader';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import ContentLayout from '@/components/layouts/ContentLayout';
 
 const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   await requireAuth();
@@ -11,9 +12,9 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <div className='min-h-[100vh] flex-1 rounded-xl'>{children}</div>
-        </div>
+        <ContentLayout maxWidth='screen-2xl' noTopMargin>
+          {children}
+        </ContentLayout>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -22,6 +22,7 @@ interface ContentLayoutProps {
   className?: string;
   centered?: boolean;
   noPadding?: boolean;
+  noTopMargin?: boolean;
 }
 
 const maxWidthClasses: Record<MaxWidthVariant, string> = {
@@ -45,11 +46,13 @@ const ContentLayout: React.FC<ContentLayoutProps> = ({
   className,
   centered = false,
   noPadding = false,
+  noTopMargin = false,
 }) => {
   return (
     <main
       className={cn(
-        'min-h-[calc(100vh-4rem)] mt-16 w-full',
+        'min-h-[calc(100vh-4rem)] w-full',
+        !noTopMargin && 'mt-16',
         !noPadding && 'px-4 sm:px-6 lg:px-8 py-6 lg:py-8',
         centered && 'flex items-center justify-center',
         className
