@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { PROTECTED_ROUTES } from '@/lib/auth/constants/auth.constants';
-import { signOut } from '@/lib/auth/config/auth-client';
+import { signOutAction } from '@/lib/auth/actions/auth.action';
 
 export function NavUser({
   user,
@@ -104,7 +104,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut()}>
+            <DropdownMenuItem onClick={() => signOutAction()}>
               <LogOut />
               Log out
             </DropdownMenuItem>

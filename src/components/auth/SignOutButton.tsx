@@ -2,9 +2,7 @@
 
 'use client';
 
-import { signOut } from '@/lib/auth/config/auth-client';
-import { AUTH_ROUTES } from '@/lib/auth/constants/auth.constants';
-import { useRouter } from 'next/navigation';
+import { signOutAction } from '@/lib/auth/actions/auth.action';
 import { useState } from 'react';
 
 interface SignOutButtonProps {
@@ -13,29 +11,16 @@ interface SignOutButtonProps {
 }
 
 function SignOutButtonContent({ className, children }: SignOutButtonProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignOut = async () => {
-    await signOut({
-      fetchOptions: {
-        onRequest: () => {
-          console.log('🔄 Signing out...');
-          setIsLoading(true);
-        },
-        onSuccess: () => {
-          console.log('✅ Sign out successful');
-          router.push(AUTH_ROUTES.LOGIN);
-        },
-        onError: (ctx) => {
-          console.error('❌ Sign out error:', ctx.error);
-          // Optionally show error toast
-        },
-        onFinally: () => {
-          setIsLoading(false);
-        },
-      },
-    });
+    setIsLoading(true);
+    try {
+      await signOutAction();
+    } catch (error) {
+      console.error('❌ Sign out error:', error);
+      setIsLoading(false);
+    }
   };
 
   return (
