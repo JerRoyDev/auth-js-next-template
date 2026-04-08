@@ -1,6 +1,7 @@
 // src/app/layout.tsx
 
 import type { Metadata } from 'next';
+import Script from "next/script";
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
 
@@ -16,6 +17,15 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en' suppressHydrationWarning>
+      <head>
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            src="//unpkg.com/react-grab/dist/index.global.js"
+            crossOrigin="anonymous"
+            strategy="beforeInteractive"
+          />
+        )}
+      </head>
       <body suppressHydrationWarning>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           {children}

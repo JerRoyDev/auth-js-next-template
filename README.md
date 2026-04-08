@@ -2,7 +2,7 @@
 
 > A modern, production-ready Next.js starter template with Better Auth authentication, Prisma ORM, and shadcn/ui components
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.1-black?style=flat-square&logo=next.js)](https://nextjs.org/) [![Better Auth](https://img.shields.io/badge/Better_Auth-1.3-blue?style=flat-square)](https://www.better-auth.com/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![Prisma](https://img.shields.io/badge/Prisma-6.18-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.3-black?style=flat-square&logo=next.js)](https://nextjs.org/) [![Better Auth](https://img.shields.io/badge/Better_Auth-1.3-blue?style=flat-square)](https://www.better-auth.com/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![Prisma](https://img.shields.io/badge/Prisma-6.18-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
 
 ## ✨ Features
 
@@ -44,7 +44,7 @@
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/JerRoyDev/next-betterauth-starter.git
+   git clone https://github.com/Jryolsn/next-betterauth-starter.git
    cd next-betterauth-starter
    ```
 
@@ -105,8 +105,8 @@
 │   └── migrations/            # Database migrations
 ├── src/
 │   ├── app/
-│   │   ├── (auth)/           # Authentication pages (signin, register)
-│   │   ├── (main)/           # Public pages (home, about, contact)
+│   │   ├── (auth)/           # Authentication pages (signin, register, verify-email)
+│   │   ├── (main)/           # Public pages (home, about, contact, faq)
 │   │   ├── (protected)/      # Protected pages (dashboard, admin)
 │   │   └── api/auth/         # Better Auth API routes
 │   ├── components/
@@ -244,4 +244,4 @@ MIT License - feel free to use this starter for your projects!
 
 ---
 
-**Built with ❤️ by [JerRoyDev](https://github.com/JerRoyDev)**
+**Built with ❤️ by [Jryolsn](https://github.com/Jryolsn)**

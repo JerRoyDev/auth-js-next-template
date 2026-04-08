@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "A modern, production-ready Next.js starter template with Better Auth authentication, Prisma ORM, and shadcn/ui components",
   "private": true,
-  "author": "JerRoyDev",
+  "author": "Jryolsn",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JerRoyDev/next-betterauth-starter"
+    "url": "https://github.com/Jryolsn/next-betterauth-starter"
   },
   "scripts": {
     "dev": "next dev --turbopack",
@@ -59,6 +59,7 @@
     "eslint": "^9",
     "eslint-config-next": "^16.0.3",
     "prisma": "^6.19.0",
+    "react-grab": "^0.0.98",
     "shadcn": "^3.5.0",
     "tailwindcss": "^4.1.13",
     "ts-node": "^10.9.2",
